@@ -1,38 +1,202 @@
+:root {
+  --primary-color: #4a90e2;
+  --secondary-color: #50e3c2;
+  --background-color: #f5f7fa;
+  --text-color: #333;
+  --chart-background: #ffffff;
+  --chart-line-color: #4a90e2;
+  --chart-grid-color: #e5e5e5;
+  --chart-text-color: #333333;
+}
+
+body.dark-theme {
+  --primary-color: #61dafb;
+  --secondary-color: #bb86fc;
+  --background-color: #121212;
+  --text-color: #e0e0e0;
+  --chart-background: #1e1e1e;
+  --chart-line-color: #4a90e2;;
+  --chart-grid-color: #252222;
+  --chart-text-color: #e0e0e0;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+  font-family: 'Roboto', sans-serif;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.App-header-menu {
+  background-color: var(--primary-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.App-header-menu h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffffff;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.hamburger-button {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #ffffff;
+  padding: 10px;
+  z-index: 10;
+  transition: transform 0.3s ease;
+}
+
+.hamburger-button:hover {
+  transform: scale(1.1);
+}
+
+.settings-menu {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background-color: var(--chart-background);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 300px;
+  z-index: 1000;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.settings-header {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  padding: 15px 20px;
+}
+
+.settings-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.settings-content {
+  padding: 20px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.setting-item span {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.setting-icon {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.App-main {
+  min-height: calc(100vh - 60px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: flex-start;
+  padding: 2rem;
+  font-size: 1.2rem;
 }
 
-.App-link {
-  color: #61dafb;
+.telemetry-container {
+  background-color: var(--chart-background);
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.telemetry-container h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
 }
+
+.telemetry-container h3 {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+  color: var(--secondary-color);
+}
+
+.chart-container {
+  width: 100%;
+  height: 500px;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.chart-container:hover {
+  transform: scale(1.02);
+}
+
+@keyframes pulse

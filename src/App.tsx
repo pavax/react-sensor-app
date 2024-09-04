@@ -1,25 +1,98 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import { TimeRange, loginPublic } from "./api/thingsboard-api";
+import "./App.css";
+import Header from "./components/Header";
+import Telemetry from "./components/Telemetry";
+import { ViewportProvider } from "./ViewportContext";
 
 function App() {
+  
+  const [currentTimePeriod, setCurrentTimePeriod] = useState<TimeRange>(
+    TimeRange.ONE_DAY
+  );
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const [loginError, setLoginError] = useState<string | null>(null);
+
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme
+      ? savedTheme === "dark"
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
+
+  const handleTimePeriodChange = (newTimePeriod: TimeRange) => {
+    setCurrentTimePeriod(newTimePeriod);
+    console.log("Time period changed to:", newTimePeriod);
+  };
+
+  const deviceId = process.env.REACT_APP_API_DEVICE_ID;
+
+  const publicId = process.env.REACT_APP_TB_PUBLICID;
+
+  useEffect(() => {
+    const performLogin = async () => {
+      if (!publicId) {
+        setLoginError(
+          "Error: REACT_APP_TB_PUBLICID is not set in the .env file"
+        );
+        return;
+      }
+
+      try {
+        await loginPublic(publicId);
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.error("Login failed:", error);
+        setLoginError("Failed to log in. Please try again later.");
+      }
+    };
+
+    performLogin();
+  }, [publicId]);
+
+  useEffect(() => {
+    document.body.classList.toggle("dark-theme", isDarkMode);
+    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+  }, [isDarkMode]);
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+    document.body.classList.toggle("dark-theme", isDarkMode);
+  };
+
+  if (loginError) {
+    return <div>{loginError}</div>;
+  }
+
+  if (!isLoggedIn) {
+    return <div>Logging in...</div>;
+  }
+
+  if (!deviceId) {
+    return (
+      <div>Error: REACT_APP_API_DEVICE_ID is not set in the .env file</div>
+    );
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ViewportProvider>
+      <div className="App">
+        <Header
+          onTimePeriodChange={handleTimePeriodChange}
+          isDarkMode={isDarkMode}
+          toggleTheme={toggleTheme}
+        />
+        <main className="App-main">
+          <Telemetry
+            deviceId={deviceId}
+            timeRange={currentTimePeriod}
+            theme={isDarkMode ? "dark" : "light"}
+          />
+        </main>
+      </div>
+    </ViewportProvider>
   );
 }
 
