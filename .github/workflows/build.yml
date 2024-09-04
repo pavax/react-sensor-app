@@ -1,0 +1,45 @@
+name: Build React App
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
+
+      - name: Replace secret
+        uses: cschleiden/replace-tokens@v1
+        with:
+          tokenPrefix: "{"
+          tokenSuffix: "}"
+          files: ".env"
+        env:
+          TB_URL: ${{ vars.TB_URL }}
+          API_DEVICE_ID: ${{ vars.API_DEVICE_ID }}
+          TB_PUBLICID: ${{ vars.TB_PUBLICID }}
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build
