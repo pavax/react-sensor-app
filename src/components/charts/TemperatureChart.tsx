@@ -37,16 +37,14 @@ ChartJS.register(
 interface TelemetryChartsProps {
   data: ProcessedData;
   timeRange: TimeRange;
-  theme: "light" | "dark";
 }
 
 const TemperatureChart: React.FC<TelemetryChartsProps> = ({
   data,
   timeRange,
-  theme,
 }) => {
-  const chartStyles = useChartStyles(theme);
   const viewport = useViewport();
+  const chartStyles = useChartStyles();
 
   if (!data || !data.entries) {
     return <div>No data available</div>;
@@ -99,7 +97,7 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
     ],
   };
 
-  const commonOptions = getCommonChartOptions(timeRange, theme);
+  const commonOptions = getCommonChartOptions(timeRange);
 
   const options: ChartOptions<"line"> = {
     ...commonOptions,

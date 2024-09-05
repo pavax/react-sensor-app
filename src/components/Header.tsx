@@ -3,14 +3,16 @@ import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes, faClock, faPalette } from '@fortawesome/free-solid-svg-icons';
 import { TimeRange } from '../api/thingsboard-api';
+import { useViewport } from '../ViewportContext';
 
 interface HeaderProps {
   onTimePeriodChange: (timePeriod: TimeRange) => void;
-  isDarkMode: boolean;
-  toggleTheme: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onTimePeriodChange, isDarkMode, toggleTheme }) => {
+const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
+  
+  const { isDarkMode, toggleTheme } = useViewport();
+
   const [showSettings, setShowSettings] = useState(false);
 
   const [timePeriod, setTimePeriod] = useState<TimeRange>(() => {
@@ -47,7 +49,6 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange, isDarkMode, toggleT
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
-
 
   const handleTimePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTimePeriod(e.target.value as TimeRange);

@@ -15,13 +15,12 @@ import RainEventChart from "./charts/RainEventChart ";
 import WindChart from "./charts/WindChart";
 import LightChart from "./charts/LightChart";
 import OverviewCards from "./OverviewCards";
-import ContexInformation from "./ContextInfromation";
+import ContextInfoBar from "./ContextInforBar";
 import { format } from "date-fns-tz";
 
 interface TelemetryProps {
   deviceId: string;
   timeRange: TimeRange;
-  theme: "light" | "dark";
 }
 
 const INTERVAL = 60_000;
@@ -29,7 +28,6 @@ const INTERVAL = 60_000;
 const Telemetry: React.FC<TelemetryProps> = ({
   deviceId,
   timeRange,
-  theme,
 }) => {
   const [telemetryData, setTelemetryData] = useState<ProcessedData | null>(
     null
@@ -130,7 +128,7 @@ const Telemetry: React.FC<TelemetryProps> = ({
 
   return (
     <div className="telemetry-grid">
-      <ContexInformation main={formattedTimestamp} additionalData={additionalData} />
+      <ContextInfoBar main={formattedTimestamp} additionalData={additionalData} />
 
       <OverviewCards data={telemetryData} />
 
@@ -140,14 +138,13 @@ const Telemetry: React.FC<TelemetryProps> = ({
           <TemperatureChart
             data={telemetryData}
             timeRange={timeRange}
-            theme={theme}
           />
         </div>
       </div>
       <div className="telemetry-container">
         <h3>Wind</h3>
         <div className="chart-container">
-          <WindChart data={telemetryData} timeRange={timeRange} theme={theme} />
+          <WindChart data={telemetryData} timeRange={timeRange}  />
         </div>
       </div>
       <div className="telemetry-container">
@@ -162,7 +159,6 @@ const Telemetry: React.FC<TelemetryProps> = ({
           <LightChart
             data={telemetryData}
             timeRange={timeRange}
-            theme={theme}
           />
         </div>
       </div>

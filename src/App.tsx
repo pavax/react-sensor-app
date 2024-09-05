@@ -19,12 +19,6 @@ function App() {
 
   const [loginError, setLoginError] = useState<string | null>(null);
 
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
-    return savedTheme
-      ? savedTheme === "dark"
-      : window.matchMedia("(prefers-color-scheme: dark)").matches;
-  });
 
   const handleTimePeriodChange = (newTimePeriod: TimeRange) => {
     setCurrentTimePeriod(newTimePeriod);
@@ -51,11 +45,6 @@ function App() {
     performLogin();
   }, [publicId]);
 
-  useEffect(() => {
-    document.body.classList.toggle("dark-theme", isDarkMode);
-    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
-  }, [isDarkMode]);
-
   if (loginError) {
     return <div>{loginError}</div>;
   }
@@ -75,14 +64,11 @@ function App() {
       <div className="App">
         <Header
           onTimePeriodChange={handleTimePeriodChange}
-          isDarkMode={isDarkMode}
-          toggleTheme={() => setIsDarkMode(!isDarkMode)}
         />
         <main className="App-main">
           <Telemetry
             deviceId={deviceId}
             timeRange={currentTimePeriod}
-            theme={isDarkMode ? "dark" : "light"}
           />
         </main>
       </div>

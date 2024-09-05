@@ -2,9 +2,9 @@ import { ChartOptions } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
 import { getTimeUnit, useChartStyles } from "./chart-utils";
 
-export function getCommonChartOptions(timeRange: TimeRange, theme: 'light' | 'dark'): ChartOptions<any> {
+export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const chartStyles = useChartStyles(theme);
+  const chartStyles = useChartStyles();
 
   return {
     responsive: true,

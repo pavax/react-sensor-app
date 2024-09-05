@@ -33,6 +33,7 @@ interface RainEventChartProps {
 }
 
 const RainEventChart: React.FC<RainEventChartProps> = ({ data, timeRange }) => {
+  
   if (!data || !data.entries) {
     return <div>No data available</div>;
   }
@@ -51,7 +52,7 @@ const RainEventChart: React.FC<RainEventChartProps> = ({ data, timeRange }) => {
     ],
   };
 
-  const commonOptions = getCommonChartOptions(timeRange, "light"); // Assuming light theme, adjust if needed
+  const commonOptions = getCommonChartOptions(timeRange); 
 
   const options: ChartOptions<"bar"> = {
     ...commonOptions,

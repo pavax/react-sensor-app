@@ -8,7 +8,7 @@ interface LatestTimestampProps {
   additionalData?: Map<String, String>;
 }
 
-const ContexInformation: React.FC<LatestTimestampProps> = ({
+const ContextInfoBar: React.FC<LatestTimestampProps> = ({
   main,
   additionalData,
 }) => {
@@ -17,10 +17,6 @@ const ContexInformation: React.FC<LatestTimestampProps> = ({
   if (!main) {
     return null;
   }
-
-  // const formattedTimestamp = format(new Date(timestamp), "dd.MM.yyyy HH:mm", {
-  //   timeZone: "Europe/Zurich",
-  // });
 
   const toggleExpand = () => {
     setExpanded(!expanded);
@@ -51,4 +47,4 @@ const ContexInformation: React.FC<LatestTimestampProps> = ({
   );
 };
 
-export default ContexInformation;
+export default ContextInfoBar;

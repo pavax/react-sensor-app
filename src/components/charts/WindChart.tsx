@@ -61,12 +61,11 @@ export const WIND_DIRECTION_LABELS = [
 interface WindChartProps {
   data: ProcessedData;
   timeRange: TimeRange;
-  theme: "light" | "dark";
 }
 
-const WindChart: React.FC<WindChartProps> = ({ data, timeRange, theme }) => {
+const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
   const viewport = useViewport();
-  const commonOptions = getCommonChartOptions(timeRange, theme);
+  const commonOptions = getCommonChartOptions(timeRange);
 
   const options: ChartOptions<"line"> = {
     ...commonOptions,
@@ -99,7 +98,7 @@ const WindChart: React.FC<WindChartProps> = ({ data, timeRange, theme }) => {
       },
       windDirection: {
         windDirectionData: data.entries.windDirection.values,
-        darkMode: theme === "dark",
+        darkMode: viewport.isDarkMode,
         isMobile: !viewport.isDesktop,
       },
     },

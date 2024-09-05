@@ -6,6 +6,8 @@ interface ViewportContextType {
   isMobile: boolean;
   isTablet: boolean;
   isDesktop: boolean;
+  isDarkMode: boolean;
+  toggleTheme: () => void;
 }
 
 const ViewportContext = createContext<ViewportContextType | undefined>(undefined);
@@ -32,8 +34,24 @@ export const ViewportProvider: React.FC<ViewportProviderProps> = ({ children }) 
   const isTablet = width > 768 && width <= 1024;
   const isDesktop = width > 1024;
 
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme
+      ? savedTheme === "dark"
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
+
+  useEffect(() => {
+    document.body.classList.toggle("dark-theme", isDarkMode);
+    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+  }, [isDarkMode]);
+
+  const toggleTheme = () => setIsDarkMode(!isDarkMode);
+
   return (
-    <ViewportContext.Provider value={{ width, height, isMobile, isTablet, isDesktop }}>
+    <ViewportContext.Provider value={{ 
+      width, height, isMobile, isTablet, isDesktop, isDarkMode, toggleTheme 
+    }}>
       {children}
     </ViewportContext.Provider>
   );

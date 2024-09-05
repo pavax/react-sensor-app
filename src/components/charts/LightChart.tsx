@@ -32,11 +32,11 @@ ChartJS.register(
 interface LightChartProps {
   data: ProcessedData;
   timeRange: TimeRange;
-  theme: "light" | "dark";
 }
 
-const LightChart: React.FC<LightChartProps> = ({ data, timeRange, theme }) => {
-  const commonOptions = getCommonChartOptions(timeRange, theme);
+const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
+
+  const commonOptions = getCommonChartOptions(timeRange);
 
   if (!data || !data.entries) {
     return <div>No data available</div>;

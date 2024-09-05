@@ -1,5 +1,6 @@
 import { TimeRange } from "../../api/thingsboard-api";
 import { useState, useEffect } from 'react';
+import { useViewport } from "../../ViewportContext";
 
 export function getTimeUnit(timeRange: TimeRange): "hour" | "day" | "week" {
     switch (timeRange) {
@@ -20,7 +21,8 @@ export function getTimeUnit(timeRange: TimeRange): "hour" | "day" | "week" {
     return value.toFixed(1);
   }
 
-  export function useChartStyles(theme: 'light' | 'dark'): { lineColor: string; textColor: string; gridColor: string; } {
+  export function useChartStyles(): { lineColor: string; textColor: string; gridColor: string; } {
+    const { isDarkMode } = useViewport();
     const [chartStyles, setChartStyles] = useState({
       lineColor: '',
       textColor: '',
@@ -38,7 +40,7 @@ export function getTimeUnit(timeRange: TimeRange): "hour" | "day" | "week" {
       };
       const timeoutId = setTimeout(updateChartStyles, 1);
       return () => clearTimeout(timeoutId);
-    }, [theme]);
+    }, [isDarkMode]);
   
     return chartStyles;
   }
