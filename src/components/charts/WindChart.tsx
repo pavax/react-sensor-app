@@ -1,47 +1,50 @@
-import React from "react";
 import {
+  CategoryScale,
   ChartData,
   Chart as ChartJS,
   ChartOptions,
-  Plugin,
-  Scale,
+  ChartType,
   CoreScaleOptions,
-  CategoryScale,
-  LinearScale,
   Legend,
+  LinearScale,
   LineElement,
+  Plugin,
   PointElement,
+  Scale,
   TimeScale,
   Title,
   Tooltip,
-  ChartType,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
 import "chartjs-adapter-date-fns";
+import { format } from "date-fns-tz";
+import React from "react";
+import { Line } from "react-chartjs-2";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
-import { getTimeUnit, formatAsNumber } from "./chart-utils";
-import { format } from "date-fns-tz";
+import { useViewport } from "../../ViewportContext";
+import { formatAsNumber, getTimeUnit, useChartStyles } from "./chart-utils";
 
 ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    TimeScale
-  );
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  TimeScale
+);
 
-  declare module 'chart.js' {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    interface PluginOptionsByType<TType extends ChartType> {
-      windDirection?: {
-        windDirectionData: number[];
-      };
-    }
+declare module "chart.js" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface PluginOptionsByType<TType extends ChartType> {
+    windDirection?: {
+      windDirectionData: number[];
+      darkMode: boolean;
+      isMobile: boolean;
+    };
   }
+}
 
 export const WIND_DIRECTION_LABELS = [
   "N",
@@ -57,36 +60,11 @@ export const WIND_DIRECTION_LABELS = [
 interface WindChartProps {
   data: ProcessedData;
   timeRange: TimeRange;
+  theme: "light" | "dark";
 }
 
-const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
-  const createWindDirectionPlugin = (): Plugin => {
-    return {
-      id: "windDirection",
-      afterDatasetsDraw: (
-        chart,
-        _,
-        pluginOptions: { windDirectionData?: number[] }
-      ) => {
-        const windDirectionData = data.entries.windDirection?.values;
-        if (!windDirectionData) return;
-
-        const ctx = chart.ctx;
-        ctx.save();
-        data.timestamps.forEach((timestamp, timestampIndex) => {
-          drawWindDirectionArrow(
-            ctx,
-            chart.scales.x,
-            Number(timestamp),
-            windDirectionData[timestampIndex],
-            timestampIndex,
-            chart
-          );
-        });
-        ctx.restore();
-      },
-    };
-  };
+const WindChart: React.FC<WindChartProps> = ({ data, timeRange, theme }) => {
+  const viewport = useViewport();
 
   const options: ChartOptions<"line"> = {
     responsive: true,
@@ -150,12 +128,14 @@ const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
         },
       },
       windDirection: {
-        windDirectionData: [],
+        windDirectionData: data.entries.windDirection.values,
+        darkMode: theme === "dark",
+        isMobile: viewport.isMobile,
       },
     },
     layout: {
       padding: {
-        top: 60,
+        top: viewport.isMobile ? 35 : 60,
         right: 15,
       },
     },
@@ -178,6 +158,7 @@ const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
   return (
     <div style={{ width: "100%", minHeight: "400px", marginBottom: "20px" }}>
       <Line
+        id={JSON.stringify(theme)}
         options={options}
         data={chartData}
         plugins={[createWindDirectionPlugin()]}
@@ -194,13 +175,53 @@ function getWindDirectionLabel(index: number, data: ProcessedData): string {
   return WIND_DIRECTION_LABELS[directionIndex] || "Unknown";
 }
 
+function createWindDirectionPlugin(): Plugin {
+  return {
+    id: "windDirection",
+    afterDatasetsDraw: (
+      chart,
+      _,
+      pluginOptions: {
+        windDirectionData?: number[];
+        darkMode: boolean;
+        isMobile: boolean;
+      }
+    ) => {
+      if (!pluginOptions.windDirectionData) return;
+
+      const ctx = chart.ctx;
+      ctx.save();
+      const timestamps = chart.data.labels;
+
+      if (!timestamps) {
+        return;
+      }
+      timestamps.forEach((timestamp, timestampIndex) => {
+        drawWindDirectionArrow(
+          ctx,
+          chart.scales.x,
+          Number(timestamp),
+          pluginOptions.windDirectionData?.[timestampIndex] ?? 0,
+          timestampIndex,
+          chart,
+          pluginOptions.darkMode,
+          pluginOptions.isMobile
+        );
+      });
+      ctx.restore();
+    },
+  };
+}
+
 function drawWindDirectionArrow(
   ctx: CanvasRenderingContext2D,
   xAxis: Scale<CoreScaleOptions>,
   timestamp: number,
   windDirection: number,
   timestampIndex: number,
-  chart: ChartJS
+  chart: ChartJS,
+  isDarkMode: boolean,
+  isMobile: boolean
 ) {
   if (windDirection === undefined) return;
 
@@ -214,8 +235,6 @@ function drawWindDirectionArrow(
   )
     return;
 
-  const isMobile = window.innerWidth <= 768; // You may want to adjust this threshold
-
   ctx.font = `${isMobile ? 8 : 10}px Arial`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
@@ -224,7 +243,7 @@ function drawWindDirectionArrow(
   const arrowSize = isMobile ? 9 : 10;
   const circleRadius = arrowSize * 1.5;
   const centerY = isMobile ? 18 : 20;
-  const arrowColor = isDarkMode()
+  const arrowColor = isDarkMode
     ? "rgba(255, 255, 255, 0.9)"
     : "rgba(0, 0, 0, 0.8)";
   const arrowTipColor = "rgba(255, 0, 0, 0.8)";
@@ -287,11 +306,6 @@ function drawWindDirectionArrow(
       centerY + circleRadius + 10
     );
   }
-}
-
-function isDarkMode() {
-  // Implement this function based on your app's theme detection logic
-  return false; // Placeholder implementation
 }
 
 export default WindChart;

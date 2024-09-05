@@ -20,7 +20,11 @@ interface TelemetryProps {
   theme: "light" | "dark";
 }
 
-const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange,theme }) => {
+const Telemetry: React.FC<TelemetryProps> = ({
+  deviceId,
+  timeRange,
+  theme,
+}) => {
   const [telemetryData, setTelemetryData] = useState<ProcessedData | null>(
     null
   );
@@ -105,7 +109,7 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange,theme }) => {
   }
 
   return (
-    <div>
+    <div className="telemetry-grid">
       <div className="telemetry-container">
         <h3>Temperatur</h3>
         <div className="chart-container">
@@ -118,11 +122,15 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange,theme }) => {
       </div>
       <div className="telemetry-container">
         <h3>Regen</h3>
-        <RainEventChart data={telemetryData} timeRange={timeRange} />
+        <div className="chart-container">
+          <RainEventChart data={telemetryData} timeRange={timeRange}/>
+        </div>
       </div>
       <div className="telemetry-container">
         <h3>Wind</h3>
-        <WindChart data={telemetryData} timeRange={timeRange} />
+        <div className="chart-container">
+          <WindChart data={telemetryData} timeRange={timeRange} theme={theme} />
+        </div>
       </div>
     </div>
   );

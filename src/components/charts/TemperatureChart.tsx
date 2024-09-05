@@ -18,6 +18,7 @@ import { ChartOptions } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
 import { format } from 'date-fns-tz';
 import { formatAsNumber, getTimeUnit, useChartStyles } from "./chart-utils";
+import { useViewport } from "../../ViewportContext";
 
 ChartJS.register(
   CategoryScale,
@@ -56,6 +57,7 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
 }) => {
 
   const chartStyles = useChartStyles(theme);
+  const viewport = useViewport();
 
   if (!data || !data.entries) {
     return <div>No data available</div>;
@@ -188,7 +190,7 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
       },
       y1: {
         type: "linear" as const,
-        display: false,
+        display: !viewport.isMobile,
         position: "right" as const,
         ticks: {
           color: chartStyles.textColor,

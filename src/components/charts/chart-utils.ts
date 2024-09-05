@@ -20,8 +20,6 @@ export function getTimeUnit(timeRange: TimeRange): "hour" | "day" | "week" {
     return value.toFixed(1);
   }
 
-
-
   export function useChartStyles(theme: 'light' | 'dark'): { lineColor: string; textColor: string; gridColor: string; } {
     const [chartStyles, setChartStyles] = useState({
       lineColor: '',
