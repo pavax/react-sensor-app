@@ -23,6 +23,7 @@ import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
 import { useViewport } from "../../ViewportContext";
 import { formatAsNumber, getTimeUnit, useChartStyles } from "./chart-utils";
+import { getCommonChartOptions } from "./common-chart-config";
 
 ChartJS.register(
   CategoryScale,
@@ -65,56 +66,25 @@ interface WindChartProps {
 
 const WindChart: React.FC<WindChartProps> = ({ data, timeRange, theme }) => {
   const viewport = useViewport();
+  const commonOptions = getCommonChartOptions(timeRange, theme);
 
   const options: ChartOptions<"line"> = {
-    responsive: true,
-    maintainAspectRatio: false,
+    ...commonOptions,
     scales: {
-      x: {
-        type: "time",
-        time: {
-          unit: getTimeUnit(timeRange),
-          displayFormats: {
-            hour: "HH:mm",
-            day: "dd.MM",
-            week: "dd.MM",
-          },
-        },
-        ticks: {
-          maxRotation: 45,
-          minRotation: 45,
-          autoSkip: true,
-          font: {
-            size: 8,
-          },
-          padding: 20,
-        },
-      },
+      ...commonOptions.scales,
       y0: {
         type: "linear",
         position: "left",
         ticks: {
-          font: {
-            size: 8,
-          },
+          ...commonOptions.scales?.y?.ticks,
           callback: (value) => `${Number(value).toFixed(0)} m/s`,
         },
       },
     },
     plugins: {
-      legend: {
-        position: "bottom",
-        labels: {
-          boxWidth: 12,
-          padding: 10,
-          font: {
-            size: 10,
-          },
-        },
-      },
+      ...commonOptions.plugins,
       tooltip: {
-        mode: "index",
-        intersect: true,
+        ...commonOptions.plugins?.tooltip,
         callbacks: {
           title: (tooltipItems) =>
             format(new Date(tooltipItems[0].parsed.x), "dd.MM.yyyy HH:mm", {

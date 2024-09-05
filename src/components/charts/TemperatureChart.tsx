@@ -17,8 +17,9 @@ import { ProcessedData } from "../../api/data-processing";
 import { ChartOptions } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
 import { format } from 'date-fns-tz';
-import { formatAsNumber, getTimeUnit, useChartStyles } from "./chart-utils";
+import { calculateTrendLine, formatAsNumber, getTimeUnit, useChartStyles } from "./chart-utils";
 import { useViewport } from "../../ViewportContext";
+import { getCommonChartOptions } from "./common-chart-config";
 
 ChartJS.register(
   CategoryScale,
@@ -35,19 +36,6 @@ interface TelemetryChartsProps {
   data: ProcessedData;
   timeRange: TimeRange;
   theme: 'light' | 'dark';
-}
-
-function calculateTrendLine(values: number[]): number[] {
-  const n = values.length;
-  const sumX = values.reduce((acc, _, i) => acc + i, 0);
-  const sumY = values.reduce((acc, y) => acc + y, 0);
-  const sumXY = values.reduce((acc, y, i) => acc + i * y, 0);
-  const sumX2 = values.reduce((acc, _, i) => acc + i * i, 0);
-
-  const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-  const intercept = (sumY - slope * sumX) / n;
-
-  return values.map((_, i) => slope * i + intercept);
 }
 
 const TemperatureChart: React.FC<TelemetryChartsProps> = ({
@@ -110,97 +98,27 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
     ],
   };
 
+  const commonOptions = getCommonChartOptions(timeRange, theme);
+  
   const options: ChartOptions<"line"> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: "bottom" as const,
-        labels: {
-          color: chartStyles.textColor,
-        },
-      },
-      tooltip: {
-        mode: 'index',
-        intersect: true,
-        callbacks: {
-          title: (tooltipItems) =>
-            format(new Date(tooltipItems[0].parsed.x), 'dd.MM.yyyy HH:mm', {
-              timeZone: 'Europe/Zurich',
-            }),
-          label: (context) => {
-            if (context.dataset.label === 'Temperature Trend') {
-              return '';
-            }
-            let label = context.dataset.label || '';
-            if (label) {
-              label += ': ';
-            }
-            if (context.parsed.y !== null) {
-              label += formatAsNumber(context.parsed.y);
-              if (context.datasetIndex === 3) {
-                label += '%';
-              } else {
-                label += '°C';
-              }
-            }
-            return label;
-          },
-        },
-      },
-    },
+    ...commonOptions,
     scales: {
-      x: {
-        type: "time",
-        time: {
-          unit: getTimeUnit(timeRange),
-          displayFormats: {
-            hour: "HH:mm",
-            day: "dd.MM",
-            week: "dd.MM",
-          },
-        },
-        ticks: {
-          color: chartStyles.textColor,
-          maxRotation: 45,
-          minRotation: 45,
-          autoSkip: true,
-          font: {
-            size: 8,
-          },
-        },
-        grid: {
-          color: chartStyles.gridColor,
-        },
-      },
-      y0: {
-        type: "linear" as const,
-        display: true,
-        position: "left" as const,
-        ticks: {
-          color: chartStyles.textColor,
-          font: {
-            size: 8,
-          },
-          
-        },
-        grid: {
-          color: chartStyles.gridColor,
-        },
-      },
+      ...(commonOptions.scales ?? {}),
       y1: {
-        type: "linear" as const,
-        display: !viewport.isMobile,
+        ...(commonOptions.scales?.y ?? {}),
         position: "right" as const,
+        display: !viewport.isMobile,
+        min: 0,
+        max: 100,
+        grid: {
+          drawOnChartArea: false,
+        },
         ticks: {
-          color: chartStyles.textColor,
           font: {
             size: 8,
           },
-        },
-        grid: {
-          color: chartStyles.gridColor,
-          drawOnChartArea: false,
+          callback: (value) => `${Number(value).toFixed(0)}`,
+          count: 7,
         },
       },
     },
