@@ -53,6 +53,7 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
         },
         grid: {
           color: chartStyles.gridColor,
+          drawOnChartArea: false,
         },
       },
       y0: {

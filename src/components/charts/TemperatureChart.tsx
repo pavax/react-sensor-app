@@ -109,9 +109,6 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
         display: !viewport.isMobile,
         min: 0,
         max: 100,
-        grid: {
-          drawOnChartArea: false,
-        },
         ticks: {
           font: {
             size: 8,
