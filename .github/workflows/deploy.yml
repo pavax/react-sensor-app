@@ -16,11 +16,11 @@ jobs:
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: build.yml
-          name: dist
-          path: dist
+          name: build
+          path: build
 
-      - name: List contents of dist
-        run: ls -R dist
+      - name: List contents of build
+        run: ls -R build
 
       - name: Deploy to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -28,6 +28,6 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/
+          local-dir: ./build/
           server-dir: /
           dangerous-clean-slate: true
