@@ -15,7 +15,7 @@ body.dark-theme {
   --background-color: #121212;
   --text-color: #e0e0e0;
   --chart-background: #1e1e1e;
-  --chart-line-color: #4a90e2;;
+  --chart-line-color: #4a90e2;
   --chart-grid-color: #252222;
   --chart-text-color: #e0e0e0;
 }
@@ -24,7 +24,7 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   transition: background-color 0.3s, color 0.3s;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 .App {
@@ -142,7 +142,7 @@ body {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 24px;
 }
 
@@ -154,7 +154,7 @@ body {
   left: 3px;
   bottom: 3px;
   background-color: white;
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 50%;
 }
 
@@ -172,11 +172,10 @@ input:checked + .slider:before {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 1rem;
+  padding: 0 1rem 1rem 1rem;
   font-size: 1.2rem;
   width: 75vw;
   margin: 0 auto;
-  padding-top: 15px;
 }
 
 .overview-cards-container {
@@ -247,6 +246,57 @@ input:checked + .slider:before {
   transition: transform 0.3s ease;
 }
 
+.context-information {
+  background-color: var(--chart-background);
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 10px 20px;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  width: 400px;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  padding-bottom: 25px; /* Increase bottom padding to make room for the icon */
+}
+
+.context-information strong {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.context-information .latch-icon-container {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+
+.context-information .latch-icon {
+  transition: transform 0.3s ease;
+}
+
+.context-information.expanded .latch-icon {
+  transform: rotate(180deg);
+}
+
+.context-information .additional-info {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  margin-bottom: 1px; 
+}
+
+.context-information.expanded .additional-info {
+  max-height: 200px;
+}
+
 @media (max-width: 1200px) {
   .App-main {
     width: 85vw;
@@ -256,7 +306,14 @@ input:checked + .slider:before {
 @media (max-width: 768px) {
   .App-main {
     width: 90vw;
-    padding: 0.5rem;
+    padding: 0 0.5rem 0.5rem 0.5rem;
+  }
+
+  .context-information {
+    font-size: 0.8rem;
+    padding: 8px 15px;
+    width: 100%;
+    max-width: 300px;
   }
 
   .telemetry-container {
@@ -268,7 +325,7 @@ input:checked + .slider:before {
   }
 
   .chart-container {
-    height: 300px; 
+    height: 300px;
   }
 
   .overview-cards-container {
@@ -299,13 +356,26 @@ input:checked + .slider:before {
   }
 
   .chart-container {
-    height: 250px; 
+    height: 250px;
+  }
+
+  .context-information {
+    font-size: 0.8rem;
+    padding: 8px 15px 30px; 
+  }
+
+  .context-information .latch-icon-container {
+    bottom: 8px; 
   }
 }
 
 @media (max-width: 360px) {
   .chart-container {
-    height: 200px; 
+    height: 200px;
+  }
+
+  .context-information {
+    padding: 8px 10px 30px; 
   }
 }
 

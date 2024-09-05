@@ -15,6 +15,8 @@ import RainEventChart from "./charts/RainEventChart ";
 import WindChart from "./charts/WindChart";
 import LightChart from "./charts/LightChart";
 import OverviewCards from "./OverviewCards";
+import ContexInformation from "./ContextInfromation";
+import { format } from "date-fns-tz";
 
 interface TelemetryProps {
   deviceId: string;
@@ -50,9 +52,9 @@ const Telemetry: React.FC<TelemetryProps> = ({
         "windVoltageMax",
         "windDirection",
         "rainEventAccDifference",
-        "rainEventAcc",
         "lux",
-        "uvIndex"
+        "uvIndex",
+        "counter"
       );
 
       const keyInfo: KeyInfo = {
@@ -78,7 +80,7 @@ const Telemetry: React.FC<TelemetryProps> = ({
           aggregationType: AggregationType.SUM,
           fractionDigits: 0,
         },
-        rainEventAcc: {
+        counter: {
           aggregationType: AggregationType.LATEST,
           fractionDigits: 0,
         },
@@ -96,15 +98,13 @@ const Telemetry: React.FC<TelemetryProps> = ({
     }
   }, [deviceId, timeRange]);
 
-
   useEffect(() => {
     fetchData();
     const intervalId = setInterval(() => {
       fetchData();
-    }, INTERVAL); 
+    }, INTERVAL);
     return () => clearInterval(intervalId);
   }, [fetchData]);
-
 
   if (loading && !telemetryData) {
     return <div>Loading telemetry data...</div>;
@@ -118,8 +118,20 @@ const Telemetry: React.FC<TelemetryProps> = ({
     return <div>No telemetry data available</div>;
   }
 
+  const formattedTimestamp = format(
+    new Date(telemetryData.latestTimestamp ?? Date.now()),
+    "dd.MM.yyyy HH:mm",
+    {
+      timeZone: "Europe/Zurich",
+    }
+  );
+  const additionalData = new Map<string, string>();
+  additionalData.set("Device-Uptime Count", telemetryData.entries.counter.latestValue?.toString() ?? "0");
+
   return (
     <div className="telemetry-grid">
+      <ContexInformation main={formattedTimestamp} additionalData={additionalData} />
+
       <OverviewCards data={telemetryData} />
 
       <div className="telemetry-container">
