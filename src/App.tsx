@@ -6,7 +6,11 @@ import Telemetry from "./components/Telemetry";
 import { ViewportProvider } from "./ViewportContext";
 
 function App() {
-  
+
+  const deviceId = process.env.REACT_APP_API_DEVICE_ID;
+
+  const publicId = process.env.REACT_APP_TB_PUBLICID;
+
   const [currentTimePeriod, setCurrentTimePeriod] = useState<TimeRange>(
     TimeRange.ONE_DAY
   );
@@ -24,12 +28,7 @@ function App() {
 
   const handleTimePeriodChange = (newTimePeriod: TimeRange) => {
     setCurrentTimePeriod(newTimePeriod);
-    console.log("Time period changed to:", newTimePeriod);
   };
-
-  const deviceId = process.env.REACT_APP_API_DEVICE_ID;
-
-  const publicId = process.env.REACT_APP_TB_PUBLICID;
 
   useEffect(() => {
     const performLogin = async () => {
@@ -57,11 +56,6 @@ function App() {
     localStorage.setItem("theme", isDarkMode ? "dark" : "light");
   }, [isDarkMode]);
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    document.body.classList.toggle("dark-theme", isDarkMode);
-  };
-
   if (loginError) {
     return <div>{loginError}</div>;
   }
@@ -82,7 +76,7 @@ function App() {
         <Header
           onTimePeriodChange={handleTimePeriodChange}
           isDarkMode={isDarkMode}
-          toggleTheme={toggleTheme}
+          toggleTheme={() => setIsDarkMode(!isDarkMode)}
         />
         <main className="App-main">
           <Telemetry
