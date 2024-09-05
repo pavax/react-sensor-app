@@ -69,10 +69,11 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
     scales: {
       ...commonOptions.scales,
       y0: {
+        ...commonOptions.scales.y0,
         ticks: {
           ...commonOptions.scales.y0,
           callback: function (value) {
-            return (Number(value) / 1000).toFixed(1) + "k";
+            return (Number(value) / 1000).toFixed(0) + "k";
           },
         },
       },

@@ -71,10 +71,9 @@ const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
     scales: {
       ...commonOptions.scales,
       y0: {
-        type: "linear",
-        position: "left",
+        ...commonOptions.scales?.y0,
         ticks: {
-          ...commonOptions.scales?.y?.ticks,
+          ...commonOptions.scales?.y0?.ticks,
           callback: (value) => `${Number(value).toFixed(0)} m/s`,
         },
       },
