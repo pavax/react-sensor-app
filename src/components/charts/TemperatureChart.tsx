@@ -207,10 +207,8 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
   };
 
   return (
-    <div>
-      <div style={{ width: "100%", minHeight: "400px", marginBottom: "20px" }}>
-        <Line options={options} data={temperatureData} />
-      </div>
+    <div style={{ width: "100%", height: "100%" }}>
+      <Line options={options} data={temperatureData} />
     </div>
   );
 };

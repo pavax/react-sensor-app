@@ -218,7 +218,7 @@ input:checked + .slider:before {
   }
 
   .chart-container {
-    height: 300px;
+    height: 300px; 
   }
 }
 
@@ -236,8 +236,12 @@ input:checked + .slider:before {
   }
 
   .chart-container {
-    height: 250px;
+    height: 250px; 
   }
 }
 
-@keyframes pulse
+@media (max-width: 360px) {
+  .chart-container {
+    height: 200px; 
+  }
+}

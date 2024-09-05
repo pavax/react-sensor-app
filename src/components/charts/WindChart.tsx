@@ -156,9 +156,8 @@ const WindChart: React.FC<WindChartProps> = ({ data, timeRange, theme }) => {
   };
 
   return (
-    <div style={{ width: "100%", minHeight: "400px", marginBottom: "20px" }}>
+    <div style={{ width: "100%", height: "100%" }}>
       <Line
-        id={JSON.stringify(theme)}
         options={options}
         data={chartData}
         plugins={[createWindDirectionPlugin()]}

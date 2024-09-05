@@ -32,8 +32,6 @@ interface RainEventChartProps {
   timeRange: TimeRange;
 }
 
-
-
 const RainEventChart: React.FC<RainEventChartProps> = ({
   data,
   timeRange,
@@ -55,7 +53,7 @@ const RainEventChart: React.FC<RainEventChartProps> = ({
     ],
   };
 
-  const options: ChartOptions<"bar"> = {
+  const options: ChartOptions<"bar"> = {  
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -99,10 +97,8 @@ const RainEventChart: React.FC<RainEventChartProps> = ({
   };
 
   return (
-    <div>
-      <div style={{ width: "100%", minHeight: "400px", marginBottom: "20px" }}>
-        <Bar options={options} data={rainEventData} />
-      </div>
+    <div style={{ width: "100%", height: "100%" }}>
+      <Bar options={options} data={rainEventData} />
     </div>
   );
 };

@@ -121,15 +121,15 @@ const Telemetry: React.FC<TelemetryProps> = ({
         </div>
       </div>
       <div className="telemetry-container">
-        <h3>Regen</h3>
-        <div className="chart-container">
-          <RainEventChart data={telemetryData} timeRange={timeRange}/>
-        </div>
-      </div>
-      <div className="telemetry-container">
         <h3>Wind</h3>
         <div className="chart-container">
           <WindChart data={telemetryData} timeRange={timeRange} theme={theme} />
+        </div>
+      </div>
+      <div className="telemetry-container">
+        <h3>Regen</h3>
+        <div className="chart-container">
+          <RainEventChart data={telemetryData} timeRange={timeRange} />
         </div>
       </div>
     </div>
