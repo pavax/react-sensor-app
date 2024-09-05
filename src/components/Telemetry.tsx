@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   fetchTelemetry,
   TelemetryTimeSeries,
@@ -22,6 +22,8 @@ interface TelemetryProps {
   theme: "light" | "dark";
 }
 
+const INTERVAL = 60_000;
+
 const Telemetry: React.FC<TelemetryProps> = ({
   deviceId,
   timeRange,
@@ -33,72 +35,78 @@ const Telemetry: React.FC<TelemetryProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-        const rawData: TelemetryTimeSeries = await fetchTelemetry(
-          deviceId,
-          20000,
-          timeRange,
-          "temperature",
-          "humidity",
-          "dewPoint",
-          "windVoltageMax",
-          "windDirection",
-          "rainEventAccDifference",
-          "rainEventAcc",
-          "lux",
-          "uvIndex"
-        );
+      const rawData: TelemetryTimeSeries = await fetchTelemetry(
+        deviceId,
+        20000,
+        timeRange,
+        "temperature",
+        "humidity",
+        "dewPoint",
+        "windVoltageMax",
+        "windDirection",
+        "rainEventAccDifference",
+        "rainEventAcc",
+        "lux",
+        "uvIndex"
+      );
 
-        const keyInfo: KeyInfo = {
-          temperature: {
-            aggregationType: AggregationType.AVERAGE,
-            fractionDigits: 0,
-          },
-          humidity: {
-            aggregationType: AggregationType.AVERAGE,
-            fractionDigits: 0,
-          },
-          dewPoint: {
-            aggregationType: AggregationType.AVERAGE,
-            fractionDigits: 0,
-          },
-          windVoltageMax: {
-            aggregationType: AggregationType.MAX,
-            fractionDigits: 0,
-            valueTransformFn: (voltage) => (voltage / 1000) * 14,
-          },
-          windDirection: { aggregationType: AggregationType.MODE },
-          rainEventAccDifference: {
-            aggregationType: AggregationType.SUM,
-            fractionDigits: 0,
-          },
-          rainEventAcc: {
-            aggregationType: AggregationType.LATEST,
-            fractionDigits: 0,
-          },
-          lux: { aggregationType: AggregationType.MAX, fractionDigits: 0 },
-          uvIndex: { aggregationType: AggregationType.MAX, fractionDigits: 0 },
-        };
+      const keyInfo: KeyInfo = {
+        temperature: {
+          aggregationType: AggregationType.AVERAGE,
+          fractionDigits: 0,
+        },
+        humidity: {
+          aggregationType: AggregationType.AVERAGE,
+          fractionDigits: 0,
+        },
+        dewPoint: {
+          aggregationType: AggregationType.AVERAGE,
+          fractionDigits: 0,
+        },
+        windVoltageMax: {
+          aggregationType: AggregationType.MAX,
+          fractionDigits: 0,
+          valueTransformFn: (voltage) => (voltage / 1000) * 14,
+        },
+        windDirection: { aggregationType: AggregationType.MODE },
+        rainEventAccDifference: {
+          aggregationType: AggregationType.SUM,
+          fractionDigits: 0,
+        },
+        rainEventAcc: {
+          aggregationType: AggregationType.LATEST,
+          fractionDigits: 0,
+        },
+        lux: { aggregationType: AggregationType.MAX, fractionDigits: 0 },
+        uvIndex: { aggregationType: AggregationType.MAX, fractionDigits: 0 },
+      };
 
-        const processedData = processData(rawData, timeRange, keyInfo);
-        setTelemetryData(processedData);
-      } catch (err) {
-        setError("Failed to fetch telemetry data");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+      const processedData = processData(rawData, timeRange, keyInfo);
+      setTelemetryData(processedData);
+    } catch (err) {
+      setError("Failed to fetch telemetry data");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   }, [deviceId, timeRange]);
 
-  if (loading) {
+
+  useEffect(() => {
+    fetchData();
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, INTERVAL); 
+    return () => clearInterval(intervalId);
+  }, [fetchData]);
+
+
+  if (loading && !telemetryData) {
     return <div>Loading telemetry data...</div>;
   }
 
