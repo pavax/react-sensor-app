@@ -52,7 +52,6 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange, isDarkMode, toggleT
   const handleTimePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTimePeriod(e.target.value as TimeRange);
   };
-
   return (
     <header className="App-header-menu">
       <h1>Sensor App</h1>
@@ -67,9 +66,6 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange, isDarkMode, toggleT
         <div ref={settingsRef} className="settings-menu">
           <div className="settings-header">
             <h2>Einstellungen</h2>
-            <button className="close-button" onClick={toggleSettings}>
-              <FontAwesomeIcon icon={faTimes} />
-            </button>
           </div>
           <div className="settings-content">
             <div className="setting-item">

@@ -130,7 +130,7 @@ const WindChart: React.FC<WindChartProps> = ({ data, timeRange, theme }) => {
       windDirection: {
         windDirectionData: data.entries.windDirection.values,
         darkMode: theme === "dark",
-        isMobile: viewport.isMobile,
+        isMobile: !viewport.isDesktop,
       },
     },
     layout: {
