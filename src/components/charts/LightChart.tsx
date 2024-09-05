@@ -16,7 +16,6 @@ import { Chart } from "react-chartjs-2";
 import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
-import { useViewport } from "../../ViewportContext";
 import { getCommonChartOptions } from "./common-chart-config";
 
 ChartJS.register(

@@ -16,8 +16,10 @@ import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
 import { ChartOptions } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
-import { format } from 'date-fns-tz';
-import { calculateTrendLine, formatAsNumber, getTimeUnit, useChartStyles } from "./chart-utils";
+import {
+  calculateTrendLine,
+  useChartStyles,
+} from "./chart-utils";
 import { useViewport } from "../../ViewportContext";
 import { getCommonChartOptions } from "./common-chart-config";
 
@@ -35,15 +37,14 @@ ChartJS.register(
 interface TelemetryChartsProps {
   data: ProcessedData;
   timeRange: TimeRange;
-  theme: 'light' | 'dark';
+  theme: "light" | "dark";
 }
 
 const TemperatureChart: React.FC<TelemetryChartsProps> = ({
   data,
   timeRange,
-  theme
+  theme,
 }) => {
-
   const chartStyles = useChartStyles(theme);
   const viewport = useViewport();
 
@@ -99,7 +100,7 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
   };
 
   const commonOptions = getCommonChartOptions(timeRange, theme);
-  
+
   const options: ChartOptions<"line"> = {
     ...commonOptions,
     scales: {

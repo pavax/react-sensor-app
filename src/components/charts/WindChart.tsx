@@ -22,7 +22,7 @@ import { Line } from "react-chartjs-2";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
 import { useViewport } from "../../ViewportContext";
-import { formatAsNumber, getTimeUnit, useChartStyles } from "./chart-utils";
+import { formatAsNumber } from "./chart-utils";
 import { getCommonChartOptions } from "./common-chart-config";
 
 ChartJS.register(
