@@ -36,6 +36,9 @@ jobs:
           API_DEVICE_ID: ${{ vars.API_DEVICE_ID }}
           TB_PUBLICID: ${{ vars.TB_PUBLICID }}
 
+      - name: Print .env file content
+        run: cat .env
+        
       - name: Build
         run: npm run build
 
