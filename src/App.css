@@ -174,9 +174,45 @@ input:checked + .slider:before {
   justify-content: flex-start;
   padding: 1rem;
   font-size: 1.2rem;
-  width: 75vw; /* Set default width for large screens */
-  margin: 0 auto; /* Center the content */
+  width: 75vw;
+  margin: 0 auto;
   padding-top: 15px;
+}
+
+.overview-cards-container {
+  width: 100%;
+  padding: 10px 0;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.overview-card-wrapper {
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.slick-slide {
+  height: auto;
+}
+
+.overview-card {
+  border-radius: 15px;
+  padding: 0.5rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.card-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.card-value {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
 }
 
 .telemetry-grid {
@@ -234,6 +270,19 @@ input:checked + .slider:before {
   .chart-container {
     height: 300px; 
   }
+
+  .overview-cards-container {
+    padding: 5px 0;
+  }
+
+  .overview-card-wrapper {
+    padding: 3px;
+  }
+
+  .overview-card {
+    border-radius: 12px;
+    padding: 0.3rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -258,4 +307,9 @@ input:checked + .slider:before {
   .chart-container {
     height: 200px; 
   }
+}
+
+.slick-track {
+  display: flex;
+  align-items: center;
 }

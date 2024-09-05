@@ -14,6 +14,7 @@ import TemperatureChart from "./charts/TemperatureChart";
 import RainEventChart from "./charts/RainEventChart ";
 import WindChart from "./charts/WindChart";
 import LightChart from "./charts/LightChart";
+import OverviewCards from "./OverviewCards";
 
 interface TelemetryProps {
   deviceId: string;
@@ -111,6 +112,8 @@ const Telemetry: React.FC<TelemetryProps> = ({
 
   return (
     <div className="telemetry-grid">
+      <OverviewCards data={telemetryData} />
+
       <div className="telemetry-container">
         <h3>Temperatur</h3>
         <div className="chart-container">
