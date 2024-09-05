@@ -13,6 +13,7 @@ import {
 import TemperatureChart from "./charts/TemperatureChart";
 import RainEventChart from "./charts/RainEventChart ";
 import WindChart from "./charts/WindChart";
+import LightChart from "./charts/LightChart";
 
 interface TelemetryProps {
   deviceId: string;
@@ -130,6 +131,16 @@ const Telemetry: React.FC<TelemetryProps> = ({
         <h3>Regen</h3>
         <div className="chart-container">
           <RainEventChart data={telemetryData} timeRange={timeRange} />
+        </div>
+      </div>
+      <div className="telemetry-container">
+        <h3>Licht</h3>
+        <div className="chart-container">
+          <LightChart
+            data={telemetryData}
+            timeRange={timeRange}
+            theme={theme}
+          />
         </div>
       </div>
     </div>
