@@ -1,6 +1,10 @@
 import { ChartOptions } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
 import { getTimeUnit, useChartStyles } from "./chart-utils";
+import { TooltipItem } from 'chart.js';
+
+import { format } from "date-fns-tz";
+
 
 export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -19,6 +23,12 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
       tooltip: {
         mode: 'index',
         intersect: true,
+        callbacks: {
+          title: (tooltipItems: TooltipItem<any>[]) =>
+            format(new Date(tooltipItems[0].parsed.x), "dd.MM.yyyy HH:mm", {
+              timeZone: "Europe/Zurich",
+            }),
+        },
       },
     },
     scales: {

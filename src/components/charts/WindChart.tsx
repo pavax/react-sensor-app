@@ -16,7 +16,6 @@ import {
   Tooltip,
 } from "chart.js";
 import "chartjs-adapter-date-fns";
-import { format } from "date-fns-tz";
 import React from "react";
 import { Line } from "react-chartjs-2";
 import { ProcessedData } from "../../api/data-processing";
@@ -85,10 +84,7 @@ const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
       tooltip: {
         ...commonOptions.plugins?.tooltip,
         callbacks: {
-          title: (tooltipItems) =>
-            format(new Date(tooltipItems[0].parsed.x), "dd.MM.yyyy HH:mm", {
-              timeZone: "Europe/Zurich",
-            }),
+          ...commonOptions.plugins?.tooltip.callbacks,
           label: (context) => {
             const windSpeed = formatAsNumber(context.parsed.y);
             const direction = getWindDirectionLabel(context.dataIndex, data);

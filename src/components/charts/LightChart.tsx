@@ -35,7 +35,6 @@ interface LightChartProps {
 }
 
 const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
-
   const commonOptions = getCommonChartOptions(timeRange);
 
   if (!data || !data.entries) {
@@ -83,24 +82,6 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
         display: false,
         min: 0,
         max: 11,
-      },
-    },
-    plugins: {
-      ...commonOptions.plugins,
-      tooltip: {
-        ...commonOptions.plugins?.tooltip,
-        callbacks: {
-          label: (context) => {
-            let label = context.dataset.label || "";
-            if (label) {
-              label += ": ";
-            }
-            if (context.parsed.y !== null) {
-              label += context.parsed.y.toFixed(1);
-            }
-            return label;
-          },
-        },
       },
     },
   };
