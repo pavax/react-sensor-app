@@ -1,6 +1,5 @@
 import {
   ChartData,
-  Chart as ChartJS,
   ChartOptions,
   ChartType,
   CoreScaleOptions,
@@ -15,8 +14,8 @@ import { TimeRange } from "../../api/thingsboard-api";
 import { useViewport } from "../../ViewportContext";
 import { useHideTooltipOnTouchMove } from "./chart-utils";
 import { getCommonChartOptions } from "./chart-config";
-import { useRef } from 'react';
-import { Chart } from 'chart.js';
+import { useRef } from "react";
+import { Chart } from "chart.js";
 
 declare module "chart.js" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -72,7 +71,10 @@ const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
           ...commonOptions.plugins?.tooltip.callbacks,
           label: (context) => {
             const windSpeed = Number(context.parsed.y);
-            const windDirectionLabel = getWindDirectionLabel(context.dataIndex, data);
+            const windDirectionLabel = getWindDirectionLabel(
+              context.dataIndex,
+              data
+            );
             return `Geschwindigkeit: ${windSpeed} m/s | Richtung: ${windDirectionLabel}`;
           },
         },
@@ -150,17 +152,37 @@ function createWindDirectionPlugin(): Plugin {
       if (!timestamps) {
         return;
       }
+
+      // Calculate average space between arrows
+      const chartWidth = chart.width;
+      const averageSpace = chartWidth / (timestamps.length - 1);
+      const canDrawCircles = averageSpace >= 32; 
+
+      const minDistance = 10;
+      let lastDrawnX = -Infinity;
       timestamps.forEach((timestamp, timestampIndex) => {
-        drawWindDirectionArrow(
-          ctx,
-          chart.scales.x,
-          Number(timestamp),
-          pluginOptions.windDirectionData?.[timestampIndex] ?? 0,
-          timestampIndex,
-          chart,
-          pluginOptions.darkMode,
-          pluginOptions.isMobile
-        );
+        const x = chart.scales.x.getPixelForValue(Number(timestamp));
+        if (x - lastDrawnX >= minDistance) {
+          // Don't draw when there was no wind
+          const windSpeed = chart.data.datasets[0].data[
+            timestampIndex
+          ] as number;
+          if (windSpeed === undefined || windSpeed === 0) {
+            return;
+          }
+          const isArrowDrawn = drawWindDirectionArrow(
+            ctx,
+            chart.scales.x,
+            Number(timestamp),
+            pluginOptions.windDirectionData?.[timestampIndex] ?? 0,
+            pluginOptions.darkMode,
+            pluginOptions.isMobile,
+            canDrawCircles
+          );
+          if (isArrowDrawn) {
+            lastDrawnX = x;
+          }
+        }
       });
       ctx.restore();
     },
@@ -172,22 +194,21 @@ function drawWindDirectionArrow(
   xAxis: Scale<CoreScaleOptions>,
   timestamp: number,
   windDirection: number,
-  timestampIndex: number,
-  chart: ChartJS,
   isDarkMode: boolean,
-  isMobile: boolean
+  isMobile: boolean,
+  drawCircle: boolean
 ) {
-  if (windDirection === undefined) return;
-
-  const windSpeed = chart.data.datasets[0].data[timestampIndex] as number;
-  if (windSpeed === undefined || windSpeed === 0) return;
+  if (windDirection === undefined) {
+    return false;
+  }
 
   const windDirectionIndex = Math.round(windDirection) - 1;
   if (
     windDirectionIndex < 0 ||
     windDirectionIndex >= WIND_DIRECTION_LABELS.length
-  )
-    return;
+  ) {
+    return false;
+  }
 
   ctx.font = `${isMobile ? 8 : 10}px Arial`;
   ctx.textAlign = "center";
@@ -206,7 +227,7 @@ function drawWindDirectionArrow(
   ctx.fillStyle = arrowColor;
   ctx.strokeStyle = arrowColor;
 
-  if (!isMobile) {
+  if (drawCircle) {
     // Draw the circle
     ctx.beginPath();
     ctx.arc(x, centerY, circleRadius, 0, 2 * Math.PI);
@@ -260,6 +281,8 @@ function drawWindDirectionArrow(
       centerY + circleRadius + 10
     );
   }
+
+  return true;
 }
 
 export default WindChart;

@@ -18,7 +18,6 @@ import {
   TimeScale,
 } from "chart.js";
 import { useViewport } from "../../ViewportContext";
-import { ProcessedData } from "../../api/data-processing";
 
 ChartJS.register(
   CategoryScale,
