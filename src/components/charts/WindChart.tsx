@@ -13,7 +13,7 @@ import { Line } from "react-chartjs-2";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
 import { useViewport } from "../../ViewportContext";
-import { formatAsNumber, useHideTooltipOnTouchMove } from "./chart-utils";
+import { useHideTooltipOnTouchMove } from "./chart-utils";
 import { getCommonChartOptions } from "./chart-config";
 import { useRef } from 'react';
 import { Chart } from 'chart.js';
@@ -71,9 +71,9 @@ const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
         callbacks: {
           ...commonOptions.plugins?.tooltip.callbacks,
           label: (context) => {
-            const windSpeed = formatAsNumber(context.parsed.y);
-            const direction = getWindDirectionLabel(context.dataIndex, data);
-            return `Geschwindigkeit: ${windSpeed} m/s Richtung: ${direction}`;
+            const windSpeed = Number(context.parsed.y);
+            const windDirectionLabel = getWindDirectionLabel(context.dataIndex, data);
+            return `Geschwindigkeit: ${windSpeed} m/s | Richtung: ${windDirectionLabel}`;
           },
         },
       },

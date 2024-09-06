@@ -1,3 +1,6 @@
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
 :root {
   --primary-color: #4a90e2;
   --secondary-color: #50e3c2;
@@ -191,8 +194,8 @@ input:checked + .slider:before {
 
 .overview-cards-container {
   width: 100%;
-  padding: 10px 0;
-  overflow: hidden;
+  padding: 10px 0 30px; /* Increased bottom padding to make room for dots */
+  overflow: visible; /* Changed from hidden to visible */
   position: relative;
   margin-bottom: 1rem;
 }
@@ -393,4 +396,32 @@ input:checked + .slider:before {
 .slick-track {
   display: flex;
   align-items: center;
+}
+
+/* Add these new styles for Slick arrows and dots */
+.slick-prev,
+.slick-next {
+  z-index: 1;
+}
+
+.slick-prev {
+  left: 10px !important;
+}
+
+.slick-next {
+  right: 10px !important;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: var(--primary-color) !important;
+  font-size: 24px !important;
+}
+
+.slick-dots {
+  bottom: -25px !important;
+}
+
+.slick-dots li button:before {
+  color: var(--primary-color) !important;
 }

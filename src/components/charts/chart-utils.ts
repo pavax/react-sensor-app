@@ -19,10 +19,6 @@ export function getTimeUnit(timeRange: TimeRange): "hour" | "day" | "week" {
   }
 }
 
-export function formatAsNumber(value: number): string {
-  return value.toFixed(1);
-}
-
 export function useChartStyles(): {
   lineColor: string;
   textColor: string;

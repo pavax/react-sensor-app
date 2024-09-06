@@ -8,11 +8,10 @@ import {
   faTachometerAlt,
   faSnowflake,
   faSun,
+  faWater,
 } from "@fortawesome/free-solid-svg-icons";
 import { ProcessedData } from "../api/data-processing";
 import { useViewport } from "../ViewportContext";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 interface OverviewCardsProps {
   data: ProcessedData;
@@ -35,14 +34,21 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
       value: data.entries.temperature?.latestValue?.toFixed(0) ?? "--",
       unit: "°C",
       icon: faTemperatureLow,
-      color: "#8e44ad", // Purple, matching the "Temperatur" label
+      color: "#8e44ad",
+    },
+    {
+      title: "Feuchtigkeit",
+      value: data.entries.humidity?.latestValue?.toFixed(0) ?? "--",
+      unit: "%",
+      icon: faWater,
+      color: "#1abc9c",
     },
     {
       title: "Wind",
       value: data.entries.windVoltageMax?.latestValue?.toFixed(0) ?? "--",
       unit: "m/s",
       icon: faWind,
-      color: "#3498db", // Blue, similar to the graph line
+      color: "#3498db",
     },
     {
       title: "Regen",
@@ -53,42 +59,45 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
         ) ?? "--",
       unit: "mm",
       icon: faCloudRain,
-      color: "#2ecc71", // Green, complementary to the existing colors
+      color: "#2ecc71",
     },
     {
       title: "Luftdruck",
       value: "--",
       unit: "",
       icon: faTachometerAlt,
-      color: "#e74c3c", // Red, for variety but still in theme
+      color: "#e74c3c",
     },
     {
       title: "Schnee",
       value: "--",
       unit: "",
       icon: faSnowflake,
-      color: "#34495e", // Dark blue, fitting the dark theme
+      color: "#34495e",
     },
     {
       title: "UV-Index",
       value: data.entries.uvIndex?.latestValue?.toFixed(0) ?? "--",
       unit: "",
       icon: faSun,
-      color: "#f39c12", // Orange, complementary to the blue
+      color: "#f39c12",
     },
   ];
 
   const settings = {
-    dots: true,
+    dots: false,
+    arrows: false,
     infinite: false,
     speed: 500,
-    slidesToShow: 6,
+    slidesToShow: 7,
     slidesToScroll: 1,
     adaptiveHeight: true,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
+          dots: true,
+          arrows: true,
           slidesToShow: 4,
           slidesToScroll: 1,
         },
@@ -96,6 +105,8 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
       {
         breakpoint: 600,
         settings: {
+          dots: true,
+          arrows: true,
           slidesToShow: 3,
           slidesToScroll: 1,
         },

@@ -32,7 +32,7 @@ ChartJS.register(
 );
 
 export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
-  
+
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const chartStyles = useChartStyles();
 
@@ -56,7 +56,7 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
         axis: "x",
         callbacks: {
           title: (tooltipItems: TooltipItem<any>[]) =>
-            format(new Date(tooltipItems[0].parsed.x), "dd.MM.yyyy HH:mm", {
+            format(new Date(tooltipItems[0].parsed.x), "dd.MM.yyyy HH:mm 'Uhr'", {
               timeZone: "Europe/Zurich",
             }),
         },
