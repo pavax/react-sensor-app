@@ -1,48 +1,56 @@
-import React, { useState, useEffect, useRef } from 'react';
-import '../App.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faTimes, faClock, faPalette } from '@fortawesome/free-solid-svg-icons';
-import { TimeRange } from '../api/thingsboard-api';
-import { useViewport } from '../ViewportContext';
+import React, { useState, useEffect, useRef } from "react";
+import "../App.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBars,
+  faTimes,
+  faClock,
+  faPalette,
+  faCog,
+} from "@fortawesome/free-solid-svg-icons";
+import { TimeRange } from "../api/thingsboard-api";
+import { useViewport } from "../ViewportContext";
+import { version } from "os";
 
 interface HeaderProps {
   onTimePeriodChange: (timePeriod: TimeRange) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
-  
   const { isDarkMode, toggleTheme } = useViewport();
 
   const [showSettings, setShowSettings] = useState(false);
 
   const [timePeriod, setTimePeriod] = useState<TimeRange>(() => {
-    const savedTimePeriod = localStorage.getItem('timePeriod');
-    return savedTimePeriod ? savedTimePeriod as TimeRange : TimeRange.ONE_DAY;
+    const savedTimePeriod = localStorage.getItem("timePeriod");
+    return savedTimePeriod ? (savedTimePeriod as TimeRange) : TimeRange.ONE_DAY;
   });
 
   const settingsRef = useRef<HTMLDivElement>(null);
-  
+
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    localStorage.setItem('timePeriod', timePeriod);
+    localStorage.setItem("timePeriod", timePeriod);
     onTimePeriodChange(timePeriod);
   }, [timePeriod, onTimePeriodChange]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (showSettings &&
-          settingsRef.current &&
-          !settingsRef.current.contains(event.target as Node) &&
-          buttonRef.current &&
-          !buttonRef.current.contains(event.target as Node)) {
+      if (
+        showSettings &&
+        settingsRef.current &&
+        !settingsRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
         setShowSettings(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showSettings]);
 
@@ -53,12 +61,15 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
   const handleTimePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTimePeriod(e.target.value as TimeRange);
   };
+
+  const buildNumber = process.env.REACT_APP_BUILD_NUMBER;
+
   return (
     <header className="App-header-menu">
       <h1>Sensor App</h1>
-      <button 
+      <button
         ref={buttonRef}
-        onClick={toggleSettings} 
+        onClick={toggleSettings}
         className="hamburger-button"
       >
         <FontAwesomeIcon icon={showSettings ? faTimes : faBars} />
@@ -71,12 +82,10 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
           <div className="settings-content">
             <div className="setting-item">
               <span>
-                <FontAwesomeIcon icon={faClock} className="setting-icon" /> Zeitraum
+                <FontAwesomeIcon icon={faClock} className="setting-icon" />{" "}
+                Zeitraum
               </span>
-              <select 
-                value={timePeriod} 
-                onChange={handleTimePeriodChange}
-              >
+              <select value={timePeriod} onChange={handleTimePeriodChange}>
                 <option value={TimeRange.ONE_DAY}>Ein Tag</option>
                 <option value={TimeRange.ONE_WEEK}>Eine Woche</option>
                 <option value={TimeRange.TWO_WEEKS}>Zwei Wochen</option>
@@ -85,7 +94,8 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
             </div>
             <div className="setting-item">
               <span>
-                <FontAwesomeIcon icon={faPalette} className="setting-icon" /> Farb-Modus
+                <FontAwesomeIcon icon={faPalette} className="setting-icon" />{" "}
+                Farb-Modus
               </span>
               <label className="toggle-switch">
                 <input
@@ -96,6 +106,20 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
                 <span className="slider round"></span>
               </label>
             </div>
+            {buildNumber && (
+              <>
+                <hr className="settings-divider" />
+                <div className="setting-item">
+                  <span className="version-info">
+                    <FontAwesomeIcon icon={faCog} className="setting-icon" />{" "}
+                    App-Version
+                  </span>
+                  <div>
+                    <span className="version-info">{buildNumber}</span>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

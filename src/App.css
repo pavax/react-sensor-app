@@ -134,6 +134,17 @@ body {
   height: 0;
 }
 
+.settings-divider {
+  border: 0;
+  height: 1px;
+  background-color: #ccc;
+  margin: 10px 0;
+}
+
+.version-info {
+  font-size: 0.8rem !important;
+}
+
 .slider {
   position: absolute;
   cursor: pointer;
