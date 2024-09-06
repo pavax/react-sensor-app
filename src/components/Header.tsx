@@ -10,7 +10,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { TimeRange } from "../api/thingsboard-api";
 import { useViewport } from "../ViewportContext";
-import { version } from "os";
 
 interface HeaderProps {
   onTimePeriodChange: (timePeriod: TimeRange) => void;
