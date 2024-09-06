@@ -26,7 +26,9 @@ jobs:
         run: cp .env.example .env
 
       - name: Add build number to .env
-        run: echo "REACT_APP_BUILD_NUMBER={BUILD_NUMBER}" >> .env
+        run: |
+          echo "" >> .env
+          echo "REACT_APP_BUILD_NUMBER={BUILD_NUMBER}" >> .env
 
       - name: Replace secret
         uses: cschleiden/replace-tokens@v1
@@ -40,8 +42,8 @@ jobs:
           TB_PUBLICID: ${{ vars.TB_PUBLICID }}
           BUILD_NUMBER: ${{ github.run_number }}
 
-      - name: Print .env file content
-        run: cat .env
+      # - name: Print .env file content
+      #   run: cat .env
         
       - name: Build
         run: npm run build
