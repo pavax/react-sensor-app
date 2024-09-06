@@ -92,6 +92,7 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
           maxRotation: 45,
           minRotation: 45,
           autoSkip: true,
+          maxTicksLimit: 32,
           font: {
             size: 8,
           },

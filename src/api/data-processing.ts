@@ -214,13 +214,13 @@ function groupDataByTimeRange(
 
   let groupingInterval = 3600000;
   if (timeRange === TimeRange.ONE_DAY) {
-    groupingInterval = ONE_HOUR / 2;
+    groupingInterval = ONE_HOUR / 3;
   } else if (timeRange === TimeRange.THREE_DAYS) {
-    groupingInterval = ONE_HOUR * 3;
+    groupingInterval = ONE_HOUR * 1;
   } else if (timeRange === TimeRange.ONE_WEEK) {
-    groupingInterval = ONE_HOUR * 6;
+    groupingInterval = ONE_HOUR * 3;
   } else if (timeRange === TimeRange.TWO_WEEKS) {
-    groupingInterval = ONE_HOUR * 12;
+    groupingInterval = ONE_HOUR * 6;
   } else if (timeRange === TimeRange.ONE_MONTH) {
     groupingInterval = ONE_DAY;
   }
