@@ -50,7 +50,7 @@ const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
   useHideTooltipOnTouchMove(chartRef);
 
   const viewport = useViewport();
-  const commonOptions = getCommonChartOptions(timeRange);
+  const commonOptions = getCommonChartOptions(timeRange, data);
 
   const options: ChartOptions<"line"> = {
     ...commonOptions,

@@ -39,7 +39,7 @@ const RainEventChart: React.FC<RainEventChartProps> = ({ data, timeRange }) => {
     ],
   };
 
-  const commonOptions = getCommonChartOptions(timeRange); 
+  const commonOptions = getCommonChartOptions(timeRange, data); 
 
   const options: ChartOptions<"bar"> = {
     ...commonOptions,

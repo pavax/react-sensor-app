@@ -1,9 +1,5 @@
 import React, { useRef } from "react";
-import {
-  ChartData,
-  ChartOptions,
-  Chart as ChartJS,
-} from "chart.js";
+import { ChartData, ChartOptions, Chart as ChartJS } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
@@ -21,7 +17,7 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
 
   useHideTooltipOnTouchMove(chartRef);
 
-  const commonOptions = getCommonChartOptions(timeRange);
+  const commonOptions = getCommonChartOptions(timeRange, data);
 
   if (!data || !data.entries) {
     return <div>No data available</div>;
@@ -45,7 +41,7 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
         backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
-        yAxisID: "y1",
+        yAxisID: "y1"
       },
     ],
   };
@@ -54,15 +50,7 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
     ...commonOptions,
     scales: {
       ...commonOptions.scales,
-      y0: {
-        ...commonOptions.scales.y0,
-        ticks: {
-          ...commonOptions.scales.y0,
-          callback: function (value) {
-            return (Number(value) / 1000).toFixed(0) + "k";
-          },
-        },
-      },
+    
       y1: {
         type: "linear" as const,
         position: "right" as const,
@@ -75,10 +63,10 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <Chart 
-        type="bar" 
-        options={options} 
-        data={chartData} 
+      <Chart
+        type="line"
+        options={options}
+        data={chartData}
         ref={(reference) => {
           if (reference) {
             chartRef.current = reference;

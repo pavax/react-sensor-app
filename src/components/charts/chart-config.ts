@@ -1,4 +1,4 @@
-import { ChartOptions } from "chart.js";
+import { ChartOptions, TimeSeriesScale } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
 import { getTimeUnit, useChartStyles } from "./chart-utils";
 import { TooltipItem } from "chart.js";
@@ -18,20 +18,22 @@ import {
   TimeScale,
 } from "chart.js";
 import { useViewport } from "../../ViewportContext";
+import { ProcessedData } from "../../api/data-processing";
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
+  TimeSeriesScale,
   PointElement,
   LineElement,
   BarElement,
+  TimeScale,
   Title,
   Tooltip,
   Legend,
-  TimeScale
 );
 
-export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
+export function getCommonChartOptions(timeRange: TimeRange, data: ProcessedData): ChartOptions<any> {
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const chartStyles = useChartStyles();
@@ -70,13 +72,19 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
     },
     scales: {
       x: {
-        type: "time",
+        type: "timeseries",
         time: {
           unit: getTimeUnit(timeRange),
           displayFormats: {
-            hour: "HH:mm",
-            day: "dd.MM",
-            week: "dd.MM",
+            millisecond: 'HH:mm:ss.SSS',
+            second: 'HH:mm:ss',
+            minute: 'HH:mm',
+            hour: 'HH:mm',
+            day: 'dd.MM HH:mm',
+            week: 'dd.MM',
+            month: 'MM.yyyy',
+            quarter: 'MM.yyyy',
+            year: 'yyyy',
           },
         },
         ticks: {
@@ -92,6 +100,8 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
           color: chartStyles.gridColor,
           drawOnChartArea: false,
         },
+        min: data.timestamps[0],
+        max: data.timestamps[data.timestamps.length - 1],
       },
       y0: {
         ticks: {
