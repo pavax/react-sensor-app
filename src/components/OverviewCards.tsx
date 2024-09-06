@@ -115,7 +115,7 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
         settings: {
           dots: true,
           arrows: true,
-          slidesToShow: 4,
+          slidesToShow: 3,
           slidesToScroll: 1,
         },
       },

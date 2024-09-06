@@ -29,11 +29,10 @@ ChartJS.register(
   TimeScale,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
 
 export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
-
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const chartStyles = useChartStyles();
 
@@ -57,9 +56,13 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
         axis: "x",
         callbacks: {
           title: (tooltipItems: TooltipItem<any>[]) =>
-            format(new Date(tooltipItems[0].parsed.x), "dd.MM.yyyy HH:mm 'Uhr'", {
-              timeZone: "Europe/Zurich",
-            }),
+            format(
+              new Date(tooltipItems[0].parsed.x),
+              "dd.MM.yyyy HH:mm 'Uhr'",
+              {
+                timeZone: "Europe/Zurich",
+              }
+            ),
         },
       },
     },
@@ -69,21 +72,32 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
       axis: "x",
       intersect: !viewPort.isMobile,
     },
+    elements: {
+      point: {
+        radius: 0,
+        hoverRadius: 5,
+        hitRadius: 5,
+        borderWidth: 0,
+      },
+      // line: {
+      //   tension: 0, // Optional: makes lines straight
+      // },
+    },
     scales: {
       x: {
         type: "timeseries",
         time: {
           unit: getTimeUnit(timeRange),
           displayFormats: {
-            millisecond: 'HH:mm:ss.SSS',
-            second: 'HH:mm:ss',
-            minute: 'HH:mm',
-            hour: 'HH:mm',
-            day: 'dd.MM HH:mm',
-            week: 'dd.MM',
-            month: 'MM.yyyy',
-            quarter: 'MM.yyyy',
-            year: 'yyyy',
+            millisecond: "HH:mm:ss.SSS",
+            second: "HH:mm:ss",
+            minute: "HH:mm",
+            hour: "HH:mm",
+            day: "dd.MM HH:mm",
+            week: "dd.MM",
+            month: "MM.yyyy",
+            quarter: "MM.yyyy",
+            year: "yyyy",
           },
         },
         ticks: {
@@ -111,6 +125,7 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
         grid: {
           color: chartStyles.gridColor,
         },
+      
       },
     },
   };
