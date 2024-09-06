@@ -40,8 +40,8 @@ jobs:
           TB_PUBLICID: ${{ vars.TB_PUBLICID }}
           BUILD_NUMBER: ${{ github.run_number }}
 
-      # - name: Print .env file content
-      #   run: cat .env
+      - name: Print .env file content
+        run: cat .env
         
       - name: Build
         run: npm run build
