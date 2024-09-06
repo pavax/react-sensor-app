@@ -9,6 +9,7 @@ import {
   faSnowflake,
   faSun,
   faWater,
+  faCloud,
 } from "@fortawesome/free-solid-svg-icons";
 import { ProcessedData } from "../api/data-processing";
 import { useViewport } from "../ViewportContext";
@@ -63,8 +64,8 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
     },
     {
       title: "Luftdruck",
-      value: "--",
-      unit: "",
+      value: data.entries.pressure?.latestValue?.toFixed(0) ?? "--",
+      unit: "hpa",
       icon: faTachometerAlt,
       color: "#e74c3c",
     },
@@ -82,6 +83,13 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
       icon: faSun,
       color: "#f39c12",
     },
+    {
+      title: "Cloudbase Height",
+      value: data.entries.cloudBaseHeight?.latestValue?.toFixed(0) ?? "--",
+      unit: "m",
+      icon: faCloud,
+      color: "#7f8c8d",
+    },
   ];
 
   const settings = {
@@ -89,7 +97,7 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
     arrows: false,
     infinite: false,
     speed: 500,
-    slidesToShow: 7,
+    slidesToShow: 8,
     slidesToScroll: 1,
     adaptiveHeight: true,
     responsive: [
@@ -98,7 +106,7 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
         settings: {
           dots: true,
           arrows: true,
-          slidesToShow: 4,
+          slidesToShow: 5,
           slidesToScroll: 1,
         },
       },
@@ -107,7 +115,7 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
         settings: {
           dots: true,
           arrows: true,
-          slidesToShow: 3,
+          slidesToShow: 4,
           slidesToScroll: 1,
         },
       },

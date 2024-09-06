@@ -17,6 +17,7 @@ import LightChart from "./charts/LightChart";
 import OverviewCards from "./OverviewCards";
 import ContextInfoBar from "./ContextInforBar";
 import { format } from "date-fns-tz";
+import CloudBaseHeightChart from "./charts/CloudBaseHeightChart";
 
 interface TelemetryProps {
   deviceId: string;
@@ -49,7 +50,12 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
         "rainEventAccDifference",
         "lux",
         "uvIndex",
-        "counter"
+        "counter",
+        "temperature2",
+        "humidity2",
+        "pressure",
+        "cloudBaseHeight",
+        "batteryVoltage",
       );
 
       const keyInfo: KeyInfo = {
@@ -79,8 +85,13 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
           aggregationType: AggregationType.LATEST,
           fractionDigits: 0,
         },
+        temperature2: { aggregationType: AggregationType.LATEST, fractionDigits: 0 },
+        humidity2: { aggregationType: AggregationType.LATEST, fractionDigits: 0 },
         lux: { aggregationType: AggregationType.MAX, fractionDigits: 0 },
         uvIndex: { aggregationType: AggregationType.MAX, fractionDigits: 0 },
+        pressure: { aggregationType: AggregationType.AVERAGE, fractionDigits: 0 },
+        cloudBaseHeight: { aggregationType: AggregationType.AVERAGE, fractionDigits: 0 },
+        batteryVoltage: { aggregationType: AggregationType.AVERAGE, fractionDigits: 0 },
       };
 
       const processedData = processData(rawData, timeRange, keyInfo);
@@ -113,24 +124,36 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
     return <div>No telemetry data available</div>;
   }
 
-  const formattedTimestamp = format(
+  const contextLatestTime = format(
     new Date(telemetryData.latestTimestamp ?? Date.now()),
     "dd.MM.yyyy HH:mm",
     {
       timeZone: "Europe/Zurich",
     }
   );
-  const additionalData = new Map<string, string>();
-  additionalData.set(
+  const contextAdditionalData = new Map<string, string>();
+  contextAdditionalData.set(
     "Device-Uptime Count",
     telemetryData.entries.counter.latestValue?.toString() ?? "0"
+  );
+  contextAdditionalData.set(
+    "Batterie",
+    `${telemetryData.entries.batteryVoltage.latestValue?.toString() ?? "0"}mv`
+  );
+  contextAdditionalData.set(
+    "Gehäuse Temp.",
+    `${telemetryData.entries.temperature2.latestValue?.toString() ?? "0"}°C`
+  );
+  contextAdditionalData.set(
+    "Gehäuse Hum.",
+    `${telemetryData.entries.humidity2.latestValue?.toString() ?? "0"}%`
   );
 
   return (
     <div className="telemetry-grid">
       <ContextInfoBar
-        main={formattedTimestamp}
-        additionalData={additionalData}
+        main={contextLatestTime}
+        additionalData={contextAdditionalData}
       />
 
       <OverviewCards data={telemetryData} />
@@ -157,6 +180,12 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
         <h3>Licht</h3>
         <div className="chart-container">
           <LightChart data={telemetryData} timeRange={timeRange} />
+        </div>
+      </div>
+      <div className="telemetry-container">
+        <h3>Cloud Base Height</h3>
+        <div className="chart-container">
+          <CloudBaseHeightChart data={telemetryData} timeRange={timeRange} />
         </div>
       </div>
     </div>

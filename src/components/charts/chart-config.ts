@@ -33,7 +33,7 @@ ChartJS.register(
   Legend,
 );
 
-export function getCommonChartOptions(timeRange: TimeRange, data: ProcessedData): ChartOptions<any> {
+export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const chartStyles = useChartStyles();
@@ -100,8 +100,6 @@ export function getCommonChartOptions(timeRange: TimeRange, data: ProcessedData)
           color: chartStyles.gridColor,
           drawOnChartArea: false,
         },
-        min: data.timestamps[0],
-        max: data.timestamps[data.timestamps.length - 1],
       },
       y0: {
         ticks: {

@@ -86,7 +86,7 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
     ],
   };
 
-  const commonOptions = getCommonChartOptions(timeRange, data);
+  const commonOptions = getCommonChartOptions(timeRange);
 
   const options: ChartOptions<"line"> = {
     ...commonOptions,

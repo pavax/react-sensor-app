@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import {
   ChartData,
   Chart,
@@ -11,45 +11,53 @@ import { TimeRange } from "../../api/thingsboard-api";
 import { getCommonChartOptions } from "./chart-config";
 import { useHideTooltipOnTouchMove } from "./chart-utils";
 
-
-interface RainEventChartProps {
+interface CloudBaseHeightChartProps {
   data: ProcessedData;
   timeRange: TimeRange;
 }
 
-const RainEventChart: React.FC<RainEventChartProps> = ({ data, timeRange }) => {
+const CloudBaseHeightChart: React.FC<CloudBaseHeightChartProps> = ({ data, timeRange }) => {
   const chartRef = useRef<Chart | null>(null);
   useHideTooltipOnTouchMove(chartRef);
-  
+
   if (!data || !data.entries) {
     return <div>No data available</div>;
   }
 
-  const rainEventData: ChartData<"bar"> = {
+  const cloudBaseHeightData: ChartData<"line"> = {
     labels: data.timestamps,
     datasets: [
       {
-        label: "Regenmenge",
-        data: data.entries.rainEventAccDifference?.values ?? [],
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
+        label: "Cloud Base Height",
+        data: data.entries.cloudBaseHeight?.values ?? [],
+        borderColor: "rgb(75, 192, 192)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
         yAxisID: "y0",
       },
     ],
   };
 
-  const commonOptions = getCommonChartOptions(timeRange); 
+  const commonOptions = getCommonChartOptions(timeRange);
 
-  const options: ChartOptions<"bar"> = {
+  const options: ChartOptions<"line"> = {
     ...commonOptions,
+    scales: {
+      ...commonOptions.scales,
+      y0: {
+        ...commonOptions.scales?.y0,
+        title: {
+          display: false,
+          text: 'Height (m)',
+        },
+      },
+    },
   };
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <Bar 
+      <Line 
         options={options} 
-        data={rainEventData} 
+        data={cloudBaseHeightData} 
         ref={(reference) => {
           if (reference) {
             chartRef.current = reference;
@@ -60,4 +68,4 @@ const RainEventChart: React.FC<RainEventChartProps> = ({ data, timeRange }) => {
   );
 };
 
-export default RainEventChart;
+export default CloudBaseHeightChart;
