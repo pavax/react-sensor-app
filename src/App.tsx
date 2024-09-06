@@ -6,7 +6,6 @@ import Telemetry from "./components/Telemetry";
 import { ViewportProvider } from "./ViewportContext";
 
 function App() {
-
   const deviceId = process.env.REACT_APP_API_DEVICE_ID;
 
   const publicId = process.env.REACT_APP_TB_PUBLICID;
@@ -14,14 +13,15 @@ function App() {
   const [currentTimePeriod, setCurrentTimePeriod] = useState<TimeRange>(
     TimeRange.ONE_DAY
   );
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [loginError, setLoginError] = useState<string | null>(null);
 
-
   const handleTimePeriodChange = (newTimePeriod: TimeRange) => {
     setCurrentTimePeriod(newTimePeriod);
+    setIsInitialized(true);
   };
 
   useEffect(() => {
@@ -62,14 +62,11 @@ function App() {
   return (
     <ViewportProvider>
       <div className="App">
-        <Header
-          onTimePeriodChange={handleTimePeriodChange}
-        />
+        <Header onTimePeriodChange={handleTimePeriodChange} />
         <main className="App-main">
-          <Telemetry
-            deviceId={deviceId}
-            timeRange={currentTimePeriod}
-          />
+          {isInitialized && (
+            <Telemetry deviceId={deviceId} timeRange={currentTimePeriod} />
+          )}
         </main>
       </div>
     </ViewportProvider>

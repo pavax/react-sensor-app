@@ -215,6 +215,8 @@ function groupDataByTimeRange(
   let groupingInterval = 3600000;
   if (timeRange === TimeRange.ONE_DAY) {
     groupingInterval = ONE_HOUR;
+  } else if (timeRange === TimeRange.THREE_DAYS) {
+    groupingInterval = ONE_HOUR * 3;
   } else if (timeRange === TimeRange.ONE_WEEK) {
     groupingInterval = ONE_HOUR * 6;
   } else if (timeRange === TimeRange.TWO_WEEKS) {

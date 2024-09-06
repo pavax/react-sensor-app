@@ -8,6 +8,8 @@ export function getTimeUnit(timeRange: TimeRange): "hour" | "day" | "week" {
   switch (timeRange) {
     case TimeRange.ONE_DAY:
       return "hour";
+    case TimeRange.THREE_DAYS:
+      return "day";
     case TimeRange.ONE_WEEK:
       return "day";
     case TimeRange.TWO_WEEKS:

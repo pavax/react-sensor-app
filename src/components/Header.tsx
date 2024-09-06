@@ -25,15 +25,13 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
     return savedTimePeriod ? (savedTimePeriod as TimeRange) : TimeRange.ONE_DAY;
   });
 
-  const settingsRef = useRef<HTMLDivElement>(null);
-
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
   useEffect(() => {
     localStorage.setItem("timePeriod", timePeriod);
     onTimePeriodChange(timePeriod);
   }, [timePeriod, onTimePeriodChange]);
 
+  const settingsRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -46,11 +44,8 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
         setShowSettings(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showSettings]);
 
   const toggleSettings = () => {
@@ -86,6 +81,7 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
               </span>
               <select value={timePeriod} onChange={handleTimePeriodChange}>
                 <option value={TimeRange.ONE_DAY}>Ein Tag</option>
+                <option value={TimeRange.THREE_DAYS}>Drei Tage</option>
                 <option value={TimeRange.ONE_WEEK}>Eine Woche</option>
                 <option value={TimeRange.TWO_WEEKS}>Zwei Wochen</option>
                 <option value={TimeRange.ONE_MONTH}>Ein Monat</option>

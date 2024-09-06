@@ -25,10 +25,7 @@ interface TelemetryProps {
 
 const INTERVAL = 60_000;
 
-const Telemetry: React.FC<TelemetryProps> = ({
-  deviceId,
-  timeRange,
-}) => {
+const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
   const [telemetryData, setTelemetryData] = useState<ProcessedData | null>(
     null
   );
@@ -124,27 +121,30 @@ const Telemetry: React.FC<TelemetryProps> = ({
     }
   );
   const additionalData = new Map<string, string>();
-  additionalData.set("Device-Uptime Count", telemetryData.entries.counter.latestValue?.toString() ?? "0");
+  additionalData.set(
+    "Device-Uptime Count",
+    telemetryData.entries.counter.latestValue?.toString() ?? "0"
+  );
 
   return (
     <div className="telemetry-grid">
-      <ContextInfoBar main={formattedTimestamp} additionalData={additionalData} />
+      <ContextInfoBar
+        main={formattedTimestamp}
+        additionalData={additionalData}
+      />
 
       <OverviewCards data={telemetryData} />
 
       <div className="telemetry-container">
         <h3>Temperatur</h3>
         <div className="chart-container">
-          <TemperatureChart
-            data={telemetryData}
-            timeRange={timeRange}
-          />
+          <TemperatureChart data={telemetryData} timeRange={timeRange} />
         </div>
       </div>
       <div className="telemetry-container">
         <h3>Wind</h3>
         <div className="chart-container">
-          <WindChart data={telemetryData} timeRange={timeRange}  />
+          <WindChart data={telemetryData} timeRange={timeRange} />
         </div>
       </div>
       <div className="telemetry-container">
@@ -156,10 +156,7 @@ const Telemetry: React.FC<TelemetryProps> = ({
       <div className="telemetry-container">
         <h3>Licht</h3>
         <div className="chart-container">
-          <LightChart
-            data={telemetryData}
-            timeRange={timeRange}
-          />
+          <LightChart data={telemetryData} timeRange={timeRange} />
         </div>
       </div>
     </div>
