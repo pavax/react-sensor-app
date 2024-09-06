@@ -1,7 +1,7 @@
 import { ChartOptions } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
 import { getTimeUnit, useChartStyles } from "./chart-utils";
-import { TooltipItem } from 'chart.js';
+import { TooltipItem } from "chart.js";
 
 import { format } from "date-fns-tz";
 
@@ -17,6 +17,7 @@ import {
   Legend,
   TimeScale,
 } from "chart.js";
+import { useViewport } from "../../ViewportContext";
 
 ChartJS.register(
   CategoryScale,
@@ -31,8 +32,13 @@ ChartJS.register(
 );
 
 export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
+  
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const chartStyles = useChartStyles();
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const viewPort = useViewport();
+
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -45,9 +51,9 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
       },
       tooltip: {
         enabled: true,
-        mode: 'index',
-        intersect: true,
-        //position: 'nearest',
+        mode: viewPort.isMobile ? "nearest" : "index",
+        intersect: !viewPort.isMobile,
+        axis: "x",
         callbacks: {
           title: (tooltipItems: TooltipItem<any>[]) =>
             format(new Date(tooltipItems[0].parsed.x), "dd.MM.yyyy HH:mm", {
@@ -56,7 +62,12 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
         },
       },
     },
-    events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove', 'touchend'],
+    events: ["mousemove", "mouseout", "click", "touchstart", "touchmove"],
+    interaction: {
+      mode: viewPort.isMobile ? "nearest" : "index",
+      axis: "x",
+      intersect: !viewPort.isMobile,
+    },
     scales: {
       x: {
         type: "time",
