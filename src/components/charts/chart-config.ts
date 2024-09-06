@@ -5,11 +5,34 @@ import { TooltipItem } from 'chart.js';
 
 import { format } from "date-fns-tz";
 
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  TimeScale,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  TimeScale
+);
 
 export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const chartStyles = useChartStyles();
-
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -21,8 +44,10 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
         },
       },
       tooltip: {
+        enabled: true,
         mode: 'index',
         intersect: true,
+        //position: 'nearest',
         callbacks: {
           title: (tooltipItems: TooltipItem<any>[]) =>
             format(new Date(tooltipItems[0].parsed.x), "dd.MM.yyyy HH:mm", {
@@ -31,6 +56,7 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
         },
       },
     },
+    events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove', 'touchend'],
     scales: {
       x: {
         type: "time",

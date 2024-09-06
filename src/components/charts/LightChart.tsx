@@ -1,33 +1,15 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
   ChartData,
   ChartOptions,
+  Chart as ChartJS,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
-import { getCommonChartOptions } from "./common-chart-config";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { getCommonChartOptions } from "./chart-config";
+import { useHideTooltipOnTouchMove } from "./chart-utils";
 
 interface LightChartProps {
   data: ProcessedData;
@@ -35,6 +17,10 @@ interface LightChartProps {
 }
 
 const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
+  const chartRef = useRef<ChartJS | null>(null);
+
+  useHideTooltipOnTouchMove(chartRef);
+
   const commonOptions = getCommonChartOptions(timeRange);
 
   if (!data || !data.entries) {
@@ -89,7 +75,16 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <Chart type="bar" options={options} data={chartData} />
+      <Chart 
+        type="bar" 
+        options={options} 
+        data={chartData} 
+        ref={(reference) => {
+          if (reference) {
+            chartRef.current = reference;
+          }
+        }}
+      />
     </div>
   );
 };

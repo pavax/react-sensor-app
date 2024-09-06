@@ -1,31 +1,16 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Bar } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
   ChartData,
-  TimeScale,
+  Chart,
 } from "chart.js";
 import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
 import { ChartOptions } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
-import { getCommonChartOptions } from "./common-chart-config";
+import { getCommonChartOptions } from "./chart-config";
+import { useHideTooltipOnTouchMove } from "./chart-utils";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  TimeScale
-);
 
 interface RainEventChartProps {
   data: ProcessedData;
@@ -33,6 +18,8 @@ interface RainEventChartProps {
 }
 
 const RainEventChart: React.FC<RainEventChartProps> = ({ data, timeRange }) => {
+  const chartRef = useRef<Chart | null>(null);
+  useHideTooltipOnTouchMove(chartRef);
   
   if (!data || !data.entries) {
     return <div>No data available</div>;
@@ -60,7 +47,15 @@ const RainEventChart: React.FC<RainEventChartProps> = ({ data, timeRange }) => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <Bar options={options} data={rainEventData} />
+      <Bar 
+        options={options} 
+        data={rainEventData} 
+        ref={(reference) => {
+          if (reference) {
+            chartRef.current = reference;
+          }
+        }}
+      />
     </div>
   );
 };

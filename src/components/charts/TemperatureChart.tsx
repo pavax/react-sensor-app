@@ -1,16 +1,8 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Line } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
   ChartData,
-  TimeScale,
+  Chart,
 } from "chart.js";
 import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
@@ -19,20 +11,11 @@ import { TimeRange } from "../../api/thingsboard-api";
 import {
   calculateTrendLine,
   useChartStyles,
+  useHideTooltipOnTouchMove,
 } from "./chart-utils";
 import { useViewport } from "../../ViewportContext";
-import { getCommonChartOptions } from "./common-chart-config";
+import { getCommonChartOptions } from "./chart-config";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  TimeScale
-);
 
 interface TelemetryChartsProps {
   data: ProcessedData;
@@ -43,8 +26,14 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
   data,
   timeRange,
 }) => {
+
   const viewport = useViewport();
+
   const chartStyles = useChartStyles();
+
+  const chartRef = useRef<Chart | null>(null);
+
+  useHideTooltipOnTouchMove(chartRef);
 
   if (!data || !data.entries) {
     return <div>No data available</div>;
@@ -120,9 +109,18 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
     },
   };
 
+
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <Line options={options} data={temperatureData} />
+      <Line 
+        options={options} 
+        data={temperatureData} 
+        ref={(reference) => {
+          if (reference) {
+            chartRef.current = reference;
+          }
+        }}
+      />
     </div>
   );
 };

@@ -1,19 +1,11 @@
 import {
-  CategoryScale,
   ChartData,
   Chart as ChartJS,
   ChartOptions,
   ChartType,
   CoreScaleOptions,
-  Legend,
-  LinearScale,
-  LineElement,
   Plugin,
-  PointElement,
   Scale,
-  TimeScale,
-  Title,
-  Tooltip,
 } from "chart.js";
 import "chartjs-adapter-date-fns";
 import React from "react";
@@ -21,19 +13,10 @@ import { Line } from "react-chartjs-2";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
 import { useViewport } from "../../ViewportContext";
-import { formatAsNumber } from "./chart-utils";
-import { getCommonChartOptions } from "./common-chart-config";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  TimeScale
-);
+import { formatAsNumber, useHideTooltipOnTouchMove } from "./chart-utils";
+import { getCommonChartOptions } from "./chart-config";
+import { useRef } from 'react';
+import { Chart } from 'chart.js';
 
 declare module "chart.js" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -63,6 +46,9 @@ interface WindChartProps {
 }
 
 const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
+  const chartRef = useRef<Chart | null>(null);
+  useHideTooltipOnTouchMove(chartRef);
+
   const viewport = useViewport();
   const commonOptions = getCommonChartOptions(timeRange);
 
@@ -125,6 +111,11 @@ const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
         options={options}
         data={chartData}
         plugins={[createWindDirectionPlugin()]}
+        ref={(reference) => {
+          if (reference) {
+            chartRef.current = reference;
+          }
+        }}
       />
     </div>
   );
