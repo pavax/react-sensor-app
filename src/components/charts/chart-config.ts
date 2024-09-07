@@ -1,6 +1,6 @@
 import { ChartOptions, TimeSeriesScale } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
-import { getTimeUnit, useChartStyles } from "./chart-utils";
+import { determineMaxTickLimit, getTimeUnit, useChartStyles } from "./chart-utils";
 import { TooltipItem } from "chart.js";
 
 import { format } from "date-fns-tz";
@@ -93,7 +93,7 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
             second: "HH:mm:ss",
             minute: "HH:mm",
             hour: "HH:mm",
-            day: "dd.MM HH:mm",
+            day: "dd.MM",
             week: "dd.MM",
             month: "MM.yyyy",
             quarter: "MM.yyyy",
@@ -105,9 +105,9 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
           maxRotation: 45,
           minRotation: 45,
           autoSkip: true,
-          maxTicksLimit: 32,
+          maxTicksLimit: determineMaxTickLimit(timeRange),
           font: {
-            size: 8,
+            size: 10,
           },
         },
         grid: {
@@ -119,13 +119,12 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
         ticks: {
           color: chartStyles.textColor,
           font: {
-            size: 8,
+            size: 10,
           },
         },
         grid: {
           color: chartStyles.gridColor,
         },
-      
       },
     },
   };

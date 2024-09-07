@@ -21,6 +21,23 @@ export function getTimeUnit(timeRange: TimeRange): "hour" | "day" | "week" {
   }
 }
 
+export function determineMaxTickLimit(timeRange: TimeRange) {
+  switch (timeRange) {
+    case TimeRange.ONE_DAY:
+      return 24;
+    case TimeRange.THREE_DAYS:
+      return 3;
+    case TimeRange.ONE_WEEK:
+      return 7;
+    case TimeRange.TWO_WEEKS:
+      return 14;
+    case TimeRange.ONE_MONTH:
+      return 31;
+    default:
+      return 31;
+  }
+}
+
 export function useChartStyles(): {
   lineColor: string;
   textColor: string;
@@ -81,3 +98,5 @@ export function calculateTrendLine(values: number[]): number[] {
 
   return values.map((_, i) => slope * i + intercept);
 }
+
+
