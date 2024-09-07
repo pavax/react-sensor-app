@@ -25,6 +25,7 @@ const CloudBaseHeightChart: React.FC<CloudBaseHeightChartProps> = ({ data, timeR
     return <div>No data available</div>;
   }
 
+
   const cloudBaseHeightData: ChartData<"line"> = {
     labels: data.timestamps,
     datasets: [
@@ -34,6 +35,7 @@ const CloudBaseHeightChart: React.FC<CloudBaseHeightChartProps> = ({ data, timeR
         data: data.entries.cloudBaseHeight?.values ?? [],
         borderColor: `${chartStyles.lineColor1}`,
         backgroundColor: `${chartStyles.lineColor1}`,
+        tension: 0.3,
       },
     ],
   };

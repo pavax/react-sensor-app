@@ -35,7 +35,7 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
   }
 
   const hexTransparency = 60;
-
+  const tension = 0.3;
   const temperatureData: ChartData<"line"> = {
     labels: data.timestamps,
     datasets: [
@@ -46,6 +46,7 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
         data: data.entries.temperature?.values ?? [],
         borderColor: `${chartStyles.lineColor1}`,
         backgroundColor: `${chartStyles.lineColor1}`,
+        tension: tension, 
       },
       {
         label: "Dew Point",
@@ -78,6 +79,7 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
         pointStyle: "triangle",
         showLine: true,
         hidden: true,
+        tension: tension,
       },
     ],
   };

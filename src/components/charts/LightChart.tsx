@@ -35,6 +35,7 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
         data: data.entries.lux?.values ?? [],
         borderColor: `${chartStyles.lineColor3}`,
         backgroundColor: `${chartStyles.lineColor3}`,
+        tension: 0.3
       },
       {
         label: "UV Index",
