@@ -54,8 +54,8 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
         data: data.entries.dewPoint?.values ?? [],
         borderColor: `${chartStyles.lineColor2}${hexTransparency}`,
         backgroundColor: `${chartStyles.lineColor2}${hexTransparency}`,
-        pointStyle: "triangle",
-        pointRadius: 6,
+        pointStyle: "circle",
+        pointRadius: viewport.isMobile ? 1 : 3,
         showLine: false,
       },
       {
