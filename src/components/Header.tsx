@@ -7,6 +7,7 @@ import {
   faClock,
   faPalette,
   faCog,
+  faInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import { TimeRange } from "../api/thingsboard-api";
 import { useViewport } from "../ViewportContext";
@@ -16,7 +17,8 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
-  const { isDarkMode, toggleTheme } = useViewport();
+  const { isDarkMode, toggleTheme, toggleShowChartTooltip, showChartTooltips } =
+    useViewport();
 
   const [showSettings, setShowSettings] = useState(false);
 
@@ -25,13 +27,15 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
     return savedTimePeriod ? (savedTimePeriod as TimeRange) : TimeRange.ONE_DAY;
   });
 
+  const settingsRef = useRef<HTMLDivElement>(null);
+
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     localStorage.setItem("timePeriod", timePeriod);
     onTimePeriodChange(timePeriod);
   }, [timePeriod, onTimePeriodChange]);
 
-  const settingsRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -48,15 +52,13 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showSettings]);
 
-  const toggleSettings = () => {
-    setShowSettings(!showSettings);
-  };
+  const buildNumber = process.env.REACT_APP_BUILD_NUMBER;
+
+  const toggleSettings = () => setShowSettings(!showSettings);
 
   const handleTimePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTimePeriod(e.target.value as TimeRange);
   };
-
-  const buildNumber = process.env.REACT_APP_BUILD_NUMBER;
 
   return (
     <header className="App-header-menu">
@@ -90,13 +92,27 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
             <div className="setting-item">
               <span>
                 <FontAwesomeIcon icon={faPalette} className="setting-icon" />{" "}
-                Farb-Modus
+                Dark Mode
               </span>
               <label className="toggle-switch">
                 <input
                   type="checkbox"
                   checked={isDarkMode}
                   onChange={toggleTheme}
+                />
+                <span className="slider round"></span>
+              </label>
+            </div>
+            <div className="setting-item">
+              <span>
+                <FontAwesomeIcon icon={faInfo} className="setting-icon" />{" "}
+                Tooltips Aktiv
+              </span>
+              <label className="toggle-switch">
+                <input
+                  type="checkbox"
+                  checked={showChartTooltips}
+                  onChange={toggleShowChartTooltip}
                 />
                 <span className="slider round"></span>
               </label>

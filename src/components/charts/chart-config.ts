@@ -50,7 +50,7 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
         },
       },
       tooltip: {
-        enabled: true,
+        enabled: viewPort.showChartTooltips,
         mode: viewPort.isMobile ? "nearest" : "index",
         intersect: !viewPort.isMobile,
         axis: "x",
