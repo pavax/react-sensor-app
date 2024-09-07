@@ -35,7 +35,7 @@ interface TelemetryProps {
 }
 
 const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -105,11 +105,11 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
 
   useEffect(() => {
     // This effect fetches initial telemetry data when the component mounts or when deviceId or timeRange changes
-    const fetchData = async () => {
+    const fetchRawTelemetryData = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
         setError(null);
-        const rawData: TelemetryTimeSeries = await fetchTelemetry(
+        const rawTelemetryData: TelemetryTimeSeries = await fetchTelemetry(
           deviceId,
           25000,
           timeRange,
@@ -128,15 +128,15 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
           "cloudBaseHeight",
           "batteryVoltage"
         );
-        setRawTelemetryData(rawData);
+        setRawTelemetryData(rawTelemetryData);
       } catch (err) {
         setError("Failed to fetch initial telemetry data");
         console.error(err);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
-    fetchData();
+    fetchRawTelemetryData();
   }, [deviceId, timeRange]);
 
   useEffect(() => {
@@ -144,38 +144,45 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
     // and updates the raw telemetry data state when new data is received
     const wsUnsubscribe = subscribeToDeviceTelemetry(
       deviceId,
-      (newRawWsData) => {
-        setRawTelemetryData((prevRawData: TelemetryTimeSeries | null) => {
-          if (!prevRawData) {
-            return newRawWsData;
+      (newRawTelemetryData) => {
+        setRawTelemetryData((prevRawTelemetryData: TelemetryTimeSeries | null) => {
+          if (!prevRawTelemetryData) {
+            return null;
           }
-          const result = { ...prevRawData };
-          for (const [key, wsValue] of Object.entries(newRawWsData)) {
-            if (result[key] === undefined) {
+          const result = { ...prevRawTelemetryData };
+          for (const [telemetryKey, subscriptionData] of Object.entries(
+            newRawTelemetryData
+          )) {
+            if (result[telemetryKey] === undefined) {
               continue;
             }
-            if (!Array.isArray(wsValue)) {
+            if (!Array.isArray(subscriptionData)) {
               console.log("Unsupported format from ws response");
               continue;
             }
-            const telementryValues = wsValue as unknown as Array<Array<any>>;
-            const newTelemetryItems: TelemetryItem[] = telementryValues
+            const subscriptionValues = subscriptionData as unknown as Array<
+              Array<any>
+            >;
+            const newTelemetryItems: TelemetryItem[] = subscriptionValues
               .map((entry) => ({ ts: entry[0], value: entry[1] }))
-              .filter(
-                (item) =>
-                  !result[key].some(
-                    (existingItem) => existingItem.ts === item.ts
-                  )
-              );
-            result[key] = [...result[key], ...newTelemetryItems];
+              .filter((item) => filterExisting(telemetryKey, item));
+
+            result[telemetryKey] = [
+              ...result[telemetryKey],
+              ...newTelemetryItems,
+            ];
           }
           return result;
+
+          function filterExisting(telemetryKey: string, item: TelemetryItem) {
+            return !result[telemetryKey].some(
+              (existingItem) => existingItem.ts === item.ts
+            );
+          }
         });
       }
     );
-    return () => {
-      wsUnsubscribe();
-    };
+    return wsUnsubscribe;
   }, [deviceId]);
 
   useEffect(() => {
@@ -184,7 +191,7 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
     }
   }, [rawTelemetryData, processAndSetTelemetryData]);
 
-  if (loading && !processedTelemetryData) {
+  if (isLoading && !processedTelemetryData) {
     return <div>Loading telemetry data...</div>;
   }
 
@@ -192,7 +199,7 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
     return <div>Error: {error}</div>;
   }
 
-  if (!processedTelemetryData) {
+  if (!processedTelemetryData?.entries) {
     return <div>No telemetry data available</div>;
   }
 

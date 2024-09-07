@@ -10,10 +10,9 @@ function App() {
 
   const publicId = process.env.REACT_APP_TB_PUBLICID;
 
-  const [currentTimePeriod, setCurrentTimePeriod] = useState<TimeRange>(
-    TimeRange.ONE_DAY
+  const [currentTimePeriod, setCurrentTimePeriod] = useState<TimeRange | null>(
+    null
   );
-  const [isInitialized, setIsInitialized] = useState(false);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -21,7 +20,6 @@ function App() {
 
   const handleTimePeriodChange = (newTimePeriod: TimeRange) => {
     setCurrentTimePeriod(newTimePeriod);
-    setIsInitialized(true);
   };
 
   useEffect(() => {
@@ -64,7 +62,7 @@ function App() {
       <div className="App">
         <Header onTimePeriodChange={handleTimePeriodChange} />
         <main className="App-main">
-          {isInitialized && (
+          {currentTimePeriod && (
             <Telemetry deviceId={deviceId} timeRange={currentTimePeriod} />
           )}
         </main>
