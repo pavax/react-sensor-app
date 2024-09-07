@@ -1,33 +1,33 @@
-import React, { useState, useEffect, useCallback } from "react";
 import {
-  fetchTelemetry,
-  TelemetryTimeSeries,
-  TimeRange,
-  subscribeToTelemetry as subscribeToDeviceTelemetry,
-  TelemetryItem,
-} from "../api/thingsboard-api";
-import {
-  processData,
-  ProcessedData,
-  KeyInfo,
-  AggregationType,
-} from "../api/data-processing";
-import TemperatureChart from "./charts/TemperatureChart";
-import RainEventChart from "./charts/RainEventChart ";
-import WindChart from "./charts/WindChart";
-import LightChart from "./charts/LightChart";
-import OverviewCards from "./OverviewCards";
-import ContextInfoBar from "./ContextInforBar";
-import { format } from "date-fns-tz";
-import CloudBaseHeightChart from "./charts/CloudBaseHeightChart";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faThermometerHalf,
-  faWind,
+  faCloud,
   faCloudRain,
   faSun,
-  faCloud,
+  faThermometerHalf,
+  faWind,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { format } from "date-fns-tz";
+import React, { useEffect, useState, useMemo } from "react";
+import {
+  AggregationType,
+  KeyInfo,
+  processData,
+  ProcessedData,
+} from "../api/data-processing";
+import {
+  fetchTelemetry,
+  subscribeToTelemetry as subscribeToDeviceTelemetry,
+  TelemetryItem,
+  TelemetryTimeSeries,
+  TimeRange,
+} from "../api/thingsboard-api";
+import CloudBaseHeightChart from "./charts/CloudBaseHeightChart";
+import LightChart from "./charts/LightChart";
+import RainEventChart from "./charts/RainEventChart ";
+import TemperatureChart from "./charts/TemperatureChart";
+import WindChart from "./charts/WindChart";
+import ContextInfoBar from "./ContextInforBar";
+import OverviewCards from "./OverviewCards";
 
 interface TelemetryProps {
   deviceId: string;
@@ -45,8 +45,8 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
   const [processedTelemetryData, setProcessedTelemetryData] =
     useState<ProcessedData | null>(null);
 
-  const processAndSetTelemetryData = useCallback(
-    (rawData: TelemetryTimeSeries) => {
+  const processAndSetTelemetryData = useMemo(() => {
+    return (rawData: TelemetryTimeSeries) => {
       const keyInfo: KeyInfo = {
         temperature: {
           aggregationType: AggregationType.AVERAGE,
@@ -100,78 +100,83 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
 
       const processedData = processData(rawData, timeRange, keyInfo);
       setProcessedTelemetryData(processedData);
-    },
-    [timeRange]
-  );
+    };
+  }, [timeRange]);
 
-  const fetchInitialTelemetryData = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const rawData: TelemetryTimeSeries = await fetchTelemetry(
-        deviceId,
-        25000,
-        timeRange,
-        "temperature",
-        "humidity",
-        "dewPoint",
-        "windVoltageMax",
-        "windDirection",
-        "rainEventAccDifference",
-        "lux",
-        "uvIndex",
-        "counter",
-        "temperature2",
-        "humidity2",
-        "pressure",
-        "cloudBaseHeight",
-        "batteryVoltage"
-      );
-      setRawTelemetryData(rawData);
-    } catch (err) {
-      setError("Failed to fetch initial telemetry data");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
+  useEffect(() => {
+    // This effect fetches initial telemetry data when the component mounts or when deviceId or timeRange changes
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const rawData: TelemetryTimeSeries = await fetchTelemetry(
+          deviceId,
+          25000,
+          timeRange,
+          "temperature",
+          "humidity",
+          "dewPoint",
+          "windVoltageMax",
+          "windDirection",
+          "rainEventAccDifference",
+          "lux",
+          "uvIndex",
+          "counter",
+          "temperature2",
+          "humidity2",
+          "pressure",
+          "cloudBaseHeight",
+          "batteryVoltage"
+        );
+        setRawTelemetryData(rawData);
+      } catch (err) {
+        setError("Failed to fetch initial telemetry data");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [deviceId, timeRange]);
 
-  const subscribeToTelemetryData = useCallback(() => {
-    const wsUnsubscribe = subscribeToDeviceTelemetry(deviceId, (newRawWsData) => {
-      setRawTelemetryData((prevRawData: TelemetryTimeSeries | null) => {
-        if (!prevRawData) {
-          return newRawWsData;
-        }
-        const result = { ...prevRawData };
-        for (const [key, wsValue] of Object.entries(newRawWsData)) {
-          if (result[key] === undefined) {
-            continue;
+  useEffect(() => {
+    // This effect subscribes to real-time telemetry updates for the device
+    // and updates the raw telemetry data state when new data is received
+    const wsUnsubscribe = subscribeToDeviceTelemetry(
+      deviceId,
+      (newRawWsData) => {
+        setRawTelemetryData((prevRawData: TelemetryTimeSeries | null) => {
+          if (!prevRawData) {
+            return newRawWsData;
           }
-          if (!Array.isArray(wsValue)) {
-            console.log("Unsupported format from ws response");
-            continue;
+          const result = { ...prevRawData };
+          for (const [key, wsValue] of Object.entries(newRawWsData)) {
+            if (result[key] === undefined) {
+              continue;
+            }
+            if (!Array.isArray(wsValue)) {
+              console.log("Unsupported format from ws response");
+              continue;
+            }
+            const telementryValues = wsValue as unknown as Array<Array<any>>;
+            const newTelemetryItems: TelemetryItem[] = telementryValues
+              .map((entry) => ({ ts: entry[0], value: entry[1] }))
+              .filter(
+                (item) =>
+                  !result[key].some(
+                    (existingItem) => existingItem.ts === item.ts
+                  )
+              );
+            result[key] = [...result[key], ...newTelemetryItems];
           }
-          const telementryValues = wsValue as unknown as Array<Array<any>>;
-          const newTelemetryItems: TelemetryItem[] = telementryValues
-            .map((entry) => ({ ts: entry[0], value: entry[1] }))
-            .filter(
-              (item) =>
-                !result[key].some((existingItem) => existingItem.ts === item.ts)
-            );
-          result[key] = [...result[key], ...newTelemetryItems];
-        }
-        return result;
-      });
-    });
+          return result;
+        });
+      }
+    );
     return () => {
       wsUnsubscribe();
     };
   }, [deviceId]);
-
-  useEffect(() => {
-    fetchInitialTelemetryData();
-    return subscribeToTelemetryData();
-  }, [deviceId, fetchInitialTelemetryData, subscribeToTelemetryData]);
 
   useEffect(() => {
     if (rawTelemetryData) {
@@ -224,61 +229,66 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
   );
 
   return (
-    <div className="telemetry-grid">
-      <ContextInfoBar
-        main={contextLatestTime}
-        additionalData={contextAdditionalData}
-      />
+    <>
+      <div className="telemetry-grid">
+        <ContextInfoBar
+          main={contextLatestTime}
+          additionalData={contextAdditionalData}
+        />
 
-      <OverviewCards data={processedTelemetryData} />
+        <OverviewCards data={processedTelemetryData} />
 
-      <div className="telemetry-container">
-        <h3>
-          <FontAwesomeIcon icon={faThermometerHalf} /> Temperatur
-        </h3>
-        <div className="chart-container">
-          <TemperatureChart
-            data={processedTelemetryData}
-            timeRange={timeRange}
-          />
+        <div className="telemetry-container">
+          <h3>
+            <FontAwesomeIcon icon={faThermometerHalf} /> Temperatur
+          </h3>
+          <div className="chart-container">
+            <TemperatureChart
+              data={processedTelemetryData}
+              timeRange={timeRange}
+            />
+          </div>
+        </div>
+        <div className="telemetry-container">
+          <h3>
+            <FontAwesomeIcon icon={faWind} /> Wind
+          </h3>
+          <div className="chart-container">
+            <WindChart data={processedTelemetryData} timeRange={timeRange} />
+          </div>
+        </div>
+        <div className="telemetry-container">
+          <h3>
+            <FontAwesomeIcon icon={faCloudRain} /> Regen
+          </h3>
+          <div className="chart-container">
+            <RainEventChart
+              data={processedTelemetryData}
+              timeRange={timeRange}
+            />
+          </div>
+        </div>
+        <div className="telemetry-container">
+          <h3>
+            <FontAwesomeIcon icon={faSun} /> Licht
+          </h3>
+          <div className="chart-container">
+            <LightChart data={processedTelemetryData} timeRange={timeRange} />
+          </div>
+        </div>
+        <div className="telemetry-container">
+          <h3>
+            <FontAwesomeIcon icon={faCloud} /> Cloud Base Height
+          </h3>
+          <div className="chart-container">
+            <CloudBaseHeightChart
+              data={processedTelemetryData}
+              timeRange={timeRange}
+            />
+          </div>
         </div>
       </div>
-      <div className="telemetry-container">
-        <h3>
-          <FontAwesomeIcon icon={faWind} /> Wind
-        </h3>
-        <div className="chart-container">
-          <WindChart data={processedTelemetryData} timeRange={timeRange} />
-        </div>
-      </div>
-      <div className="telemetry-container">
-        <h3>
-          <FontAwesomeIcon icon={faCloudRain} /> Regen
-        </h3>
-        <div className="chart-container">
-          <RainEventChart data={processedTelemetryData} timeRange={timeRange} />
-        </div>
-      </div>
-      <div className="telemetry-container">
-        <h3>
-          <FontAwesomeIcon icon={faSun} /> Licht
-        </h3>
-        <div className="chart-container">
-          <LightChart data={processedTelemetryData} timeRange={timeRange} />
-        </div>
-      </div>
-      <div className="telemetry-container">
-        <h3>
-          <FontAwesomeIcon icon={faCloud} /> Cloud Base Height
-        </h3>
-        <div className="chart-container">
-          <CloudBaseHeightChart
-            data={processedTelemetryData}
-            timeRange={timeRange}
-          />
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 
