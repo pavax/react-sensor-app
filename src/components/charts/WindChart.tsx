@@ -12,7 +12,7 @@ import { Line } from "react-chartjs-2";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
 import { useViewport } from "../../ViewportContext";
-import { useHideTooltipOnTouchMove } from "./chart-utils";
+import { useChartStyles, useHideTooltipOnTouchMove } from "./chart-utils";
 import { getCommonChartOptions } from "./chart-config";
 import { useRef } from "react";
 import { Chart } from "chart.js";
@@ -49,6 +49,7 @@ const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
   useHideTooltipOnTouchMove(chartRef);
 
   const viewport = useViewport();
+  const chartStyles = useChartStyles();
   const commonOptions = getCommonChartOptions(timeRange);
 
   const options: ChartOptions<"line"> = {
@@ -98,10 +99,10 @@ const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
     datasets: [
       {
         label: "Wind Speed",
-        data: data.entries.windVoltageMax?.values ?? [],
-        borderColor: "rgb(75, 192, 192)",
-        backgroundColor: "rgba(75, 192, 192, 0.5)",
         yAxisID: "y0",
+        data: data.entries.windVoltageMax?.values ?? [],
+        borderColor: chartStyles.lineColor1,
+        backgroundColor: chartStyles.lineColor1,
         stepped: "middle",
       },
     ],

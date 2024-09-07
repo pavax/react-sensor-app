@@ -39,13 +39,21 @@ export function determineMaxTickLimit(timeRange: TimeRange) {
 }
 
 export function useChartStyles(): {
-  lineColor: string;
+  lineColor1: string;
+  lineColor2: string;
+  lineColor3: string;
+  lineColor4: string;
+  lineColor5: string;
   textColor: string;
   gridColor: string;
 } {
   const { isDarkMode } = useViewport();
   const [chartStyles, setChartStyles] = useState({
-    lineColor: "",
+    lineColor1: "",
+    lineColor2: "",
+    lineColor3: "",
+    lineColor4: "",
+    lineColor5: "",
     textColor: "",
     gridColor: "",
   });
@@ -54,8 +62,20 @@ export function useChartStyles(): {
     const updateChartStyles = () => {
       const bodyComputedStyle = getComputedStyle(document.body);
       setChartStyles({
-        lineColor: bodyComputedStyle
-          .getPropertyValue("--chart-line-color")
+        lineColor1: bodyComputedStyle
+          .getPropertyValue("--chart-line-color-1")
+          .trim(),
+        lineColor2: bodyComputedStyle
+          .getPropertyValue("--chart-line-color-2")
+          .trim(),
+        lineColor3: bodyComputedStyle
+          .getPropertyValue("--chart-line-color-3")
+          .trim(),
+        lineColor4: bodyComputedStyle
+          .getPropertyValue("--chart-line-color-4")
+          .trim(),
+        lineColor5: bodyComputedStyle
+          .getPropertyValue("--chart-line-color-5")
           .trim(),
         textColor: bodyComputedStyle
           .getPropertyValue("--chart-text-color")
@@ -98,5 +118,3 @@ export function calculateTrendLine(values: number[]): number[] {
 
   return values.map((_, i) => slope * i + intercept);
 }
-
-

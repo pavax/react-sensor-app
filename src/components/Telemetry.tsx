@@ -23,7 +23,7 @@ import {
 } from "../api/thingsboard-api";
 import CloudBaseHeightChart from "./charts/CloudBaseHeightChart";
 import LightChart from "./charts/LightChart";
-import RainEventChart from "./charts/RainEventChart ";
+import RainEventChart from "./charts/RainEventChart";
 import TemperatureChart from "./charts/TemperatureChart";
 import WindChart from "./charts/WindChart";
 import ContextInfoBar from "./ContextInforBar";

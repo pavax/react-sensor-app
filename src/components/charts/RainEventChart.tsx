@@ -9,7 +9,7 @@ import { ProcessedData } from "../../api/data-processing";
 import { ChartOptions } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
 import { getCommonChartOptions } from "./chart-config";
-import { useHideTooltipOnTouchMove } from "./chart-utils";
+import { useChartStyles, useHideTooltipOnTouchMove } from "./chart-utils";
 
 
 interface RainEventChartProps {
@@ -20,6 +20,8 @@ interface RainEventChartProps {
 const RainEventChart: React.FC<RainEventChartProps> = ({ data, timeRange }) => {
   const chartRef = useRef<Chart | null>(null);
   useHideTooltipOnTouchMove(chartRef);
+
+  const chartStyles = useChartStyles();
   
   if (!data || !data.entries) {
     return <div>No data available</div>;
@@ -30,11 +32,10 @@ const RainEventChart: React.FC<RainEventChartProps> = ({ data, timeRange }) => {
     datasets: [
       {
         label: "Regenmenge",
-        data: data.entries.rainEventAccDifference?.values ?? [],
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
         yAxisID: "y0",
+        data: data.entries.rainEventAccDifference?.values ?? [],
+        borderColor: `${chartStyles.lineColor1}`,
+        backgroundColor: `${chartStyles.lineColor1}`,
       },
     ],
   };

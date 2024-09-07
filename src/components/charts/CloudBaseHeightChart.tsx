@@ -9,7 +9,7 @@ import { ProcessedData } from "../../api/data-processing";
 import { ChartOptions } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
 import { getCommonChartOptions } from "./chart-config";
-import { useHideTooltipOnTouchMove } from "./chart-utils";
+import { useChartStyles, useHideTooltipOnTouchMove } from "./chart-utils";
 
 interface CloudBaseHeightChartProps {
   data: ProcessedData;
@@ -19,6 +19,7 @@ interface CloudBaseHeightChartProps {
 const CloudBaseHeightChart: React.FC<CloudBaseHeightChartProps> = ({ data, timeRange }) => {
   const chartRef = useRef<Chart | null>(null);
   useHideTooltipOnTouchMove(chartRef);
+  const chartStyles = useChartStyles();
 
   if (!data || !data.entries) {
     return <div>No data available</div>;
@@ -29,10 +30,10 @@ const CloudBaseHeightChart: React.FC<CloudBaseHeightChartProps> = ({ data, timeR
     datasets: [
       {
         label: "Cloud Base Height",
-        data: data.entries.cloudBaseHeight?.values ?? [],
-        borderColor: "rgb(75, 192, 192)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
         yAxisID: "y0",
+        data: data.entries.cloudBaseHeight?.values ?? [],
+        borderColor: `${chartStyles.lineColor1}`,
+        backgroundColor: `${chartStyles.lineColor1}`,
       },
     ],
   };

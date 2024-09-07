@@ -5,7 +5,7 @@ import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
 import { getCommonChartOptions } from "./chart-config";
-import { useHideTooltipOnTouchMove } from "./chart-utils";
+import { useChartStyles, useHideTooltipOnTouchMove } from "./chart-utils";
 
 interface LightChartProps {
   data: ProcessedData;
@@ -17,6 +17,8 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
 
   useHideTooltipOnTouchMove(chartRef);
 
+  const chartStyles = useChartStyles();
+
   const commonOptions = getCommonChartOptions(timeRange);
 
   if (!data || !data.entries) {
@@ -27,21 +29,20 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
     labels: data.timestamps,
     datasets: [
       {
-        type: "line" as const,
         label: "Lux",
-        data: data.entries.lux?.values ?? [],
-        borderColor: "rgb(255, 205, 86)",
-        backgroundColor: "rgba(255, 205, 86, 0.5)",
+        type: "line" as const,
         yAxisID: "y0",
+        data: data.entries.lux?.values ?? [],
+        borderColor: `${chartStyles.lineColor3}`,
+        backgroundColor: `${chartStyles.lineColor3}`,
       },
       {
-        type: "bar" as const,
         label: "UV Index",
+        type: "bar" as const,
+        yAxisID: "y1",
         data: data.entries.uvIndex?.values ?? [],
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
-        yAxisID: "y1"
+        borderColor: `${chartStyles.lineColor1}`,
+        backgroundColor: `${chartStyles.lineColor1}`,
       },
     ],
   };
@@ -50,7 +51,7 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
     ...commonOptions,
     scales: {
       ...commonOptions.scales,
-    
+
       y1: {
         type: "linear" as const,
         position: "right" as const,
