@@ -18,6 +18,8 @@ import OverviewCards from "./OverviewCards";
 import ContextInfoBar from "./ContextInforBar";
 import { format } from "date-fns-tz";
 import CloudBaseHeightChart from "./charts/CloudBaseHeightChart";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThermometerHalf, faWind, faCloudRain, faSun, faCloud } from "@fortawesome/free-solid-svg-icons";
 
 interface TelemetryProps {
   deviceId: string;
@@ -159,31 +161,31 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
       <OverviewCards data={telemetryData} />
 
       <div className="telemetry-container">
-        <h3>Temperatur</h3>
+        <h3><FontAwesomeIcon icon={faThermometerHalf} /> Temperatur</h3>
         <div className="chart-container">
           <TemperatureChart data={telemetryData} timeRange={timeRange} />
         </div>
       </div>
       <div className="telemetry-container">
-        <h3>Wind</h3>
+        <h3><FontAwesomeIcon icon={faWind} /> Wind</h3>
         <div className="chart-container">
           <WindChart data={telemetryData} timeRange={timeRange} />
         </div>
       </div>
       <div className="telemetry-container">
-        <h3>Regen</h3>
+        <h3><FontAwesomeIcon icon={faCloudRain} /> Regen</h3>
         <div className="chart-container">
           <RainEventChart data={telemetryData} timeRange={timeRange} />
         </div>
       </div>
       <div className="telemetry-container">
-        <h3>Licht</h3>
+        <h3><FontAwesomeIcon icon={faSun} /> Licht</h3>
         <div className="chart-container">
           <LightChart data={telemetryData} timeRange={timeRange} />
         </div>
       </div>
       <div className="telemetry-container">
-        <h3>Cloud Base Height</h3>
+        <h3><FontAwesomeIcon icon={faCloud} /> Cloud Base Height</h3>
         <div className="chart-container">
           <CloudBaseHeightChart data={telemetryData} timeRange={timeRange} />
         </div>
