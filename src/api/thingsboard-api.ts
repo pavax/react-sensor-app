@@ -90,3 +90,66 @@ export function getTimeRangeMilliseconds(range: TimeRange): number {
       return 30 * 24 * 60 * 60 * 1000;
   }
 }
+
+export function subscribeToTelemetry(
+  deviceId: string,
+  callback: (data: TelemetryTimeSeries) => void
+): () => void {
+  if (!AUTH_TOKEN) throw new Error("Not authenticated. Please login first.");
+
+  let ws: WebSocket | null = null;
+  let reconnectAttempts = 0;
+  const maxReconnectAttempts = 5;
+  const reconnectDelay = 5000;
+
+  const connect = () => {
+    ws = new WebSocket(`${TB_URL.replace('http', 'ws')}/api/ws/plugins/telemetry?token=${AUTH_TOKEN}`);
+
+    ws.onopen = () => {
+      console.log('WebSocket connected');
+      reconnectAttempts = 0;
+      const subscriptionCommand = {
+        tsSubCmds: [
+          {
+            entityType: "DEVICE",
+            entityId: deviceId,
+            scope: "LATEST_TELEMETRY",
+            cmdId: 10
+          }
+        ],
+        historyCmds: [],
+        attrSubCmds: []
+      };
+      ws?.send(JSON.stringify(subscriptionCommand));
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.subscriptionId === 10) {
+        callback(data.data);
+      }
+    };
+
+    ws.onclose = (event) => {
+      console.log('WebSocket disconnected:', event.reason);
+      if (reconnectAttempts < maxReconnectAttempts) {
+        setTimeout(() => {
+          reconnectAttempts++;
+          connect();
+        }, reconnectDelay);
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+  };
+
+  connect();
+
+  return () => {
+    if (ws) {
+      ws.close();
+    }
+  };
+}
