@@ -31,7 +31,7 @@ import RainEventChart from "../charts/RainEventChart";
 import TemperatureChart from "../charts/TemperatureChart";
 import WindChart from "../charts/WindChart";
 import ContextInfoBar from "./ContextInforBar";
-import OverviewCards, { CardData } from "./OverviewCards";
+import OverviewCards, { OverviewCardData } from "./OverviewCards";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 interface DashboardProps {
@@ -43,6 +43,11 @@ interface ChartConfig {
   title: string;
   icon: IconDefinition;
   component: React.ComponentType<{ data: ProcessedData; timeRange: TimeRange }>;
+}
+
+interface AdditionalContextDataConfig {
+  label: string;
+  key: (data: ProcessedData) => string;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ deviceId, timeRange }) => {
@@ -112,7 +117,9 @@ const Dashboard: React.FC<DashboardProps> = ({ deviceId, timeRange }) => {
 
   const processAndSetTelemetryData = useMemo(() => {
     return (rawData: TelemetryTimeSeries) => {
-      setProcessedTelemetryData(processData(rawData, timeRange, dataPointConfigs));
+      setProcessedTelemetryData(
+        processData(rawData, timeRange, dataPointConfigs)
+      );
     };
   }, [timeRange, dataPointConfigs]);
 
@@ -193,7 +200,7 @@ const Dashboard: React.FC<DashboardProps> = ({ deviceId, timeRange }) => {
     }
   }, [rawTelemetryData, processAndSetTelemetryData]);
 
-  const cards: CardData[] = useMemo(() => {
+  const overviewCards: OverviewCardData[] = useMemo(() => {
     if (!processedTelemetryData) return [];
     return [
       {
@@ -292,29 +299,38 @@ const Dashboard: React.FC<DashboardProps> = ({ deviceId, timeRange }) => {
       timeZone: "Europe/Zurich",
     }
   );
-  const contextAdditionalData = new Map<string, string>();
-  contextAdditionalData.set(
-    "Device-Uptime Count",
-    processedTelemetryData.entries.counter.latestValue?.toString() ?? "0"
-  );
-  contextAdditionalData.set(
-    "Batterie",
-    `${
-      processedTelemetryData.entries.batteryVoltage.latestValue?.toString() ??
-      "0"
-    }mv`
-  );
-  contextAdditionalData.set(
-    "Gehäuse Temp.",
-    `${
-      processedTelemetryData.entries.temperature2.latestValue?.toString() ?? "0"
-    }°C`
-  );
-  contextAdditionalData.set(
-    "Gehäuse Hum.",
-    `${
-      processedTelemetryData.entries.humidity2.latestValue?.toString() ?? "0"
-    }%`
+
+  const additionalContextDataConfig: AdditionalContextDataConfig[] = [
+    {
+      label: "Device-Uptime Count",
+      key: (data) => data.entries.counter.latestValue?.toString() ?? "0",
+    },
+    {
+      label: "Batterie",
+      key: (data) =>
+        `${data.entries.batteryVoltage.latestValue?.toString() ?? "0"}mv`,
+    },
+    {
+      label: "Gehäuse Temp.",
+      key: (data) =>
+        `${
+          data.entries.temperature2.latestValue?.toString() ?? "0"
+        }°C`
+    },
+    {
+      label: "Gehäuse Hum.",
+      key: (data) =>
+        `${
+          data.entries.humidity2.latestValue?.toString() ?? "0"
+        }%`
+    },
+  ];
+
+  const contextAdditionalData = new Map<string, string>(
+    additionalContextDataConfig.map(config => [
+      config.label,
+      config.key(processedTelemetryData)
+    ])
   );
 
   const chartConfigs: ChartConfig[] = [
@@ -353,7 +369,7 @@ const Dashboard: React.FC<DashboardProps> = ({ deviceId, timeRange }) => {
           additionalData={contextAdditionalData}
         />
 
-        <OverviewCards cards={cards} />
+        <OverviewCards cards={overviewCards} />
 
         {chartConfigs.map((config, index) => (
           <div key={index} className="telemetry-container">

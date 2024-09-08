@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { useViewport } from "../../ViewportContext";
 
-export interface CardData {
+export interface OverviewCardData {
   title: string;
   value: string | number;
   unit: string;
@@ -13,7 +13,7 @@ export interface CardData {
 }
 
 interface OverviewCardsProps {
-  cards: CardData[];
+  cards: OverviewCardData[];
 }
 
 const OverviewCards: React.FC<OverviewCardsProps> = ({ cards }) => {
