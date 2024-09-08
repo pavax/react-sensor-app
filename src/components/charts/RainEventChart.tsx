@@ -1,12 +1,14 @@
 import React, { useRef } from "react";
-import { Bar } from "react-chartjs-2";
-import { ChartData, Chart } from "chart.js";
+import { ChartData } from "chart.js";
 import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
 import { ChartOptions } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
-import { createAutoHideTooltipPlugin, getCommonChartOptions } from "./chart-config";
+import { getCommonChartOptions } from "./chart-config";
 import { useChartStyles } from "./chart-utils";
+import { Chart } from "react-chartjs-2";
+import { Chart as ChartJS } from "chart.js";
+import { createAutoHideTooltipPlugin } from "./plugins/AutoHideTooltipPlugin";
 
 interface RainEventChartProps {
   data: ProcessedData;
@@ -14,7 +16,7 @@ interface RainEventChartProps {
 }
 
 const RainEventChart: React.FC<RainEventChartProps> = ({ data, timeRange }) => {
-  const chartRef = useRef<Chart | null>(null);
+  const chartRef = useRef<ChartJS | null>(null);
   const chartStyles = useChartStyles();
 
   if (!data || !data.entries) {
@@ -42,7 +44,8 @@ const RainEventChart: React.FC<RainEventChartProps> = ({ data, timeRange }) => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <Bar
+      <Chart
+        type="bar"
         options={options}
         data={rainEventData}
         plugins={[createAutoHideTooltipPlugin()]}

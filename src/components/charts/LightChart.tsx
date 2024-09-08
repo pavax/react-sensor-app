@@ -4,8 +4,9 @@ import { Chart } from "react-chartjs-2";
 import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
-import { createAutoHideTooltipPlugin, getCommonChartOptions } from "./chart-config";
+import { getCommonChartOptions } from "./chart-config";
 import { useChartStyles } from "./chart-utils";
+import { createAutoHideTooltipPlugin } from "./plugins/AutoHideTooltipPlugin";
 
 interface LightChartProps {
   data: ProcessedData;

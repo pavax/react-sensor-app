@@ -1,23 +1,25 @@
 import React, { useRef } from "react";
-import { Line } from "react-chartjs-2";
-import {
-  ChartData,
-  Chart,
-} from "chart.js";
+import { ChartData } from "chart.js";
 import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
 import { ChartOptions } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
-import { createAutoHideTooltipPlugin, getCommonChartOptions } from "./chart-config";
+import { getCommonChartOptions } from "./chart-config";
 import { useChartStyles } from "./chart-utils";
+import { Chart } from "react-chartjs-2";
+import { Chart as ChartJS } from "chart.js";
+import { createAutoHideTooltipPlugin } from "./plugins/AutoHideTooltipPlugin";
 
 interface CloudBaseHeightChartProps {
   data: ProcessedData;
   timeRange: TimeRange;
 }
 
-const CloudBaseHeightChart: React.FC<CloudBaseHeightChartProps> = ({ data, timeRange }) => {
-  const chartRef = useRef<Chart | null>(null);
+const CloudBaseHeightChart: React.FC<CloudBaseHeightChartProps> = ({
+  data,
+  timeRange,
+}) => {
+  const chartRef = useRef<ChartJS | null>(null);
   const chartStyles = useChartStyles();
 
   if (!data || !data.entries) {
@@ -47,7 +49,7 @@ const CloudBaseHeightChart: React.FC<CloudBaseHeightChartProps> = ({ data, timeR
         ...commonOptions.scales?.y0,
         title: {
           display: false,
-          text: 'Height (m)',
+          text: "Height (m)",
         },
       },
     },
@@ -55,9 +57,10 @@ const CloudBaseHeightChart: React.FC<CloudBaseHeightChartProps> = ({ data, timeR
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <Line 
-        options={options} 
-        data={cloudBaseHeightData} 
+      <Chart
+        type="line"
+        options={options}
+        data={cloudBaseHeightData}
         plugins={[createAutoHideTooltipPlugin()]}
         ref={(reference) => {
           if (reference) {

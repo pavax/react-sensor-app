@@ -1,16 +1,17 @@
 import React, { useRef } from "react";
-import { Line } from "react-chartjs-2";
-import { ChartData, Chart } from "chart.js";
+import { Chart } from "react-chartjs-2";
+import { ChartData } from "chart.js";
 import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
 import { ChartOptions } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
-import {
-  calculateTrendLine,
-  useChartStyles,
-} from "./chart-utils";
+import { calculateTrendLine, useChartStyles } from "./chart-utils";
 import { useViewport } from "../../ViewportContext";
-import { createAutoHideTooltipPlugin, getCommonChartOptions,  } from "./chart-config";
+import {
+  getCommonChartOptions,
+} from "./chart-config";
+import { Chart as ChartJS } from "chart.js";
+import { createAutoHideTooltipPlugin } from "./plugins/AutoHideTooltipPlugin";
 
 interface TelemetryChartsProps {
   data: ProcessedData;
@@ -23,7 +24,7 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
 }) => {
   const viewport = useViewport();
   const chartStyles = useChartStyles();
-  const chartRef = useRef<Chart | null>(null);
+  const chartRef = useRef<ChartJS | null>(null);
 
   if (!data || !data.entries) {
     return <div>No data available</div>;
@@ -104,7 +105,8 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <Line
+      <Chart
+        type="line"
         options={options}
         data={temperatureData}
         plugins={[createAutoHideTooltipPlugin()]}
