@@ -28,7 +28,7 @@ interface OutdoorSensorPageProps {
 }
 
 const OutdoorSensorPage: React.FC<OutdoorSensorPageProps> = ({ timeRange }) => {
-  const deviceId = process.env.REACT_APP_API_DEVICE_ID;
+  const deviceId = process.env.REACT_APP_API_DEVICE_ID_OUDOOR_SENSOR_ID;
 
   const dataPointConfigs = useMemo<DataPointConfigs>(
     () => ({
@@ -198,7 +198,7 @@ const OutdoorSensorPage: React.FC<OutdoorSensorPageProps> = ({ timeRange }) => {
 
   if (!deviceId) {
     return (
-      <div>Error: REACT_APP_API_DEVICE_ID is not set in the .env file</div>
+      <div>Error: REACT_APP_API_DEVICE_ID_OUDOOR_SENSOR_ID is not set in the .env file</div>
     );
   }
   return (
