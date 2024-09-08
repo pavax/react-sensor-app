@@ -2,9 +2,6 @@
   RewriteEngine On
   RewriteBase /
   
-  # Redirect /outdoor to root
-  RewriteRule ^outdoor$ / [R=301,L]
-  
   # Handle SPA routing
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
