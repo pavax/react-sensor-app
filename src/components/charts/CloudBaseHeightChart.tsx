@@ -42,17 +42,7 @@ const CloudBaseHeightChart: React.FC<CloudBaseHeightChartProps> = ({
   const commonOptions = getCommonChartOptions(timeRange);
 
   const options: ChartOptions<"line"> = {
-    ...commonOptions,
-    scales: {
-      ...commonOptions.scales,
-      y0: {
-        ...commonOptions.scales?.y0,
-        title: {
-          display: false,
-          text: "Height (m)",
-        },
-      },
-    },
+    ...commonOptions
   };
 
   return (

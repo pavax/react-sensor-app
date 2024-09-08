@@ -84,7 +84,7 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
     scales: {
       ...(commonOptions.scales ?? {}),
       y1: {
-        ...(commonOptions.scales?.y ?? {}),
+        ...(commonOptions.scales?.y0 ?? {}),
         position: "right" as const,
         display: !viewport.isMobile,
         min: 0,
