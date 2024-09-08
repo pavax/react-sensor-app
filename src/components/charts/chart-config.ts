@@ -49,7 +49,7 @@ export function createAutoHideTooltipPlugin() {
     }
   };
 
-  document.addEventListener('touchmove', handleTouchMove, { passive: true });
+  document.addEventListener('touchstart', handleTouchMove, { passive: true });
 
   return {
     id: "hideTooltipAfter5Seconds",
@@ -76,7 +76,7 @@ export function createAutoHideTooltipPlugin() {
       }, AUTO_HIDE_AFTER_TIME);
     },
     destroy() {
-      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchstart', handleTouchMove);
     }
   };
 }
@@ -115,7 +115,7 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
         },
       },
     },
-    events: ["mousemove", "mouseout", "click", "touchstart", "touchmove"],
+    events: ["mousemove", "mouseout", "click"],
     interaction: {
       mode: viewPort.isMobile ? "nearest" : "index",
       axis: "x",
