@@ -1,4 +1,4 @@
-import { ChartOptions, TimeSeriesScale } from "chart.js";
+import { BarController, ChartOptions, LineController, TimeSeriesScale } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
 import {
   determineMaxTickLimit,
@@ -26,14 +26,16 @@ import { useViewport } from "../../ViewportContext";
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  TimeSeriesScale,
   PointElement,
   LineElement,
   BarElement,
   TimeScale,
+  TimeSeriesScale,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  LineController,
+  BarController
 );
 
 export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
