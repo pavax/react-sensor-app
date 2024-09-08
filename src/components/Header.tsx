@@ -52,8 +52,6 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showSettings]);
 
-  const buildNumber = process.env.REACT_APP_BUILD_NUMBER;
-
   const toggleSettings = () => setShowSettings(!showSettings);
 
   const handleTimePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -117,20 +115,6 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
                 <span className="slider round"></span>
               </label>
             </div>
-            {buildNumber && (
-              <>
-                <hr className="settings-divider" />
-                <div className="setting-item">
-                  <span className="version-info">
-                    <FontAwesomeIcon icon={faCog} className="setting-icon" />{" "}
-                    App-Version
-                  </span>
-                  <div>
-                    <span className="version-info">{buildNumber}</span>
-                  </div>
-                </div>
-              </>
-            )}
           </div>
         </div>
       )}

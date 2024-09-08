@@ -36,10 +36,14 @@ body {
   color: var(--text-color);
   transition: background-color 0.3s, color 0.3s;
   font-family: "Roboto", sans-serif;
+  overflow-x: hidden; /* Prevent horizontal scrolling on the body */
 }
 
 .App {
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .App-header-menu {
@@ -198,6 +202,7 @@ input:checked + .slider:before {
   font-size: 1.2rem;
   width: 75vw;
   margin: 0 auto;
+  flex: 1;
 }
 
 .overview-cards-container {
@@ -432,4 +437,23 @@ input:checked + .slider:before {
 
 .slick-dots li button:before {
   color: var(--primary-color) !important;
+}
+
+.App-footer {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  text-align: center;
+  padding: 3px;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box; /* Add this line */
+}
+
+.App-footer p {
+  margin: 3px;
 }

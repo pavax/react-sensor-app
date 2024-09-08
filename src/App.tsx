@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { TimeRange, loginPublic } from "./api/thingsboard-api";
 import "./App.css";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Telemetry from "./components/Telemetry";
 import { ViewportProvider } from "./ViewportContext";
 
@@ -66,6 +67,7 @@ function App() {
             <Telemetry deviceId={deviceId} timeRange={currentTimePeriod} />
           )}
         </main>
+        <Footer />
       </div>
     </ViewportProvider>
   );
