@@ -22,9 +22,7 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
   timeRange,
 }) => {
   const viewport = useViewport();
-
   const chartStyles = useChartStyles();
-
   const chartRef = useRef<Chart | null>(null);
 
   if (!data || !data.entries) {

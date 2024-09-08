@@ -14,9 +14,7 @@ interface LightChartProps {
 
 const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
   const chartRef = useRef<ChartJS | null>(null);
-
   const chartStyles = useChartStyles();
-
   const commonOptions = getCommonChartOptions(timeRange);
 
   if (!data || !data.entries) {

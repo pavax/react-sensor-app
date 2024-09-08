@@ -15,7 +15,6 @@ interface RainEventChartProps {
 
 const RainEventChart: React.FC<RainEventChartProps> = ({ data, timeRange }) => {
   const chartRef = useRef<Chart | null>(null);
-
   const chartStyles = useChartStyles();
 
   if (!data || !data.entries) {

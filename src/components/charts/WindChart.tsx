@@ -46,11 +46,9 @@ interface WindChartProps {
 
 const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
   const chartRef = useRef<Chart | null>(null);
-
   const viewport = useViewport();
   const chartStyles = useChartStyles();
   const commonOptions = getCommonChartOptions(timeRange);
-
 
   const options: ChartOptions<"line"> = {
     ...commonOptions,

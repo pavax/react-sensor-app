@@ -24,7 +24,6 @@ const CloudBaseHeightChart: React.FC<CloudBaseHeightChartProps> = ({ data, timeR
     return <div>No data available</div>;
   }
 
-
   const cloudBaseHeightData: ChartData<"line"> = {
     labels: data.timestamps,
     datasets: [
