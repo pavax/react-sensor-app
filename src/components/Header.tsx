@@ -6,7 +6,6 @@ import {
   faTimes,
   faClock,
   faPalette,
-  faCog,
   faInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import { TimeRange } from "../api/thingsboard-api";
