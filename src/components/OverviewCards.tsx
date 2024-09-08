@@ -1,5 +1,5 @@
 import React from "react";
-import Slider from "react-slick";
+import Slider, { Settings } from "react-slick";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTemperatureLow,
@@ -92,20 +92,22 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
     },
   ];
 
-  const settings = {
+  const settings: Settings = {
     dots: false,
     arrows: false,
     infinite: false,
-    speed: 500,
+    speed: 800,
     slidesToShow: 8,
     slidesToScroll: 1,
     adaptiveHeight: true,
+    swipeToSlide: true,
+    swipe: true,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
           dots: true,
-          arrows: true,
+          arrows: false,
           slidesToShow: 5,
           slidesToScroll: 1,
         },
@@ -114,7 +116,7 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
         breakpoint: 600,
         settings: {
           dots: true,
-          arrows: true,
+          arrows: false,
           slidesToShow: 3,
           slidesToScroll: 1,
         },
