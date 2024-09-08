@@ -14,7 +14,7 @@ export enum AggregationType {
   SUM = "sum",
 }
 
-export interface KeyInfo {
+export interface DataPointConfigs {
   [dataPoint: string]: {
     aggregationType: AggregationType;
     fractionDigits?: number;
@@ -50,9 +50,9 @@ const ONE_DAY = ONE_HOUR * 24;
 export function processData(
   telemetryTimeSeries: TelemetryTimeSeries,
   timeRange: TimeRange,
-  keyInfo: KeyInfo
+  dataPointConfigs: DataPointConfigs
 ): ProcessedData {
-  const validDataKeyNames = Object.keys(keyInfo).filter(
+  const validDataKeyNames = Object.keys(dataPointConfigs).filter(
     (keyName) => keyName in telemetryTimeSeries
   );
 
@@ -100,7 +100,7 @@ export function processData(
         const values = dataPoints[dataKeyName] || [];
         let result = aggregateData(
           values,
-          keyInfo[dataKeyName].aggregationType
+          dataPointConfigs[dataKeyName].aggregationType
         );
 
         if (result === undefined) {
@@ -112,13 +112,13 @@ export function processData(
           telemetryTimeSeries[dataKeyName][latestIndex].value
         );
 
-        const valueTransformFn = keyInfo[dataKeyName].valueTransformFn;
+        const valueTransformFn = dataPointConfigs[dataKeyName].valueTransformFn;
         if (valueTransformFn) {
           result = valueTransformFn(result);
           latestValue = valueTransformFn(latestValue);
         }
 
-        const fractionDigits = keyInfo[dataKeyName].fractionDigits;
+        const fractionDigits = dataPointConfigs[dataKeyName].fractionDigits;
         if (fractionDigits !== undefined && typeof result === "number") {
           result = Number(result.toFixed(fractionDigits));
           latestValue = Number(latestValue.toFixed(fractionDigits));

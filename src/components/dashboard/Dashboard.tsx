@@ -14,26 +14,27 @@ import { format } from "date-fns-tz";
 import React, { useEffect, useState, useMemo } from "react";
 import {
   AggregationType,
+  DataPointConfigs,
   processData,
   ProcessedData,
-} from "../api/data-processing";
+} from "../../api/data-processing";
 import {
   fetchTelemetry,
   subscribeToTelemetry as subscribeToDeviceTelemetry,
   TelemetryItem,
   TelemetryTimeSeries,
   TimeRange,
-} from "../api/thingsboard-api";
-import CloudBaseHeightChart from "./charts/CloudBaseHeightChart";
-import LightChart from "./charts/LightChart";
-import RainEventChart from "./charts/RainEventChart";
-import TemperatureChart from "./charts/TemperatureChart";
-import WindChart from "./charts/WindChart";
+} from "../../api/thingsboard-api";
+import CloudBaseHeightChart from "../charts/CloudBaseHeightChart";
+import LightChart from "../charts/LightChart";
+import RainEventChart from "../charts/RainEventChart";
+import TemperatureChart from "../charts/TemperatureChart";
+import WindChart from "../charts/WindChart";
 import ContextInfoBar from "./ContextInforBar";
 import OverviewCards, { CardData } from "./OverviewCards";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
-interface TelemetryProps {
+interface DashboardProps {
   deviceId: string;
   timeRange: TimeRange;
 }
@@ -44,7 +45,7 @@ interface ChartConfig {
   component: React.ComponentType<{ data: ProcessedData; timeRange: TimeRange }>;
 }
 
-const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
+const Dashboard: React.FC<DashboardProps> = ({ deviceId, timeRange }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [error, setError] = useState<string | null>(null);
@@ -55,7 +56,7 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
   const [processedTelemetryData, setProcessedTelemetryData] =
     useState<ProcessedData | null>(null);
 
-  const keyInfo = useMemo(
+  const dataPointConfigs = useMemo<DataPointConfigs>(
     () => ({
       temperature: {
         aggregationType: AggregationType.AVERAGE,
@@ -111,9 +112,9 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
 
   const processAndSetTelemetryData = useMemo(() => {
     return (rawData: TelemetryTimeSeries) => {
-      setProcessedTelemetryData(processData(rawData, timeRange, keyInfo));
+      setProcessedTelemetryData(processData(rawData, timeRange, dataPointConfigs));
     };
-  }, [timeRange, keyInfo]);
+  }, [timeRange, dataPointConfigs]);
 
   useEffect(() => {
     // This effect fetches initial telemetry data when the component mounts or when deviceId or timeRange changes
@@ -121,12 +122,11 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
       try {
         setIsLoading(true);
         setError(null);
-        const keys = Object.keys(keyInfo);
         const rawTelemetryData: TelemetryTimeSeries = await fetchTelemetry(
           deviceId,
           25000,
           timeRange,
-          ...keys
+          ...Object.keys(dataPointConfigs)
         );
         setRawTelemetryData(rawTelemetryData);
       } catch (err) {
@@ -137,7 +137,7 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
       }
     };
     fetchRawTelemetryData();
-  }, [deviceId, timeRange, keyInfo]);
+  }, [deviceId, timeRange, dataPointConfigs]);
 
   useEffect(() => {
     // This effect subscribes to real-time telemetry updates for the device
@@ -373,4 +373,4 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
   );
 };
 
-export default Telemetry;
+export default Dashboard;

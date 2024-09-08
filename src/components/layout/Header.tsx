@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import "../App.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
@@ -8,9 +7,9 @@ import {
   faPalette,
   faInfo,
 } from "@fortawesome/free-solid-svg-icons";
-import { TimeRange } from "../api/thingsboard-api";
-import { useViewport } from "../ViewportContext";
 import { Link } from "react-router-dom";
+import { TimeRange } from "../../api/thingsboard-api";
+import { useViewport } from "../../ViewportContext";
 
 interface HeaderProps {
   onTimePeriodChange: (timePeriod: TimeRange) => void;

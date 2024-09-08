@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { TimeRange, loginPublic } from "./api/thingsboard-api";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Telemetry from "./components/Telemetry";
-import OverviewPage from "./components/OverviewPage";
+import Footer from "./components/layout/Footer";
+import OverviewPage from "./components/pages/OverviewPage";
 import { ViewportProvider } from "./ViewportContext";
 import "./App.css";
+import OutdoorSensorPage from "./components/pages/OutdoorSensorPage";
+import Header from "./components/layout/Header";
 
 function App() {
-  const deviceId = process.env.REACT_APP_API_DEVICE_ID;
   const publicId = process.env.REACT_APP_TB_PUBLICID;
   const [currentTimePeriod, setCurrentTimePeriod] = useState<TimeRange | null>(
     null
@@ -50,12 +49,6 @@ function App() {
     return <div>Logging in...</div>;
   }
 
-  if (!deviceId) {
-    return (
-      <div>Error: REACT_APP_API_DEVICE_ID is not set in the .env file</div>
-    );
-  }
-
   return (
     <BrowserRouter>
       <ViewportProvider>
@@ -67,12 +60,7 @@ function App() {
                 <Route path="/" element={<OverviewPage />} />
                 <Route
                   path="/outdoor"
-                  element={
-                    <Telemetry
-                      deviceId={deviceId}
-                      timeRange={currentTimePeriod}
-                    />
-                  }
+                  element={<OutdoorSensorPage timeRange={currentTimePeriod} />}
                 />
                 {/* Add more routes for other dashboards here */}
               </Routes>
