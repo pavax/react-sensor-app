@@ -13,7 +13,7 @@ import {
   TelemetryTimeSeries,
   TimeRange,
 } from "../../api/thingsboard-api";
-import ContextInfoBar from "./ContextInforBar";
+import ContextInfoBar from "./ContextInfoBar";
 import OverviewCards, { OverviewCardData } from "./OverviewCards";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
