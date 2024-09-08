@@ -1,8 +1,12 @@
 import {
   faCloud,
   faCloudRain,
+  faSnowflake,
   faSun,
+  faTachometerAlt,
+  faTemperatureLow,
   faThermometerHalf,
+  faWater,
   faWind,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,7 +14,6 @@ import { format } from "date-fns-tz";
 import React, { useEffect, useState, useMemo } from "react";
 import {
   AggregationType,
-  KeyInfo,
   processData,
   ProcessedData,
 } from "../api/data-processing";
@@ -27,11 +30,18 @@ import RainEventChart from "./charts/RainEventChart";
 import TemperatureChart from "./charts/TemperatureChart";
 import WindChart from "./charts/WindChart";
 import ContextInfoBar from "./ContextInforBar";
-import OverviewCards from "./OverviewCards";
+import OverviewCards, { CardData } from "./OverviewCards";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 interface TelemetryProps {
   deviceId: string;
   timeRange: TimeRange;
+}
+
+interface ChartConfig {
+  title: string;
+  icon: IconDefinition;
+  component: React.ComponentType<{ data: ProcessedData; timeRange: TimeRange }>;
 }
 
 const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
@@ -45,63 +55,65 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
   const [processedTelemetryData, setProcessedTelemetryData] =
     useState<ProcessedData | null>(null);
 
+  const keyInfo = useMemo(
+    () => ({
+      temperature: {
+        aggregationType: AggregationType.AVERAGE,
+        fractionDigits: 0,
+      },
+      humidity: {
+        aggregationType: AggregationType.AVERAGE,
+        fractionDigits: 0,
+      },
+      dewPoint: {
+        aggregationType: AggregationType.AVERAGE,
+        fractionDigits: 0,
+      },
+      windVoltageMax: {
+        aggregationType: AggregationType.MAX,
+        fractionDigits: 0,
+        valueTransformFn: (voltage: any) => (voltage / 1000) * 14,
+      },
+      windDirection: { aggregationType: AggregationType.MODE },
+      rainEventAccDifference: {
+        aggregationType: AggregationType.SUM,
+        fractionDigits: 0,
+      },
+      counter: {
+        aggregationType: AggregationType.LATEST,
+        fractionDigits: 0,
+      },
+      temperature2: {
+        aggregationType: AggregationType.LATEST,
+        fractionDigits: 0,
+      },
+      humidity2: {
+        aggregationType: AggregationType.LATEST,
+        fractionDigits: 0,
+      },
+      lux: { aggregationType: AggregationType.MAX, fractionDigits: 0 },
+      uvIndex: { aggregationType: AggregationType.MAX, fractionDigits: 0 },
+      pressure: {
+        aggregationType: AggregationType.AVERAGE,
+        fractionDigits: 0,
+      },
+      cloudBaseHeight: {
+        aggregationType: AggregationType.AVERAGE,
+        fractionDigits: 0,
+      },
+      batteryVoltage: {
+        aggregationType: AggregationType.AVERAGE,
+        fractionDigits: 0,
+      },
+    }),
+    []
+  );
+
   const processAndSetTelemetryData = useMemo(() => {
     return (rawData: TelemetryTimeSeries) => {
-      const keyInfo: KeyInfo = {
-        temperature: {
-          aggregationType: AggregationType.AVERAGE,
-          fractionDigits: 0,
-        },
-        humidity: {
-          aggregationType: AggregationType.AVERAGE,
-          fractionDigits: 0,
-        },
-        dewPoint: {
-          aggregationType: AggregationType.AVERAGE,
-          fractionDigits: 0,
-        },
-        windVoltageMax: {
-          aggregationType: AggregationType.MAX,
-          fractionDigits: 0,
-          valueTransformFn: (voltage) => (voltage / 1000) * 14,
-        },
-        windDirection: { aggregationType: AggregationType.MODE },
-        rainEventAccDifference: {
-          aggregationType: AggregationType.SUM,
-          fractionDigits: 0,
-        },
-        counter: {
-          aggregationType: AggregationType.LATEST,
-          fractionDigits: 0,
-        },
-        temperature2: {
-          aggregationType: AggregationType.LATEST,
-          fractionDigits: 0,
-        },
-        humidity2: {
-          aggregationType: AggregationType.LATEST,
-          fractionDigits: 0,
-        },
-        lux: { aggregationType: AggregationType.MAX, fractionDigits: 0 },
-        uvIndex: { aggregationType: AggregationType.MAX, fractionDigits: 0 },
-        pressure: {
-          aggregationType: AggregationType.AVERAGE,
-          fractionDigits: 0,
-        },
-        cloudBaseHeight: {
-          aggregationType: AggregationType.AVERAGE,
-          fractionDigits: 0,
-        },
-        batteryVoltage: {
-          aggregationType: AggregationType.AVERAGE,
-          fractionDigits: 0,
-        },
-      };
-
-      const processedData = processData(rawData, timeRange, keyInfo);
-      setProcessedTelemetryData(processedData);
+      setProcessedTelemetryData(processData(rawData, timeRange, keyInfo));
     };
-  }, [timeRange]);
+  }, [timeRange, keyInfo]);
 
   useEffect(() => {
     // This effect fetches initial telemetry data when the component mounts or when deviceId or timeRange changes
@@ -109,24 +121,12 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
       try {
         setIsLoading(true);
         setError(null);
+        const keys = Object.keys(keyInfo);
         const rawTelemetryData: TelemetryTimeSeries = await fetchTelemetry(
           deviceId,
           25000,
           timeRange,
-          "temperature",
-          "humidity",
-          "dewPoint",
-          "windVoltageMax",
-          "windDirection",
-          "rainEventAccDifference",
-          "lux",
-          "uvIndex",
-          "counter",
-          "temperature2",
-          "humidity2",
-          "pressure",
-          "cloudBaseHeight",
-          "batteryVoltage"
+          ...keys
         );
         setRawTelemetryData(rawTelemetryData);
       } catch (err) {
@@ -137,7 +137,7 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
       }
     };
     fetchRawTelemetryData();
-  }, [deviceId, timeRange]);
+  }, [deviceId, timeRange, keyInfo]);
 
   useEffect(() => {
     // This effect subscribes to real-time telemetry updates for the device
@@ -145,41 +145,43 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
     const wsUnsubscribe = subscribeToDeviceTelemetry(
       deviceId,
       (newRawTelemetryData) => {
-        setRawTelemetryData((prevRawTelemetryData: TelemetryTimeSeries | null) => {
-          if (!prevRawTelemetryData) {
-            return null;
-          }
-          const result = { ...prevRawTelemetryData };
-          for (const [telemetryKey, subscriptionData] of Object.entries(
-            newRawTelemetryData
-          )) {
-            if (result[telemetryKey] === undefined) {
-              continue;
+        setRawTelemetryData(
+          (prevRawTelemetryData: TelemetryTimeSeries | null) => {
+            if (!prevRawTelemetryData) {
+              return null;
             }
-            if (!Array.isArray(subscriptionData)) {
-              console.log("Unsupported format from ws response");
-              continue;
+            const result = { ...prevRawTelemetryData };
+            for (const [telemetryKey, subscriptionData] of Object.entries(
+              newRawTelemetryData
+            )) {
+              if (result[telemetryKey] === undefined) {
+                continue;
+              }
+              if (!Array.isArray(subscriptionData)) {
+                console.log("Unsupported format from ws response");
+                continue;
+              }
+              const subscriptionValues = subscriptionData as unknown as Array<
+                Array<any>
+              >;
+              const newTelemetryItems: TelemetryItem[] = subscriptionValues
+                .map((entry) => ({ ts: entry[0], value: entry[1] }))
+                .filter((item) => filterExisting(telemetryKey, item));
+
+              result[telemetryKey] = [
+                ...result[telemetryKey],
+                ...newTelemetryItems,
+              ];
             }
-            const subscriptionValues = subscriptionData as unknown as Array<
-              Array<any>
-            >;
-            const newTelemetryItems: TelemetryItem[] = subscriptionValues
-              .map((entry) => ({ ts: entry[0], value: entry[1] }))
-              .filter((item) => filterExisting(telemetryKey, item));
+            return result;
 
-            result[telemetryKey] = [
-              ...result[telemetryKey],
-              ...newTelemetryItems,
-            ];
+            function filterExisting(telemetryKey: string, item: TelemetryItem) {
+              return !result[telemetryKey].some(
+                (existingItem) => existingItem.ts === item.ts
+              );
+            }
           }
-          return result;
-
-          function filterExisting(telemetryKey: string, item: TelemetryItem) {
-            return !result[telemetryKey].some(
-              (existingItem) => existingItem.ts === item.ts
-            );
-          }
-        });
+        );
       }
     );
     return wsUnsubscribe;
@@ -190,6 +192,86 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
       processAndSetTelemetryData(rawTelemetryData);
     }
   }, [rawTelemetryData, processAndSetTelemetryData]);
+
+  const cards: CardData[] = useMemo(() => {
+    if (!processedTelemetryData) return [];
+    return [
+      {
+        title: "Temperatur",
+        value:
+          processedTelemetryData.entries.temperature?.latestValue?.toFixed(0) ??
+          "--",
+        unit: "°C",
+        icon: faTemperatureLow,
+        color: "#8e44ad",
+      },
+      {
+        title: "Feuchtigkeit",
+        value:
+          processedTelemetryData.entries.humidity?.latestValue?.toFixed(0) ??
+          "--",
+        unit: "%",
+        icon: faWater,
+        color: "#1abc9c",
+      },
+      {
+        title: "Wind",
+        value:
+          processedTelemetryData.entries.windVoltageMax?.latestValue?.toFixed(
+            0
+          ) ?? "--",
+        unit: "m/s",
+        icon: faWind,
+        color: "#3498db",
+      },
+      {
+        title: "Regen",
+        value:
+          processedTelemetryData.entries.rainEventAccDifference.values.reduce(
+            (sum, value) => sum + value,
+            0
+          ) ?? "--",
+        unit: "mm",
+        icon: faCloudRain,
+        color: "#2ecc71",
+      },
+      {
+        title: "Luftdruck",
+        value:
+          processedTelemetryData.entries.pressure?.latestValue?.toFixed(0) ??
+          "--",
+        unit: "hpa",
+        icon: faTachometerAlt,
+        color: "#e74c3c",
+      },
+      {
+        title: "Schnee",
+        value: "--",
+        unit: "",
+        icon: faSnowflake,
+        color: "#34495e",
+      },
+      {
+        title: "UV-Index",
+        value:
+          processedTelemetryData.entries.uvIndex?.latestValue?.toFixed(0) ??
+          "--",
+        unit: "",
+        icon: faSun,
+        color: "#f39c12",
+      },
+      {
+        title: "Cloudbase Height",
+        value:
+          processedTelemetryData.entries.cloudBaseHeight?.latestValue?.toFixed(
+            0
+          ) ?? "--",
+        unit: "m",
+        icon: faCloud,
+        color: "#7f8c8d",
+      },
+    ];
+  }, [processedTelemetryData]);
 
   if (isLoading && !processedTelemetryData) {
     return <div>Loading telemetry data...</div>;
@@ -235,6 +317,34 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
     }%`
   );
 
+  const chartConfigs: ChartConfig[] = [
+    {
+      title: "Temperatur",
+      icon: faThermometerHalf,
+      component: TemperatureChart,
+    },
+    {
+      title: "Wind",
+      icon: faWind,
+      component: WindChart,
+    },
+    {
+      title: "Regen",
+      icon: faCloudRain,
+      component: RainEventChart,
+    },
+    {
+      title: "Licht",
+      icon: faSun,
+      component: LightChart,
+    },
+    {
+      title: "Cloud Base Height",
+      icon: faCloud,
+      component: CloudBaseHeightChart,
+    },
+  ];
+
   return (
     <>
       <div className="telemetry-grid">
@@ -243,57 +353,21 @@ const Telemetry: React.FC<TelemetryProps> = ({ deviceId, timeRange }) => {
           additionalData={contextAdditionalData}
         />
 
-        <OverviewCards data={processedTelemetryData} />
+        <OverviewCards cards={cards} />
 
-        <div className="telemetry-container">
-          <h3>
-            <FontAwesomeIcon icon={faThermometerHalf} /> Temperatur
-          </h3>
-          <div className="chart-container">
-            <TemperatureChart
-              data={processedTelemetryData}
-              timeRange={timeRange}
-            />
+        {chartConfigs.map((config, index) => (
+          <div key={index} className="telemetry-container">
+            <h3>
+              <FontAwesomeIcon icon={config.icon} /> {config.title}
+            </h3>
+            <div className="chart-container">
+              <config.component
+                data={processedTelemetryData}
+                timeRange={timeRange}
+              />
+            </div>
           </div>
-        </div>
-        <div className="telemetry-container">
-          <h3>
-            <FontAwesomeIcon icon={faWind} /> Wind
-          </h3>
-          <div className="chart-container">
-            <WindChart data={processedTelemetryData} timeRange={timeRange} />
-          </div>
-        </div>
-        <div className="telemetry-container">
-          <h3>
-            <FontAwesomeIcon icon={faCloudRain} /> Regen
-          </h3>
-          <div className="chart-container">
-            <RainEventChart
-              data={processedTelemetryData}
-              timeRange={timeRange}
-            />
-          </div>
-        </div>
-        <div className="telemetry-container">
-          <h3>
-            <FontAwesomeIcon icon={faSun} /> Licht
-          </h3>
-          <div className="chart-container">
-            <LightChart data={processedTelemetryData} timeRange={timeRange} />
-          </div>
-        </div>
-        <div className="telemetry-container">
-          <h3>
-            <FontAwesomeIcon icon={faCloud} /> Cloud Base Height
-          </h3>
-          <div className="chart-container">
-            <CloudBaseHeightChart
-              data={processedTelemetryData}
-              timeRange={timeRange}
-            />
-          </div>
-        </div>
+        ))}
       </div>
     </>
   );

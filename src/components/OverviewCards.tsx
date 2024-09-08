@@ -1,24 +1,22 @@
 import React from "react";
 import Slider, { Settings } from "react-slick";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTemperatureLow,
-  faWind,
-  faCloudRain,
-  faTachometerAlt,
-  faSnowflake,
-  faSun,
-  faWater,
-  faCloud,
-} from "@fortawesome/free-solid-svg-icons";
-import { ProcessedData } from "../api/data-processing";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { useViewport } from "../ViewportContext";
 
-interface OverviewCardsProps {
-  data: ProcessedData;
+export interface CardData {
+  title: string;
+  value: string | number;
+  unit: string;
+  icon: IconDefinition;
+  color: string;
 }
 
-const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
+interface OverviewCardsProps {
+  cards: CardData[];
+}
+
+const OverviewCards: React.FC<OverviewCardsProps> = ({ cards }) => {
   const { isMobile, isTablet } = useViewport();
 
   const getCardSize = () => {
@@ -28,69 +26,6 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
   };
 
   const cardSize = getCardSize();
-
-  const cards = [
-    {
-      title: "Temperatur",
-      value: data.entries.temperature?.latestValue?.toFixed(0) ?? "--",
-      unit: "°C",
-      icon: faTemperatureLow,
-      color: "#8e44ad",
-    },
-    {
-      title: "Feuchtigkeit",
-      value: data.entries.humidity?.latestValue?.toFixed(0) ?? "--",
-      unit: "%",
-      icon: faWater,
-      color: "#1abc9c",
-    },
-    {
-      title: "Wind",
-      value: data.entries.windVoltageMax?.latestValue?.toFixed(0) ?? "--",
-      unit: "m/s",
-      icon: faWind,
-      color: "#3498db",
-    },
-    {
-      title: "Regen",
-      value:
-        data.entries.rainEventAccDifference.values.reduce(
-          (sum, value) => sum + value,
-          0
-        ) ?? "--",
-      unit: "mm",
-      icon: faCloudRain,
-      color: "#2ecc71",
-    },
-    {
-      title: "Luftdruck",
-      value: data.entries.pressure?.latestValue?.toFixed(0) ?? "--",
-      unit: "hpa",
-      icon: faTachometerAlt,
-      color: "#e74c3c",
-    },
-    {
-      title: "Schnee",
-      value: "--",
-      unit: "",
-      icon: faSnowflake,
-      color: "#34495e",
-    },
-    {
-      title: "UV-Index",
-      value: data.entries.uvIndex?.latestValue?.toFixed(0) ?? "--",
-      unit: "",
-      icon: faSun,
-      color: "#f39c12",
-    },
-    {
-      title: "Cloudbase Height",
-      value: data.entries.cloudBaseHeight?.latestValue?.toFixed(0) ?? "--",
-      unit: "m",
-      icon: faCloud,
-      color: "#7f8c8d",
-    },
-  ];
 
   const settings: Settings = {
     dots: false,
