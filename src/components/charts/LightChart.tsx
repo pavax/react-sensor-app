@@ -49,7 +49,6 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
     ...commonOptions,
     scales: {
       ...commonOptions.scales,
-
       y1: {
         type: "linear" as const,
         position: "right" as const,

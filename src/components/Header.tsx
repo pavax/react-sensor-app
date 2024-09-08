@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { TimeRange } from "../api/thingsboard-api";
 import { useViewport } from "../ViewportContext";
+import { Link } from "react-router-dom";
 
 interface HeaderProps {
   onTimePeriodChange: (timePeriod: TimeRange) => void;
@@ -59,7 +60,7 @@ const Header: React.FC<HeaderProps> = ({ onTimePeriodChange }) => {
 
   return (
     <header className="App-header-menu">
-      <h1>Sensor App</h1>
+      <h1><Link to="/">Sensor App</Link></h1>
       <button
         ref={buttonRef}
         onClick={toggleSettings}

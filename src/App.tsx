@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { TimeRange, loginPublic } from "./api/thingsboard-api";
-import "./App.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Telemetry from "./components/Telemetry";
+import OverviewPage from "./components/OverviewPage";
 import { ViewportProvider } from "./ViewportContext";
+import "./App.css";
 
 function App() {
   const deviceId = process.env.REACT_APP_API_DEVICE_ID;
-
   const publicId = process.env.REACT_APP_TB_PUBLICID;
-
   const [currentTimePeriod, setCurrentTimePeriod] = useState<TimeRange | null>(
     null
   );
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const handleTimePeriodChange = (newTimePeriod: TimeRange) => {
@@ -59,17 +57,33 @@ function App() {
   }
 
   return (
-    <ViewportProvider>
-      <div className="App">
-        <Header onTimePeriodChange={handleTimePeriodChange} />
-        <main className="App-main">
-          {currentTimePeriod && (
-            <Telemetry deviceId={deviceId} timeRange={currentTimePeriod} />
+    <BrowserRouter>
+      <ViewportProvider>
+        <div className="App">
+          <Header onTimePeriodChange={handleTimePeriodChange} />
+          {currentTimePeriod ? (
+            <main className="App-main">
+              <Routes>
+                <Route path="/" element={<OverviewPage />} />
+                <Route
+                  path="/outdoor"
+                  element={
+                    <Telemetry
+                      deviceId={deviceId}
+                      timeRange={currentTimePeriod}
+                    />
+                  }
+                />
+                {/* Add more routes for other dashboards here */}
+              </Routes>
+            </main>
+          ) : (
+            <div>Please select a time period</div>
           )}
-        </main>
-        <Footer />
-      </div>
-    </ViewportProvider>
+          <Footer />
+        </div>
+      </ViewportProvider>
+    </BrowserRouter>
   );
 }
 
