@@ -102,6 +102,8 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
     adaptiveHeight: true,
     swipeToSlide: true,
     swipe: true,
+    touchThreshold: 5,
+    touchMove: true,
     responsive: [
       {
         breakpoint: 1024,
@@ -109,7 +111,7 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
           dots: true,
           arrows: false,
           slidesToShow: 5,
-          slidesToScroll: 5,
+          slidesToScroll: 1,
         },
       },
       {
@@ -118,7 +120,7 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
           dots: true,
           arrows: false,
           slidesToShow: 3,
-          slidesToScroll: 3,
+          slidesToScroll: 1,
         },
       },
     ],
