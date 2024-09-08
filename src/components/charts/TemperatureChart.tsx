@@ -51,7 +51,7 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
         borderColor: `${chartStyles.lineColor2}${hexTransparency}`,
         backgroundColor: `${chartStyles.lineColor2}${hexTransparency}`,
         pointStyle: "circle",
-        pointRadius: viewport.isMobile ? 1 : 3,
+        pointRadius: viewport.isMobile ? 2 : 3,
         showLine: false,
       },
       {
