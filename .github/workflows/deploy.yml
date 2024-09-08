@@ -20,7 +20,7 @@ jobs:
           path: app
 
       - name: List contents of app
-        run: ls -R app
+        run: ls -la app
 
       - name: Deploy to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
