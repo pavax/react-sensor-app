@@ -4,17 +4,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 interface LatestTimestampProps {
-  main: string;
+  latestTimestamp: string;
   additionalData?: Map<String, String>;
 }
 
 const ContextInfoBar: React.FC<LatestTimestampProps> = ({
-  main,
+  latestTimestamp,
   additionalData,
 }) => {
   const [expanded, setExpanded] = useState(false);
 
-  if (!main) {
+  if (!latestTimestamp) {
     return null;
   }
 
@@ -28,7 +28,7 @@ const ContextInfoBar: React.FC<LatestTimestampProps> = ({
       onClick={toggleExpand}
     >
       <span>Daten von: </span>
-      <strong>{main}</strong>
+      <strong>{latestTimestamp}</strong>
       {additionalData && additionalData.size > 0 && (
         <>
           <div className="additional-info">

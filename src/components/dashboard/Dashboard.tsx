@@ -187,30 +187,28 @@ const Dashboard: React.FC<DashboardProps> = ({
   );
 
   return (
-    <>
-      <div className="telemetry-grid">
-        <ContextInfoBar
-          main={contextLatestTime}
-          additionalData={contextAdditionalData}
-        />
+    <div className="telemetry-grid">
+      <ContextInfoBar
+        latestTimestamp={contextLatestTime}
+        additionalData={contextAdditionalData}
+      />
 
-        <OverviewCards cards={overviewCards} />
+      <OverviewCards cards={overviewCards} />
 
-        {chartConfigs.map((config, index) => (
-          <div key={index} className="telemetry-container">
-            <h3>
-              <FontAwesomeIcon icon={config.icon} /> {config.title}
-            </h3>
-            <div className="chart-container">
-              <config.component
-                data={processedTelemetryData}
-                timeRange={timeRange}
-              />
-            </div>
+      {chartConfigs.map((config, index) => (
+        <div key={index} className="telemetry-container">
+          <h3>
+            <FontAwesomeIcon icon={config.icon} /> {config.title}
+          </h3>
+          <div className="chart-container">
+            <config.component
+              data={processedTelemetryData}
+              timeRange={timeRange}
+            />
           </div>
-        ))}
-      </div>
-    </>
+        </div>
+      ))}
+    </div>
   );
 };
 
