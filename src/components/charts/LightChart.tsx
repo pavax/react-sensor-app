@@ -4,8 +4,8 @@ import { Chart } from "react-chartjs-2";
 import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
-import { getCommonChartOptions } from "./chart-config";
-import { useChartStyles, useHideTooltipOnTouchMove } from "./chart-utils";
+import { createAutoHideTooltipPlugin, getCommonChartOptions } from "./chart-config";
+import { useChartStyles } from "./chart-utils";
 
 interface LightChartProps {
   data: ProcessedData;
@@ -14,8 +14,6 @@ interface LightChartProps {
 
 const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
   const chartRef = useRef<ChartJS | null>(null);
-
-  useHideTooltipOnTouchMove(chartRef);
 
   const chartStyles = useChartStyles();
 
@@ -35,7 +33,6 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
         data: data.entries.lux?.values ?? [],
         borderColor: `${chartStyles.lineColor3}`,
         backgroundColor: `${chartStyles.lineColor3}`,
-        tension: 0.3
       },
       {
         label: "UV Index",
@@ -69,6 +66,7 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
         type="line"
         options={options}
         data={chartData}
+        plugins={[createAutoHideTooltipPlugin()]}
         ref={(reference) => {
           if (reference) {
             chartRef.current = reference;

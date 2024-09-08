@@ -8,8 +8,8 @@ import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
 import { ChartOptions } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
-import { getCommonChartOptions } from "./chart-config";
-import { useChartStyles, useHideTooltipOnTouchMove } from "./chart-utils";
+import { createAutoHideTooltipPlugin, getCommonChartOptions } from "./chart-config";
+import { useChartStyles } from "./chart-utils";
 
 interface CloudBaseHeightChartProps {
   data: ProcessedData;
@@ -18,7 +18,6 @@ interface CloudBaseHeightChartProps {
 
 const CloudBaseHeightChart: React.FC<CloudBaseHeightChartProps> = ({ data, timeRange }) => {
   const chartRef = useRef<Chart | null>(null);
-  useHideTooltipOnTouchMove(chartRef);
   const chartStyles = useChartStyles();
 
   if (!data || !data.entries) {
@@ -35,7 +34,6 @@ const CloudBaseHeightChart: React.FC<CloudBaseHeightChartProps> = ({ data, timeR
         data: data.entries.cloudBaseHeight?.values ?? [],
         borderColor: `${chartStyles.lineColor1}`,
         backgroundColor: `${chartStyles.lineColor1}`,
-        tension: 0.3,
       },
     ],
   };
@@ -61,6 +59,7 @@ const CloudBaseHeightChart: React.FC<CloudBaseHeightChartProps> = ({ data, timeR
       <Line 
         options={options} 
         data={cloudBaseHeightData} 
+        plugins={[createAutoHideTooltipPlugin()]}
         ref={(reference) => {
           if (reference) {
             chartRef.current = reference;

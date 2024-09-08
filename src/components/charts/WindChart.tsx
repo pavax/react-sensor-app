@@ -12,8 +12,8 @@ import { Line } from "react-chartjs-2";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
 import { useViewport } from "../../ViewportContext";
-import { useChartStyles, useHideTooltipOnTouchMove } from "./chart-utils";
-import { getCommonChartOptions } from "./chart-config";
+import { useChartStyles } from "./chart-utils";
+import { createAutoHideTooltipPlugin, getCommonChartOptions, } from "./chart-config";
 import { useRef } from "react";
 import { Chart } from "chart.js";
 
@@ -46,11 +46,11 @@ interface WindChartProps {
 
 const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
   const chartRef = useRef<Chart | null>(null);
-  useHideTooltipOnTouchMove(chartRef);
 
   const viewport = useViewport();
   const chartStyles = useChartStyles();
   const commonOptions = getCommonChartOptions(timeRange);
+
 
   const options: ChartOptions<"line"> = {
     ...commonOptions,
@@ -113,7 +113,7 @@ const WindChart: React.FC<WindChartProps> = ({ data, timeRange }) => {
       <Line
         options={options}
         data={chartData}
-        plugins={[createWindDirectionPlugin()]}
+        plugins={[createWindDirectionPlugin(), createAutoHideTooltipPlugin()]}
         ref={(reference) => {
           if (reference) {
             chartRef.current = reference;

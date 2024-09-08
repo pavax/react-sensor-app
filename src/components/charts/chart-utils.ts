@@ -1,8 +1,6 @@
 import { TimeRange } from "../../api/thingsboard-api";
 import { useState, useEffect } from "react";
 import { useViewport } from "../../ViewportContext";
-import { RefObject } from "react";
-import { Chart } from "chart.js";
 
 export function getTimeUnit(timeRange: TimeRange): "hour" | "day" | "week" {
   switch (timeRange) {
@@ -90,20 +88,6 @@ export function useChartStyles(): {
   }, [isDarkMode]);
 
   return chartStyles;
-}
-
-export function useHideTooltipOnTouchMove(chartRef: RefObject<Chart | null>) {
-  useEffect(() => {
-    const hideTooltip = () => {
-      if (chartRef.current?.tooltip) {
-        chartRef.current.tooltip.setActiveElements([], { x: 0, y: 0 });
-        chartRef.current.update();
-      }
-    };
-
-    document.addEventListener("touchmove", hideTooltip);
-    return () => document.removeEventListener("touchmove", hideTooltip);
-  }, [chartRef]);
 }
 
 export function calculateTrendLine(values: number[]): number[] {

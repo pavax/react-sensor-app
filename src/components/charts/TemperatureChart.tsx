@@ -8,10 +8,9 @@ import { TimeRange } from "../../api/thingsboard-api";
 import {
   calculateTrendLine,
   useChartStyles,
-  useHideTooltipOnTouchMove,
 } from "./chart-utils";
 import { useViewport } from "../../ViewportContext";
-import { getCommonChartOptions } from "./chart-config";
+import { createAutoHideTooltipPlugin, getCommonChartOptions,  } from "./chart-config";
 
 interface TelemetryChartsProps {
   data: ProcessedData;
@@ -28,14 +27,11 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
 
   const chartRef = useRef<Chart | null>(null);
 
-  useHideTooltipOnTouchMove(chartRef);
-
   if (!data || !data.entries) {
     return <div>No data available</div>;
   }
 
   const hexTransparency = 60;
-  const tension = 0.3;
   const temperatureData: ChartData<"line"> = {
     labels: data.timestamps,
     datasets: [
@@ -46,7 +42,6 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
         data: data.entries.temperature?.values ?? [],
         borderColor: `${chartStyles.lineColor1}`,
         backgroundColor: `${chartStyles.lineColor1}`,
-        tension: tension, 
       },
       {
         label: "Dew Point",
@@ -79,7 +74,6 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
         pointStyle: "triangle",
         showLine: true,
         hidden: true,
-        tension: tension,
       },
     ],
   };
@@ -115,6 +109,7 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
       <Line
         options={options}
         data={temperatureData}
+        plugins={[createAutoHideTooltipPlugin()]}
         ref={(reference) => {
           if (reference) {
             chartRef.current = reference;

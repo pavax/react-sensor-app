@@ -1,6 +1,10 @@
-import { ChartOptions, TimeSeriesScale } from "chart.js";
+import { ChartOptions, TimeSeriesScale, Chart } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
-import { determineMaxTickLimit, getTimeUnit, useChartStyles } from "./chart-utils";
+import {
+  determineMaxTickLimit,
+  getTimeUnit,
+  useChartStyles,
+} from "./chart-utils";
 import { TooltipItem } from "chart.js";
 
 import { format } from "date-fns-tz";
@@ -31,6 +35,51 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+export function createAutoHideTooltipPlugin() {
+  let autoHideTimeoutRef: number | null = null;
+  const AUTO_HIDE_AFTER_TIME = 3_000;
+  let chart: Chart | null = null;
+
+  const handleTouchMove = () => {
+    if (chart) {
+      chart.tooltip?.setActiveElements([], { x: 0, y: 0 });
+      chart.setActiveElements([]);
+      chart.update();
+    }
+  };
+
+  document.addEventListener('touchmove', handleTouchMove, { passive: true });
+
+  return {
+    id: "hideTooltipAfter5Seconds",
+    beforeInit(chartInstance: Chart) {
+      chart = chartInstance;
+    },
+    beforeEvent(_: Chart, args: { event: { type: string } }) {
+      if (args.event.type === "mouseout") {
+        if (autoHideTimeoutRef !== null) {
+          clearTimeout(autoHideTimeoutRef);
+          autoHideTimeoutRef = null;
+        }
+      }
+    },
+    afterTooltipDraw: (chartInstance: Chart) => {
+      if (autoHideTimeoutRef !== null) {
+        clearTimeout(autoHideTimeoutRef);
+      }
+      autoHideTimeoutRef = window.setTimeout(() => {
+        chartInstance.tooltip?.setActiveElements([], { x: 0, y: 0 });
+        chartInstance.setActiveElements([]);
+        chartInstance.update();
+        autoHideTimeoutRef = null;
+      }, AUTO_HIDE_AFTER_TIME);
+    },
+    destroy() {
+      document.removeEventListener('touchmove', handleTouchMove);
+    }
+  };
+}
 
 export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -76,12 +125,12 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
       point: {
         radius: 0,
         hoverRadius: 5,
-        hitRadius: 5,
+        hitRadius: viewPort.isMobile ? 15 : 5,
         borderWidth: 0,
       },
-      // line: {
-      //   tension: 0, // Optional: makes lines straight
-      // },
+      line: {
+        tension: 0.3,
+      },
     },
     scales: {
       x: {
