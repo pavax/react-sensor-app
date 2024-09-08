@@ -109,7 +109,7 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
           dots: true,
           arrows: false,
           slidesToShow: 5,
-          slidesToScroll: 1,
+          slidesToScroll: 5,
         },
       },
       {
@@ -118,7 +118,7 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ data }) => {
           dots: true,
           arrows: false,
           slidesToShow: 3,
-          slidesToScroll: 1,
+          slidesToScroll: 3,
         },
       },
     ],
