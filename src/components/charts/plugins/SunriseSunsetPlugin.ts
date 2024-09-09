@@ -67,12 +67,69 @@ export function createSunriseSunsetPlugin(): Plugin {
         return x;
       };
 
-      const drawIcon = (time: Date, icon: string, color: string) => {
+      const drawArrowAndGround = (
+        time: Date,
+        isSunrise: boolean,
+        color: string
+      ) => {
         const x = xAxis.getPixelForValue(time.getTime());
-        if (x < xAxis.left || x > xAxis.right) return null;
+        if (x < xAxis.left || x > xAxis.right) return;
 
-        ctx.fillText(icon, x, yAxis.bottom + 10);
-        return x;
+        const arrowSize = 10;
+        const groundWidth = 20;
+        const yGround = yAxis.bottom + 15;
+        const gap = 5; // Small gap between arrow and ground
+        const tickSize = 6; // Increased size of the tick
+
+        // Draw ground
+        ctx.beginPath();
+        ctx.strokeStyle = "#4682B4"; // Steel Blue color
+        ctx.lineWidth = 2;
+        ctx.moveTo(x - groundWidth / 2, yGround);
+        ctx.lineTo(x + groundWidth / 2, yGround);
+        ctx.stroke();
+
+        // Draw arrow and tick
+        ctx.beginPath();
+        ctx.fillStyle = color;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        if (isSunrise) {
+          // Triangle
+          ctx.moveTo(x, yGround - arrowSize - gap - tickSize);
+          ctx.lineTo(x - arrowSize / 2, yGround - gap - tickSize);
+          ctx.lineTo(x + arrowSize / 2, yGround - gap - tickSize);
+          ctx.closePath();
+          ctx.fill();
+
+          // Tick
+          ctx.moveTo(x, yGround - gap - tickSize);
+          ctx.lineTo(x, yGround - gap);
+          ctx.stroke();
+        } else {
+          // Triangle
+          ctx.moveTo(x, yGround - gap);
+          ctx.lineTo(x - arrowSize / 2, yGround - arrowSize - gap);
+          ctx.lineTo(x + arrowSize / 2, yGround - arrowSize - gap);
+          ctx.closePath();
+          ctx.fill();
+
+          // Tick
+          ctx.moveTo(x, yGround - arrowSize - gap);
+          ctx.lineTo(x, yGround - arrowSize - gap - tickSize - 2);
+          ctx.stroke();
+        }
+
+        // Draw time
+        ctx.font = "10px Arial";
+        ctx.fillStyle = color;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        const timeString = format(time, "HH:mm");
+        const currentAlpha = ctx.globalAlpha;
+        ctx.globalAlpha = currentAlpha * 2;
+        ctx.fillText(timeString, x, yGround + gap);
+        ctx.globalAlpha = currentAlpha;
       };
 
       uniqueDates.forEach((dateString) => {
@@ -82,17 +139,17 @@ export function createSunriseSunsetPlugin(): Plugin {
         const sunriseX = drawVerticalLine(sunTimes.sunrise, SUNRISE_COLOR);
         const sunsetX = drawVerticalLine(sunTimes.sunset, SUNSET_COLOR);
 
-        if (sunriseX !== null && sunsetX !== null && Math.abs(sunsetX - sunriseX) >= 30) {
-          drawIcon(sunTimes.sunrise, "☀️", SUNRISE_COLOR);
-          drawIcon(sunTimes.sunset, "🌛", SUNSET_COLOR);
+        if (
+          sunriseX !== null &&
+          sunsetX !== null &&
+          Math.abs(sunsetX - sunriseX) >= 30
+        ) {
+          drawArrowAndGround(sunTimes.sunrise, true, SUNRISE_COLOR);
+          drawArrowAndGround(sunTimes.sunset, false, SUNSET_COLOR);
         }
       });
 
       ctx.restore();
     },
-
-    
   };
-
-  
 }

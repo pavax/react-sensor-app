@@ -43,11 +43,17 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
   const chartStyles = useChartStyles();
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const viewPort = useViewport();
+  const viewport = useViewport();
 
   return {
     responsive: true,
     maintainAspectRatio: false,
+    layout: {
+      padding: {
+        top: viewport.isMobile ? 35 : 60,
+        right: 15,
+      },
+    },
     plugins: {
       legend: {
         position: "bottom" as const,
@@ -56,9 +62,9 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
         },
       },
       tooltip: {
-        enabled: viewPort.showChartTooltips,
-        mode: viewPort.isMobile ? "nearest" : "index",
-        intersect: !viewPort.isMobile,
+        enabled: viewport.showChartTooltips,
+        mode: viewport.isMobile ? "nearest" : "index",
+        intersect: !viewport.isMobile,
         axis: "x",
         callbacks: {
           title: (tooltipItems: TooltipItem<any>[]) =>
@@ -74,15 +80,15 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
     },
     events: ["mousemove", "mouseout", "click"],
     interaction: {
-      mode: viewPort.isMobile ? "nearest" : "index",
+      mode: viewport.isMobile ? "nearest" : "index",
       axis: "x",
-      intersect: !viewPort.isMobile,
+      intersect: !viewport.isMobile,
     },
     elements: {
       point: {
         radius: 0,
         hoverRadius: 5,
-        hitRadius: viewPort.isMobile ? 15 : 5,
+        hitRadius: viewport.isMobile ? 15 : 5,
         borderWidth: 0,
       },
       line: {
