@@ -541,7 +541,7 @@ input:checked + .slider:before {
   border: none;
   cursor: pointer;
   padding: 5px 10px;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -564,4 +564,8 @@ input:checked + .slider:before {
 
 .toggle-sunrise-sunset span {
   margin-left: 5px;
+}
+
+.toggle-sunrise-sunset.strikethrough {
+  text-decoration: line-through;
 }
