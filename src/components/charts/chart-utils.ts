@@ -1,9 +1,6 @@
 import { TimeRange } from "../../api/thingsboard-api";
 import { useState, useEffect } from "react";
 import { useViewport } from "../../ViewportContext";
-import { ProcessedData } from "../../api/data-processing";
-import { SunriseSunsetData, fetchSunriseSunsetData } from "./plugins/SunriseSunsetPlugin";
-import { format } from "date-fns";
 
 export function getTimeUnit(timeRange: TimeRange): "hour" | "day" | "week" {
   switch (timeRange) {
@@ -104,32 +101,4 @@ export function calculateTrendLine(values: number[]): number[] {
   const intercept = (sumY - slope * sumX) / n;
 
   return values.map((_, i) => slope * i + intercept);
-}
-
-
-export function useSunriseSunset(data: ProcessedData | null) {
-  const [sunriseSunsetData, setSunriseSunsetData] = useState<SunriseSunsetData[]>([]);
-
-  useEffect(() => {
-    const fetchSunriseSunset = async () => {
-      if (!data || !data.timestamps || data.timestamps.length === 0) return;
-
-      const startDate = new Date(data.timestamps[0]);
-      const endDate = new Date(data.timestamps[data.timestamps.length - 1]);
-      
-      const startDateString = format(startDate, 'yyyy-MM-dd');
-      const endDateString = format(endDate, 'yyyy-MM-dd');
-      
-      const sunriseSunsetData = await fetchSunriseSunsetData(
-        Number(process.env.REACT_APP_LATITUDE),
-        Number(process.env.REACT_APP_LONGITUDE),
-        startDateString,
-        endDateString
-      );
-      setSunriseSunsetData(sunriseSunsetData);
-    };
-    fetchSunriseSunset();
-  }, [data]);
-
-  return sunriseSunsetData;
 }

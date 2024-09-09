@@ -5,7 +5,7 @@ import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
 import { getCommonChartOptions } from "./chart-config";
-import { useChartStyles, useSunriseSunset } from "./chart-utils";
+import { useChartStyles } from "./chart-utils";
 import { createAutoHideTooltipPlugin } from "./plugins/AutoHideTooltipPlugin";
 import { createSunriseSunsetPlugin } from "./plugins/SunriseSunsetPlugin";
 
@@ -18,7 +18,6 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
   const chartRef = useRef<ChartJS | null>(null);
   const chartStyles = useChartStyles();
   const commonOptions = getCommonChartOptions(timeRange);
-  const sunriseSunsetData = useSunriseSunset(data);
 
   if (!data || !data.entries) {
     return <div>No data available</div>;
@@ -61,7 +60,9 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
     plugins: {
       ...commonOptions.plugins,
       sunriseSunset: {
-        data: sunriseSunsetData
+        latitude: Number(process.env.REACT_APP_LATITUDE),
+        longitude: Number(process.env.REACT_APP_LONGITUDE),
+        show: true
       },
     },
   };

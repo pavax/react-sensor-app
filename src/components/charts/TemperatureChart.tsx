@@ -7,7 +7,6 @@ import { TimeRange } from "../../api/thingsboard-api";
 import {
   calculateTrendLine,
   useChartStyles,
-  useSunriseSunset,
 } from "./chart-utils";
 import { useViewport } from "../../ViewportContext";
 import { getCommonChartOptions } from "./chart-config";
@@ -28,7 +27,6 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
   const viewport = useViewport();
   const chartStyles = useChartStyles();
   const chartRef = useRef<ChartJS | null>(null);
-  const sunriseSunsetData = useSunriseSunset(data);
   const [showSunriseSunset, setShowSunriseSunset] = useState(true);
 
   if (!data || !data.entries) {
@@ -109,7 +107,8 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
     plugins: {
       ...commonOptions.plugins,
       sunriseSunset: {
-        data: sunriseSunsetData,
+        latitude: Number(process.env.REACT_APP_LATITUDE),
+        longitude: Number(process.env.REACT_APP_LONGITUDE),
         show: showSunriseSunset,
       },
     },

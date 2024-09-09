@@ -5,57 +5,23 @@ declare module "chart.js" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface PluginOptionsByType<TType extends ChartType> {
     sunriseSunset?: {
-      data: SunriseSunsetData[];
+      latitude: number;
+      longitude: number;
       show: boolean;
     };
   }
-}
-
-export interface SunriseSunsetData {
-  sunrise: string;
-  sunset: string;
-}
-
-const sunriseSunsetCache: Record<string, SunriseSunsetData[]> = {};
-
-export async function fetchSunriseSunsetData(
-  lat: number,
-  lng: number,
-  startDate: string,
-  endDate: string
-): Promise<SunriseSunsetData[]> {
-  const cacheKey = `${lat},${lng},${startDate},${endDate}`;
-
-  if (sunriseSunsetCache[cacheKey]) {
-    return sunriseSunsetCache[cacheKey];
-  }
-
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  const days: SunriseSunsetData[] = [];
-
-  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-    const times = SunCalc.getTimes(d, lat, lng);
-    days.push({
-      sunrise: times.sunrise.toISOString(),
-      sunset: times.sunset.toISOString(),
-    });
-  }
-
-  sunriseSunsetCache[cacheKey] = days;
-  return days;
 }
 
 export function createSunriseSunsetPlugin(): Plugin {
   return {
     id: "sunriseSunset",
     afterDraw(chart: Chart) {
-      const sunriseSunsetOptions = chart.options.plugins?.sunriseSunset;
-      if (!sunriseSunsetOptions || !sunriseSunsetOptions.show) return;
+      const options = chart.options.plugins?.sunriseSunset;
+      if (!options || !options.show) return;
+      if (!options || !options.longitude) return;
+      if (!options || !options.latitude) return;
 
-      const sunriseSunsetData = sunriseSunsetOptions.data;
-      if (!sunriseSunsetData) return;
-
+      const { latitude, longitude } = options;
       const ctx = chart.ctx;
       const xAxis = chart.scales["x"];
       const yAxis = chart.scales["y0"];
@@ -65,16 +31,19 @@ export function createSunriseSunsetPlugin(): Plugin {
       ctx.textBaseline = "top";
       ctx.font = "16px Arial";
 
-      sunriseSunsetData.forEach((data) => {
-        const sunriseX = xAxis.getPixelForValue(new Date(data.sunrise!).getTime());
-        const sunsetX = xAxis.getPixelForValue(new Date(data.sunset!).getTime());
-        // Draw sunrise icon
-        ctx.fillStyle = "orange";
-        ctx.fillText("🌅", sunriseX, yAxis.bottom + 10);
+      const dataPoints = chart.data.labels as number[];
+      dataPoints.forEach((timestamp) => {
+        const date = new Date(timestamp);
+        const times = SunCalc.getTimes(date, latitude, longitude);
 
-        // Draw sunset icon
-        ctx.fillStyle = "purple";
-        ctx.fillText("🌇", sunsetX, yAxis.bottom + 10);
+        const drawIcon = (time: Date, icon: string, color: string) => {
+          const x = xAxis.getPixelForValue(time.getTime());
+          ctx.fillStyle = color;
+          ctx.fillText(icon, x, yAxis.bottom + 10);
+        };
+
+        drawIcon(times.sunrise, "🌅", "orange");
+        drawIcon(times.sunset, "🌇", "purple");
       });
 
       ctx.restore();
