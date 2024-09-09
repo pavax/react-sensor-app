@@ -8,6 +8,7 @@ import { getCommonChartOptions } from "./chart-config";
 import { useChartStyles } from "./chart-utils";
 import { createAutoHideTooltipPlugin } from "./plugins/AutoHideTooltipPlugin";
 import { createSunriseSunsetPlugin } from "./plugins/SunriseSunsetPlugin";
+import { useViewport } from "../../ViewportContext";
 
 interface LightChartProps {
   data: ProcessedData;
@@ -15,6 +16,7 @@ interface LightChartProps {
 }
 
 const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
+  const viewport = useViewport();
   const chartRef = useRef<ChartJS | null>(null);
   const chartStyles = useChartStyles();
   const commonOptions = getCommonChartOptions(timeRange);
@@ -62,7 +64,9 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
       sunriseSunset: {
         latitude: Number(process.env.REACT_APP_LATITUDE),
         longitude: Number(process.env.REACT_APP_LONGITUDE),
-        show: true
+        show: true,
+        darkMode: viewport.isDarkMode,
+        isMobile: !viewport.isDesktop,
       },
     },
   };
