@@ -43,7 +43,7 @@ export function createSunriseSunsetPlugin(): Plugin {
 
       const chartWidth = chart.width;
       const averageSpace = chartWidth / (uniqueDates.size - 1);
-      if (averageSpace < 50) {
+      if (averageSpace < 70) {
         return;
       }
 
