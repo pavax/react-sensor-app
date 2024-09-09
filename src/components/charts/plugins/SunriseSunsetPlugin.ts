@@ -49,9 +49,8 @@ export function createSunriseSunsetPlugin(): Plugin {
 
       ctx.save();
       ctx.textAlign = "center";
-      ctx.textBaseline = "top";
-      ctx.font = isMobile ? "10px Arial" : "16px Arial";
-      ctx.globalAlpha = 1;
+      ctx.textBaseline = "bottom";
+      ctx.globalAlpha = 0.4;
 
       const drawVerticalLine = (time: Date, color: string) => {
         const x = xAxis.getPixelForValue(time.getTime());
@@ -77,19 +76,11 @@ export function createSunriseSunsetPlugin(): Plugin {
         const x = xAxis.getPixelForValue(time.getTime());
         if (x < xAxis.left || x > xAxis.right) return;
 
-        const arrowSize = isMobile ? 7 : 10;
-        const groundWidth = isMobile ? 14 : 20;
-        const yGround = yAxis.bottom + (isMobile ? 25 : 15);
+        const arrowSize = isMobile ? 5 : 10;
+        const groundWidth = isMobile ? 10 : 20;
+        const yBase = yAxis.top - (isMobile ? 15 : 30);
         const gap = isMobile ? 2 : 5;
-        const tickSize = isMobile ? 5 : 5;
-
-        // Draw ground
-        ctx.beginPath();
-        ctx.strokeStyle = "#4682B4"; // Steel Blue color
-        ctx.lineWidth = 2;
-        ctx.moveTo(x - groundWidth / 2, yGround);
-        ctx.lineTo(x + groundWidth / 2, yGround);
-        ctx.stroke();
+        const tickSize = isMobile ?  5 : 5;
 
         // Draw arrow and tick
         ctx.beginPath();
@@ -98,39 +89,47 @@ export function createSunriseSunsetPlugin(): Plugin {
         ctx.lineWidth = 2;
         if (isSunrise) {
           // Triangle
-          ctx.moveTo(x, yGround - arrowSize - gap - tickSize);
-          ctx.lineTo(x - arrowSize / 2, yGround - gap - tickSize);
-          ctx.lineTo(x + arrowSize / 2, yGround - gap - tickSize);
+          ctx.moveTo(x, yBase);
+          ctx.lineTo(x - arrowSize / 2, yBase + arrowSize);
+          ctx.lineTo(x + arrowSize / 2, yBase + arrowSize);
           ctx.closePath();
           ctx.fill();
 
           // Tick
-          ctx.moveTo(x, yGround - gap - tickSize);
-          ctx.lineTo(x, yGround - gap);
+          ctx.moveTo(x, yBase + arrowSize);
+          ctx.lineTo(x, yBase + arrowSize + tickSize);
           ctx.stroke();
         } else {
           // Triangle
-          ctx.moveTo(x, yGround - gap);
-          ctx.lineTo(x - arrowSize / 2, yGround - arrowSize - gap);
-          ctx.lineTo(x + arrowSize / 2, yGround - arrowSize - gap);
+          ctx.moveTo(x, yBase + arrowSize + tickSize);
+          ctx.lineTo(x - arrowSize / 2, yBase + tickSize);
+          ctx.lineTo(x + arrowSize / 2, yBase + tickSize);
           ctx.closePath();
           ctx.fill();
 
           // Tick
-          ctx.moveTo(x, yGround - arrowSize - gap);
-          ctx.lineTo(x, yGround - arrowSize - gap - tickSize - 2);
+          ctx.moveTo(x, yBase + tickSize);
+          ctx.lineTo(x, yBase);
           ctx.stroke();
         }
+
+        // Draw ground
+        ctx.beginPath();
+        ctx.strokeStyle = "#4682B4"; // Steel Blue color
+        ctx.lineWidth = 2;
+        ctx.moveTo(x - groundWidth / 2, yBase + arrowSize + tickSize + gap);
+        ctx.lineTo(x + groundWidth / 2, yBase + arrowSize + tickSize + gap);
+        ctx.stroke();
 
         // Draw time
         ctx.font = isMobile ? "8px Arial" : "10px Arial";
         ctx.fillStyle = color;
         ctx.textAlign = "center";
-        ctx.textBaseline = "top";
+        ctx.textBaseline = "bottom";
         const timeString = format(time, "HH:mm");
         const currentAlpha = ctx.globalAlpha;
         ctx.globalAlpha = currentAlpha * 2;
-        ctx.fillText(timeString, x, yGround + gap);
+        ctx.fillText(timeString, x, yBase - gap);
         ctx.globalAlpha = currentAlpha;
       };
 
