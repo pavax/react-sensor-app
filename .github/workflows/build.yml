@@ -41,6 +41,8 @@ jobs:
           API_DEVICE_ID: ${{ vars.API_DEVICE_ID }}
           TB_PUBLICID: ${{ vars.TB_PUBLICID }}
           BUILD_NUMBER: ${{ github.run_number }}
+          LATITUDE: ${{ vars.LATITUDE }}
+          LONGITUDE: ${{ vars.LONGITUDE }}
 
       # - name: Print .env file content
       #   run: cat .env
