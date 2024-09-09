@@ -110,6 +110,8 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
         latitude: Number(process.env.REACT_APP_LATITUDE),
         longitude: Number(process.env.REACT_APP_LONGITUDE),
         show: showSunriseSunset,
+        darkMode: viewport.isDarkMode,
+        isMobile: !viewport.isDesktop,
       },
     },
   };

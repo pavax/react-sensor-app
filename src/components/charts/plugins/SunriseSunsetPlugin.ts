@@ -9,6 +9,8 @@ declare module "chart.js" {
       latitude: number;
       longitude: number;
       show: boolean;
+      darkMode: boolean;
+      isMobile: boolean;
     };
   }
 }
@@ -26,7 +28,7 @@ export function createSunriseSunsetPlugin(): Plugin {
       if (!options || !options.longitude) return;
       if (!options || !options.latitude) return;
 
-      const { latitude, longitude } = options;
+      const { latitude, longitude, isMobile } = options;
       const ctx = chart.ctx;
       const xAxis = chart.scales["x"];
       const yAxis = chart.scales["y0"];
@@ -48,8 +50,8 @@ export function createSunriseSunsetPlugin(): Plugin {
       ctx.save();
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
-      ctx.font = "16px Arial";
-      ctx.globalAlpha = 0.2;
+      ctx.font = isMobile ? "10px Arial" : "16px Arial";
+      ctx.globalAlpha = 1;
 
       const drawVerticalLine = (time: Date, color: string) => {
         const x = xAxis.getPixelForValue(time.getTime());
@@ -75,11 +77,11 @@ export function createSunriseSunsetPlugin(): Plugin {
         const x = xAxis.getPixelForValue(time.getTime());
         if (x < xAxis.left || x > xAxis.right) return;
 
-        const arrowSize = 10;
-        const groundWidth = 20;
-        const yGround = yAxis.bottom + 15;
-        const gap = 5; // Small gap between arrow and ground
-        const tickSize = 6; // Increased size of the tick
+        const arrowSize = isMobile ? 7 : 10;
+        const groundWidth = isMobile ? 14 : 20;
+        const yGround = yAxis.bottom + (isMobile ? 25 : 15);
+        const gap = isMobile ? 2 : 5;
+        const tickSize = isMobile ? 5 : 5;
 
         // Draw ground
         ctx.beginPath();
@@ -121,7 +123,7 @@ export function createSunriseSunsetPlugin(): Plugin {
         }
 
         // Draw time
-        ctx.font = "10px Arial";
+        ctx.font = isMobile ? "8px Arial" : "10px Arial";
         ctx.fillStyle = color;
         ctx.textAlign = "center";
         ctx.textBaseline = "top";
@@ -142,7 +144,7 @@ export function createSunriseSunsetPlugin(): Plugin {
         if (
           sunriseX !== null &&
           sunsetX !== null &&
-          Math.abs(sunsetX - sunriseX) >= 30
+          Math.abs(sunsetX - sunriseX) >= (isMobile ? 20 : 30)
         ) {
           drawArrowAndGround(sunTimes.sunrise, true, SUNRISE_COLOR);
           drawArrowAndGround(sunTimes.sunset, false, SUNSET_COLOR);
