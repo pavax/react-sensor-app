@@ -5,8 +5,9 @@ import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
 import { getCommonChartOptions } from "./chart-config";
-import { useChartStyles } from "./chart-utils";
+import { useChartStyles, useSunriseSunset } from "./chart-utils";
 import { createAutoHideTooltipPlugin } from "./plugins/AutoHideTooltipPlugin";
+import { createSunriseSunsetPlugin } from "./plugins/SunriseSunsetPlugin";
 
 interface LightChartProps {
   data: ProcessedData;
@@ -17,6 +18,7 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
   const chartRef = useRef<ChartJS | null>(null);
   const chartStyles = useChartStyles();
   const commonOptions = getCommonChartOptions(timeRange);
+  const sunriseSunsetData = useSunriseSunset(data);
 
   if (!data || !data.entries) {
     return <div>No data available</div>;
@@ -56,6 +58,12 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
         max: 11,
       },
     },
+    plugins: {
+      ...commonOptions.plugins,
+      sunriseSunset: {
+        data: sunriseSunsetData
+      },
+    },
   };
 
   return (
@@ -64,7 +72,7 @@ const LightChart: React.FC<LightChartProps> = ({ data, timeRange }) => {
         type="line"
         options={options}
         data={chartData}
-        plugins={[createAutoHideTooltipPlugin()]}
+        plugins={[createAutoHideTooltipPlugin(), createSunriseSunsetPlugin()]}
         ref={(reference) => {
           if (reference) {
             chartRef.current = reference;

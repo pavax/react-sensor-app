@@ -1,17 +1,20 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Chart } from "react-chartjs-2";
-import { ChartData } from "chart.js";
+import { ChartData, ChartOptions, Chart as ChartJS } from "chart.js";
 import "chartjs-adapter-date-fns";
 import { ProcessedData } from "../../api/data-processing";
-import { ChartOptions } from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
-import { calculateTrendLine, useChartStyles } from "./chart-utils";
-import { useViewport } from "../../ViewportContext";
 import {
-  getCommonChartOptions,
-} from "./chart-config";
-import { Chart as ChartJS } from "chart.js";
+  calculateTrendLine,
+  useChartStyles,
+  useSunriseSunset,
+} from "./chart-utils";
+import { useViewport } from "../../ViewportContext";
+import { getCommonChartOptions } from "./chart-config";
 import { createAutoHideTooltipPlugin } from "./plugins/AutoHideTooltipPlugin";
+import { createSunriseSunsetPlugin } from "./plugins/SunriseSunsetPlugin";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSun } from "@fortawesome/free-solid-svg-icons";
 
 interface TelemetryChartsProps {
   data: ProcessedData;
@@ -25,6 +28,8 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
   const viewport = useViewport();
   const chartStyles = useChartStyles();
   const chartRef = useRef<ChartJS | null>(null);
+  const sunriseSunsetData = useSunriseSunset(data);
+  const [showSunriseSunset, setShowSunriseSunset] = useState(true);
 
   if (!data || !data.entries) {
     return <div>No data available</div>;
@@ -101,21 +106,43 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
         },
       },
     },
+    plugins: {
+      ...commonOptions.plugins,
+      sunriseSunset: {
+        data: sunriseSunsetData,
+        show: showSunriseSunset,
+      },
+    },
   };
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
-      <Chart
-        type="line"
-        options={options}
-        data={temperatureData}
-        plugins={[createAutoHideTooltipPlugin()]}
-        ref={(reference) => {
-          if (reference) {
-            chartRef.current = reference;
-          }
-        }}
-      />
+    <div className="chart-wrapper">
+      <div className="chart-container">
+        <Chart
+          type="line"
+          options={options}
+          data={temperatureData}
+          plugins={[createAutoHideTooltipPlugin(), createSunriseSunsetPlugin()]}
+          ref={(reference) => {
+            if (reference) {
+              chartRef.current = reference;
+            }
+          }}
+        />
+      </div>
+      <div className="chart-controls">
+        <button
+          className="toggle-sunrise-sunset"
+          onClick={() => setShowSunriseSunset(!showSunriseSunset)}
+          title={showSunriseSunset ? "Sonnendaten ausblenden" : "Sonnendaten einblenden"}
+        >
+          <FontAwesomeIcon 
+            icon={faSun} 
+            color={showSunriseSunset ? "var(--primary-color)" : "var(--chart-text-color)"}
+          />
+          <span>Sonnendaten {showSunriseSunset ? "Ausblenden" : "Einblenden"}</span>
+        </button>
+      </div>
     </div>
   );
 };
