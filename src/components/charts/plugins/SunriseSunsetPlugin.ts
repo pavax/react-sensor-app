@@ -68,7 +68,7 @@ export function createSunriseSunsetPlugin(): Plugin {
         return x;
       };
 
-      const drawArrowAndGround = (
+      const drawArrowIcon = (
         time: Date,
         isSunrise: boolean,
         color: string
@@ -134,8 +134,7 @@ export function createSunriseSunsetPlugin(): Plugin {
       };
 
       uniqueDates.forEach((dateString) => {
-        const date = new Date(dateString);
-        const sunTimes = SunCalc.getTimes(date, latitude, longitude);
+        const sunTimes = SunCalc.getTimes(new Date(dateString), latitude, longitude);
 
         const sunriseX = drawVerticalLine(sunTimes.sunrise, SUNRISE_COLOR);
         const sunsetX = drawVerticalLine(sunTimes.sunset, SUNSET_COLOR);
@@ -145,8 +144,8 @@ export function createSunriseSunsetPlugin(): Plugin {
           sunsetX !== null &&
           Math.abs(sunsetX - sunriseX) >= (isMobile ? 20 : 30)
         ) {
-          drawArrowAndGround(sunTimes.sunrise, true, SUNRISE_COLOR);
-          drawArrowAndGround(sunTimes.sunset, false, SUNSET_COLOR);
+          drawArrowIcon(sunTimes.sunrise, true, SUNRISE_COLOR);
+          drawArrowIcon(sunTimes.sunset, false, SUNSET_COLOR);
         }
       });
 
