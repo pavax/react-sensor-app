@@ -1,4 +1,5 @@
 import { Plugin, Chart, ChartType } from "chart.js";
+import SunCalc from 'suncalc';
 
 declare module "chart.js" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -29,33 +30,20 @@ export async function fetchSunriseSunsetData(
     return sunriseSunsetCache[cacheKey];
   }
 
-  const apiKey = process.env.REACT_APP_VISUAL_CROSSING_API_KEY;
-  if (!apiKey) {
-    console.error('Visual Crossing API key is not set in environment variables');
-    return [];
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const days: SunriseSunsetData[] = [];
+
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    const times = SunCalc.getTimes(d, lat, lng);
+    days.push({
+      sunrise: times.sunrise.toISOString(),
+      sunset: times.sunset.toISOString(),
+    });
   }
 
-  try {
-    const location = `${lat},${lng}`;
-    const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}/${startDate}/${endDate}?key=${apiKey}&include=days&elements=datetime,sunrise,sunset`;
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-      throw new Error(`API request failed: ${response.status} ${response.statusText}`);
-    }
-    
-    const data = await response.json();
-
-    sunriseSunsetCache[cacheKey] = data.days.map((day: any) => ({
-      sunrise: new Date(`${day.datetime}T${day.sunrise}`).toISOString(),
-      sunset: new Date(`${day.datetime}T${day.sunset}`).toISOString(),
-    }));
-
-    return sunriseSunsetCache[cacheKey];
-  } catch (error) {
-    console.error('Error fetching sunrise/sunset data:', error);
-    return [];
-  }
+  sunriseSunsetCache[cacheKey] = days;
+  return days;
 }
 
 export function createSunriseSunsetPlugin(): Plugin {
