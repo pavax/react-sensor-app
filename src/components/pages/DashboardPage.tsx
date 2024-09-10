@@ -6,7 +6,6 @@ import outdoorSensorConfigJson from "../../configs/outdoor-dashboard.json";
 import { DashboardConfig } from "../../dashboards/config-types";
 import { transformJsonConfig } from "../../dashboards/config-transformer";
 
-
 interface DashboardPageData {
   timeRange: TimeRange;
 }
@@ -28,12 +27,8 @@ const DashboardPage: React.FC<DashboardPageData> = ({ timeRange }) => {
 
   return (
     <Dashboard
-      deviceId={dashboardConfig.deviceId}
       timeRange={timeRange}
-      dataPointConfigs={dashboardConfig.dataPointConfigs}
-      additionalContextDataConfig={dashboardConfig.additionalContextDataConfig}
-      chartConfigs={dashboardConfig.chartConfigs}
-      overviewCardConfigs={dashboardConfig.overviewCardConfigs}
+      dashboardConfig={dashboardConfig}
     />
   );
 };

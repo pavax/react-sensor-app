@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format } from "date-fns-tz";
 import React, { useEffect, useState, useMemo } from "react";
 import {
-  DataPointConfigs,
   processData,
   ProcessedData,
 } from "../../api/data-processing";
@@ -16,14 +15,11 @@ import {
 import ContextInfoBar from "./ContextInfoBar";
 import OverviewCards, { OverviewCardData } from "./OverviewCards";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { DashboardConfig } from "../../dashboards/config-types";
 
 interface DashboardProps {
-  deviceId: string;
   timeRange: TimeRange;
-  dataPointConfigs: DataPointConfigs;
-  additionalContextDataConfig: AdditionalContextConfig[];
-  chartConfigs: ChartConfig[];
-  overviewCardConfigs: OverviewCardConfig[];
+  dashboardConfig: DashboardConfig;
 }
 
 export interface ChartConfig {
@@ -46,13 +42,17 @@ export interface OverviewCardConfig {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({
-  deviceId,
   timeRange,
-  dataPointConfigs,
-  additionalContextDataConfig,
-  chartConfigs,
-  overviewCardConfigs, // Add this line
+  dashboardConfig,
 }) => {
+  const {
+    deviceId,
+    dataPointConfigs,
+    additionalContextDataConfig,
+    chartConfigs,
+    overviewCardConfigs,
+  } = dashboardConfig;
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [error, setError] = useState<string | null>(null);
