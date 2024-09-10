@@ -6,7 +6,7 @@ import outdoorSensorConfigJson from "../../custom_config/outdoor-dashboard.json"
 import { DashboardConfig } from "../../dashboards/config-types";
 import { transformJsonConfig } from "../../dashboards/config-transformer";
 
-interface DashboardPageData {
+interface DashboardProps {
   timeRange: TimeRange;
 }
 
@@ -14,7 +14,7 @@ const configMap: { [key: string]: any } = {
   outdoor: outdoorSensorConfigJson,
 };
 
-const DashboardPage: React.FC<DashboardPageData> = ({ timeRange }) => {
+const DashboardPage: React.FC<DashboardProps> = ({ timeRange }) => {
   const { dashboardId } = useParams<{ dashboardId: string }>();
   
   const jsonConfig = configMap[dashboardId || ""];

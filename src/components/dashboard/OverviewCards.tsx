@@ -4,16 +4,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { useViewport } from "../../ViewportContext";
 
+
+interface OverviewCardsProps {
+  cards: OverviewCardData[];
+}
+
 export interface OverviewCardData {
   title: string;
   value: string | number;
   unit: string;
   icon: IconDefinition;
   color: string;
-}
-
-interface OverviewCardsProps {
-  cards: OverviewCardData[];
 }
 
 const OverviewCards: React.FC<OverviewCardsProps> = ({ cards }) => {

@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
-interface LatestTimestampProps {
+interface ContextInfoBarProps {
   latestTimestamp: string;
   additionalData?: Map<String, String>;
 }
 
-const ContextInfoBar: React.FC<LatestTimestampProps> = ({
+const ContextInfoBar: React.FC<ContextInfoBarProps> = ({
   latestTimestamp,
   additionalData,
 }) => {
