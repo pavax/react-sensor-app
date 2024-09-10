@@ -60,8 +60,8 @@ export function createSunriseSunsetPlugin(): Plugin {
         // Set transparency if not visible
         ctx.globalAlpha = isVisible ? alpha * 2 : alpha;
 
-        const legendX = xAxis.left;
-        const legendY = isMobile ? 20 : 30;
+        const legendX = isMobile ? 0: xAxis.left;
+        const legendY = isMobile ? 15 : 30;
 
         ctx.fillStyle = "#FFFFFF";
         ctx.font = `${fontSize}px Arial`;
@@ -88,6 +88,7 @@ export function createSunriseSunsetPlugin(): Plugin {
         return { legendX, legendY, clickAreaWidth, clickAreaHeight };
       };
       let toggleButtonDimensions = drawToggleButton();
+      
       const handleToggleClick = (event: MouseEvent) => {
         const rect = chart.canvas.getBoundingClientRect();
         const clickX = event.clientX - rect.left;
