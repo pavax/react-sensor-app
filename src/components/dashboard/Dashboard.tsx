@@ -29,7 +29,7 @@ interface DashboardProps {
 export interface ChartConfig {
   title: string;
   icon: IconDefinition;
-  component: React.ComponentType<{ data: ProcessedData; timeRange: TimeRange }>;
+  chartComponent: React.ComponentType<{ data: ProcessedData; timeRange: TimeRange }>;
 }
 
 export interface AdditionalContextConfig {
@@ -201,7 +201,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             <FontAwesomeIcon icon={config.icon} /> {config.title}
           </h3>
           <div className="chart-container">
-            <config.component
+            <config.chartComponent
               data={processedTelemetryData}
               timeRange={timeRange}
             />

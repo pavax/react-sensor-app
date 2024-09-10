@@ -107,27 +107,27 @@ const OutdoorSensorPage: React.FC<OutdoorSensorPageProps> = ({ timeRange }) => {
     {
       title: "Temperatur",
       icon: faThermometerHalf,
-      component: TemperatureChart,
+      chartComponent: TemperatureChart,
     },
     {
       title: "Wind",
       icon: faWind,
-      component: WindChart,
+      chartComponent: WindChart,
     },
     {
       title: "Regen",
       icon: faCloudRain,
-      component: RainEventChart,
+      chartComponent: RainEventChart,
     },
     {
       title: "Licht",
       icon: faSun,
-      component: LightChart,
+      chartComponent: LightChart,
     },
     {
       title: "Cloud Base Height",
       icon: faCloud,
-      component: CloudBaseHeightChart,
+      chartComponent: CloudBaseHeightChart,
     },
   ];
 
