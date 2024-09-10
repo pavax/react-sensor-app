@@ -6,9 +6,9 @@ const Footer: React.FC = () => {
 
 
   return (
-    <footer className="App-footer">
-      <p>&copy; {new Date().getFullYear()} Sensor App. All rights reserved.</p>
-      {buildNumber && <p>Build: {buildNumber}</p>}
+    <footer className="bg-gray-800 text-white p-4 mt-auto">
+      <p className="text-center">&copy; {new Date().getFullYear()} Sensor App. All rights reserved.</p>
+      {buildNumber && <p className="text-center text-sm mt-2">Build: {buildNumber}</p>}
     </footer>
   );
 };

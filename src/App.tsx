@@ -42,20 +42,20 @@ function App() {
   }, [publicId]);
 
   if (loginError) {
-    return <div>{loginError}</div>;
+    return <div className="text-red-500 p-4">{loginError}</div>;
   }
 
   if (!isLoggedIn) {
-    return <div>Logging in...</div>;
+    return <div className="text-gray-600 p-4">Logging in...</div>;
   }
 
   return (
     <BrowserRouter>
       <ViewportProvider>
-        <div className="App">
+        <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-white">
           <Header onTimePeriodChange={handleTimePeriodChange} />
           {currentTimePeriod ? (
-            <main className="App-main">
+            <main className="flex-grow">
               <Routes>
                 <Route path="/" element={<OverviewPage />} />
                 <Route
@@ -66,7 +66,7 @@ function App() {
               </Routes>
             </main>
           ) : (
-            <div>Please select a time period</div>
+            <div className="text-gray-600 p-4">Please select a time period</div>
           )}
           <Footer />
         </div>

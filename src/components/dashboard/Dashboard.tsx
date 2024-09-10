@@ -167,15 +167,15 @@ const Dashboard: React.FC<DashboardProps> = ({
   }, [processedTelemetryData, additionalContextDataConfig]);
 
   if (isLoading && !processedTelemetryData) {
-    return <div>Loading telemetry data...</div>;
+    return <div className="text-center py-4 dark:text-gray-300">Loading telemetry data...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="text-red-600 dark:text-red-400 py-4">Error: {error}</div>;
   }
 
   if (!processedTelemetryData?.entries) {
-    return <div>No telemetry data available</div>;
+    return <div className="text-center py-4 dark:text-gray-300">No telemetry data available</div>;
   }
 
   const contextLatestTime = format(
@@ -187,7 +187,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   );
 
   return (
-    <div className="telemetry-grid">
+    <div className="grid gap-4 p-4">
       <ContextInfoBar
         latestTimestamp={contextLatestTime}
         additionalData={contextAdditionalData}
@@ -196,11 +196,11 @@ const Dashboard: React.FC<DashboardProps> = ({
       <OverviewCards cards={overviewCards} />
 
       {chartConfigs.map((config, index) => (
-        <div key={index} className="telemetry-container">
-          <h3>
-            <FontAwesomeIcon icon={config.icon} /> {config.title}
+        <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+          <h3 className="text-lg font-semibold mb-2 flex items-center dark:text-white">
+            <FontAwesomeIcon icon={config.icon} className="mr-2" /> {config.title}
           </h3>
-          <div className="chart-container">
+          <div className="w-full h-64">
             <config.component
               data={processedTelemetryData}
               timeRange={timeRange}
