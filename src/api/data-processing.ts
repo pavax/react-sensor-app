@@ -45,8 +45,6 @@ const ONE_MINUTE = 1000 * 60;
 
 const ONE_HOUR = ONE_MINUTE * 60;
 
-const ONE_DAY = ONE_HOUR * 24;
-
 export function processData(
   telemetryTimeSeries: TelemetryTimeSeries,
   timeRange: TimeRange,
@@ -212,26 +210,38 @@ function groupDataByTimeRange(
     [timestamp: number]: number[];
   } = {};
 
-  let groupingInterval = 3600000;
+  let groupingInterval = ONE_HOUR;
   if (timeRange === TimeRange.ONE_DAY) {
-    groupingInterval = ONE_HOUR / 3;
+    groupingInterval = 20 * ONE_MINUTE;
   } else if (timeRange === TimeRange.THREE_DAYS) {
-    groupingInterval = ONE_HOUR * 1;
+    groupingInterval = 1 * ONE_HOUR;
   } else if (timeRange === TimeRange.ONE_WEEK) {
-    groupingInterval = ONE_HOUR * 3;
+    groupingInterval = 3 * ONE_HOUR;
   } else if (timeRange === TimeRange.TWO_WEEKS) {
-    groupingInterval = ONE_HOUR * 6;
+    groupingInterval = 6 * ONE_HOUR;
   } else if (timeRange === TimeRange.ONE_MONTH) {
-    groupingInterval = ONE_DAY;
+    groupingInterval = 12 * ONE_HOUR;
   }
 
   telemetryItems.forEach((telemetryItem) => {
-    const timestamp =
-      Math.floor(telemetryItem.ts / groupingInterval) * groupingInterval;
-    if (!result[timestamp]) {
-      result[timestamp] = [];
+    const telemetryDate = new Date(telemetryItem.ts);
+    const telemetryTimestamp = telemetryDate.getTime();
+
+    // Calculate the start of the day
+    const startOfDay = new Date(telemetryDate);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    // Calculate the offset from the start of the day
+    const offsetFromStartOfDay = telemetryTimestamp - startOfDay.getTime();
+
+    // Calculate the group timestamp
+    const groupIndex = Math.floor(offsetFromStartOfDay / groupingInterval);
+    const groupTimestamp = startOfDay.getTime() + groupIndex * groupingInterval;
+
+    if (!result[groupTimestamp]) {
+      result[groupTimestamp] = [];
     }
-    result[timestamp].push(parseFloat(telemetryItem.value));
+    result[groupTimestamp].push(parseFloat(telemetryItem.value));
   });
 
   return result;
