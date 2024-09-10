@@ -18,7 +18,7 @@ export interface DataPointConfigs {
   [dataPoint: string]: {
     aggregationType: AggregationType;
     fractionDigits?: number;
-    valueTransformFn?: (value: number) => number;
+    rawValueTransformer?: (value: number) => number;
   };
 }
 
@@ -110,7 +110,7 @@ export function processData(
           telemetryTimeSeries[dataKeyName][latestIndex].value
         );
 
-        const valueTransformFn = dataPointConfigs[dataKeyName].valueTransformFn;
+        const valueTransformFn = dataPointConfigs[dataKeyName].rawValueTransformer;
         if (valueTransformFn) {
           result = valueTransformFn(result);
           latestValue = valueTransformFn(latestValue);

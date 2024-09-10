@@ -16,7 +16,7 @@
     "windVoltageMax": {
       "aggregationType": "MAX",
       "fractionDigits": 0,
-      "valueTransformFn": "MULTIPLY(DIVIDE(value, 1000), 14)"
+      "transform": "x / 1000 * 14"
     },
     "windDirection": { "aggregationType": "MODE" },
     "rainEventAccDifference": {

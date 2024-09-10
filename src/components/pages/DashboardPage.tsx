@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import { TimeRange } from "../../api/thingsboard-api";
-import outdoorSensorConfigJson from "../../configs/outdoor-dashboard.json";
+import outdoorSensorConfigJson from "../../custom_config/outdoor-dashboard.json"
 import { DashboardConfig } from "../../dashboards/config-types";
 import { transformJsonConfig } from "../../dashboards/config-transformer";
 

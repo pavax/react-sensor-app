@@ -1,4 +1,7 @@
+import { Parser } from 'expr-eval';
 import { ProcessedData } from "../api/data-processing";
+
+const parser = new Parser();
 
 type DSLFunction = (data: ProcessedData, args: string[]) => number | string;
 
@@ -11,20 +14,19 @@ const dslFunctions: Record<string, DSLFunction> = {
     const key = args[0];
     return data.entries[key]?.latestValue ?? 0;
   },
-  MULTIPLY: (data, args) => {
-    return args.reduce((product, arg) => product * Number(evaluateDSL(arg, data)), 1);
-  },
-  DIVIDE: (data, args) => {
-    return args.reduce((quotient, arg, index) => 
-      index === 0 ? Number(evaluateDSL(arg, data)) : quotient / Number(evaluateDSL(arg, data))
-    , 0);
-  },
   CONSTANT: (_, args) => args[0],
 };
 
+export function transformRawValue(expression: string, rawValue: number): number {
+  const expr = parser.parse(expression);
+  return expr.evaluate({ x: rawValue });
+}
+
 export function evaluateDSL(expression: string, data: ProcessedData): number | string {
   const match = expression.match(/(\w+)\((.*?)\)/);
-  if (!match) return expression; // If it's not a function, return as is
+  if (!match) {
+    return expression
+  }; 
 
   const [, funcName, argsString] = match;
   const args = argsString.split(',').map(arg => arg.trim());
