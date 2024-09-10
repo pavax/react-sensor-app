@@ -52,9 +52,9 @@ export function createSunriseSunsetPlugin(): Plugin {
       ctx.textBaseline = "bottom";
       ctx.globalAlpha = 0.4;
 
-      const drawVerticalLine = (time: Date, color: string) => {
+      const drawVerticalLine = (time: Date, color: string): number => {
         const x = xAxis.getPixelForValue(time.getTime());
-        if (x < xAxis.left || x > xAxis.right) return null;
+        if (x < xAxis.left || x > xAxis.right) return Infinity;
 
         ctx.beginPath();
         ctx.strokeStyle = color;
@@ -68,11 +68,7 @@ export function createSunriseSunsetPlugin(): Plugin {
         return x;
       };
 
-      const drawArrowIcon = (
-        time: Date,
-        isSunrise: boolean,
-        color: string
-      ) => {
+      const drawArrowIcon = (time: Date, isSunrise: boolean, color: string) => {
         const x = xAxis.getPixelForValue(time.getTime());
         if (x < xAxis.left || x > xAxis.right) return;
 
@@ -80,7 +76,7 @@ export function createSunriseSunsetPlugin(): Plugin {
         const groundWidth = isMobile ? 10 : 20;
         const yBase = yAxis.top - (isMobile ? 15 : 30);
         const gap = isMobile ? 2 : 5;
-        const tickSize = isMobile ?  5 : 5;
+        const tickSize = isMobile ? 5 : 5;
 
         // Draw arrow and tick
         ctx.beginPath();
@@ -134,16 +130,16 @@ export function createSunriseSunsetPlugin(): Plugin {
       };
 
       uniqueDates.forEach((dateString) => {
-        const sunTimes = SunCalc.getTimes(new Date(dateString), latitude, longitude);
+        const sunTimes = SunCalc.getTimes(
+          new Date(dateString),
+          latitude,
+          longitude
+        );
 
         const sunriseX = drawVerticalLine(sunTimes.sunrise, SUNRISE_COLOR);
         const sunsetX = drawVerticalLine(sunTimes.sunset, SUNSET_COLOR);
 
-        if (
-          sunriseX !== null &&
-          sunsetX !== null &&
-          Math.abs(sunsetX - sunriseX) >= (isMobile ? 20 : 30)
-        ) {
+        if (Math.abs(sunsetX - sunriseX) >= (isMobile ? 20 : 30)) {
           drawArrowIcon(sunTimes.sunrise, true, SUNRISE_COLOR);
           drawArrowIcon(sunTimes.sunset, false, SUNSET_COLOR);
         }
