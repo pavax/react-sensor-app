@@ -53,49 +53,19 @@
   "additionalContextDataConfig": [
     {
       "label": "Device-Uptime Count",
-      "key": "LATEST(counter)"
+      "text": "LATEST(counter)"
     },
     {
       "label": "Batterie",
-      "key": "LATEST(batteryVoltage)",
-      "unit": "mv"
+      "text": "LATEST(batteryVoltage) mv"
     },
     {
       "label": "Gehäuse Temp.",
-      "key": "LATEST(temperature2)",
-      "unit": "°C"
+      "text": "LATEST(temperature2) °C"
     },
     {
       "label": "Gehäuse Hum.",
-      "key": "LATEST(humidity2)",
-      "unit": "%"
-    }
-  ],
-  "chartConfigs": [
-    {
-      "title": "Temperatur",
-      "icon": "faThermometerHalf",
-      "chartComponent": "TemperatureChart"
-    },
-    {
-      "title": "Wind",
-      "icon": "faWind",
-      "chartComponent": "WindChart"
-    },
-    {
-      "title": "Regen",
-      "icon": "faCloudRain",
-      "chartComponent": "RainEventChart"
-    },
-    {
-      "title": "Licht",
-      "icon": "faSun",
-      "chartComponent": "LightChart"
-    },
-    {
-      "title": "Cloud Base Height",
-      "icon": "faCloud",
-      "chartComponent": "CloudBaseHeightChart"
+      "text": "LATEST(humidity2) %"
     }
   ],
   "overviewCardConfigs": [
@@ -136,7 +106,7 @@
     },
     {
       "title": "Schnee",
-      "value": "CONSTANT(--)",
+      "value": "--",
       "unit": "",
       "icon": "faSnowflake",
       "color": "#34495e"
@@ -154,6 +124,33 @@
       "unit": "m",
       "icon": "faCloud",
       "color": "#7f8c8d"
+    }
+  ],
+  "chartConfigs": [
+    {
+      "title": "Temperatur",
+      "icon": "faThermometerHalf",
+      "chartComponent": "TemperatureChart"
+    },
+    {
+      "title": "Wind",
+      "icon": "faWind",
+      "chartComponent": "WindChart"
+    },
+    {
+      "title": "Regen",
+      "icon": "faCloudRain",
+      "chartComponent": "RainEventChart"
+    },
+    {
+      "title": "Licht",
+      "icon": "faSun",
+      "chartComponent": "LightChart"
+    },
+    {
+      "title": "Cloud Base Height",
+      "icon": "faCloud",
+      "chartComponent": "CloudBaseHeightChart"
     }
   ]
 }

@@ -30,7 +30,7 @@ export interface ChartConfig {
 
 export interface AdditionalContextConfig {
   label: string;
-  key: (processedData: ProcessedData) => string;
+  text: (processedData: ProcessedData) => string;
 }
 
 export interface OverviewCardConfig {
@@ -161,7 +161,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     return new Map<string, string>(
       additionalContextDataConfig.map((config) => [
         config.label,
-        config.key(processedTelemetryData),
+        config.text(processedTelemetryData),
       ])
     );
   }, [processedTelemetryData, additionalContextDataConfig]);

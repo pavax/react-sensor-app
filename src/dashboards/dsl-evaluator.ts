@@ -1,5 +1,12 @@
 import { Parser } from "expr-eval";
 import { ProcessedData } from "../api/data-processing";
+import {
+  calculateAverage,
+  calculateMax,
+  calculateMedian,
+  calculateMin,
+  calculateMode,
+} from "../common/math";
 
 const parser = new Parser();
 
@@ -18,7 +25,26 @@ const dslFunctions: Record<string, DSLFunction> = {
     const key = args[0];
     return data.entries[key]?.latestValue ?? 0;
   },
-  CONSTANT: (_, args) => args[0],
+  MIN: (data, args) => {
+    const key = args[0];
+    return calculateMin(data.entries[key].values);
+  },
+  MAX: (data, args) => {
+    const key = args[0];
+    return calculateMax(data.entries[key].values);
+  },
+  AVERAGE: (data, args) => {
+    const key = args[0];
+    return calculateAverage(data.entries[key].values);
+  },
+  MEDIAN: (data, args) => {
+    const key = args[0];
+    return calculateMedian(data.entries[key].values);
+  },
+  MODE: (data, args) => {
+    const key = args[0];
+    return calculateMode(data.entries[key].values);
+  },
 };
 
 export function transformRawValue(
@@ -43,20 +69,22 @@ export function transformRawValue(
   }
 }
 
-export function evaluateDSL(
-  expression: string,
-  data: ProcessedData
-): number | string {
-  const match = expression.match(/(\w+)\((.*?)\)/);
+export function evaluateDSL(expression: string, data: ProcessedData): string {
+  const match = expression.match(
+    /(.*?)\s*(SUM|LATEST|MIN|MAX|AVERAGE|MEDIAN|MODE)\((.*?)\)\s*(.*)/
+  );
   if (!match) {
     return expression;
   }
 
-  const [, funcName, argsString] = match;
+  const [, prefix, funcName, argsString, suffix] = match;
   const args = argsString.split(",").map((arg) => arg.trim());
 
   const func = dslFunctions[funcName];
   if (!func) throw new Error(`Unknown function: ${funcName}`);
 
-  return func(data, args);
+  const evaluatedResult = func(data, args);
+
+  // Concatenate prefix, evaluated result, and suffix
+  return `${prefix.trim()} ${evaluatedResult} ${suffix.trim()}`.trim();
 }

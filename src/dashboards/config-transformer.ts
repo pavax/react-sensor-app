@@ -26,8 +26,8 @@ export function transformJsonConfig(jsonConfig: any): DashboardConfig {
     additionalContextDataConfig: jsonConfig.additionalContextDataConfig.map(
       (config: any) => ({
         ...config,
-        key: (data: any) => {
-          const value = evaluateDSL(config.key, data);
+        text: (data: any) => {
+          const value = evaluateDSL(config.text, data);
           return config.unit ? `${value}${config.unit}` : value.toString();
         },
       })
