@@ -50,7 +50,7 @@ export function createSunriseSunsetPlugin(): Plugin {
       ctx.save();
       ctx.textAlign = "center";
       ctx.textBaseline = "bottom";
-      ctx.globalAlpha = 0.4;
+      ctx.globalAlpha = 0.3;
 
       const drawVerticalLine = (time: Date, color: string): number => {
         const x = xAxis.getPixelForValue(time.getTime());
