@@ -1,36 +1,25 @@
-import React from "react";
-import Dashboard, {
-  AdditionalContextConfig,
-  ChartConfig,
-  OverviewCardConfig,
-} from "../dashboard/Dashboard";
-import { TimeRange } from "../../api/thingsboard-api";
-import { AggregationType } from "../../api/data-processing";
 import {
-  faThermometerHalf,
-  faWind,
-  faCloudRain,
-  faSun,
   faCloud,
-  faTemperatureLow,
-  faWater,
-  faTachometerAlt,
+  faCloudRain,
   faSnowflake,
+  faSun,
+  faTachometerAlt,
+  faTemperatureLow,
+  faThermometerHalf,
+  faWater,
+  faWind,
 } from "@fortawesome/free-solid-svg-icons";
-import CloudBaseHeightChart from "../charts/CloudBaseHeightChart";
-import LightChart from "../charts/LightChart";
-import RainEventChart from "../charts/RainEventChart";
-import TemperatureChart from "../charts/TemperatureChart";
-import WindChart from "../charts/WindChart";
+import { AggregationType } from "../api/data-processing";
+import CloudBaseHeightChart from "../components/charts/CloudBaseHeightChart";
+import LightChart from "../components/charts/LightChart";
+import RainEventChart from "../components/charts/RainEventChart";
+import TemperatureChart from "../components/charts/TemperatureChart";
+import WindChart from "../components/charts/WindChart";
+import { DashboardConfig } from "./types";
 
-interface OutdoorSensorPageProps {
-  timeRange: TimeRange;
-}
-
-const OutdoorSensorPage: React.FC<OutdoorSensorPageProps> = ({ timeRange }) => {
-  const deviceId = process.env.REACT_APP_API_DEVICE_ID_OUDOOR_SENSOR_ID;
-
-  const dataPointConfigs = {
+const outdoorDashboardConfig: DashboardConfig = {
+  deviceId: process.env.REACT_APP_API_DEVICE_ID_OUDOOR_SENSOR_ID || "",
+  dataPointConfigs: {
     temperature: {
       aggregationType: AggregationType.AVERAGE,
       fractionDigits: 0,
@@ -79,9 +68,8 @@ const OutdoorSensorPage: React.FC<OutdoorSensorPageProps> = ({ timeRange }) => {
       aggregationType: AggregationType.AVERAGE,
       fractionDigits: 0,
     },
-  };
-
-  const additionalContextDataConfig: AdditionalContextConfig[] = [
+  },
+  additionalContextDataConfig: [
     {
       label: "Device-Uptime Count",
       key: (data) => data.entries.counter.latestValue?.toString() ?? "0",
@@ -101,9 +89,8 @@ const OutdoorSensorPage: React.FC<OutdoorSensorPageProps> = ({ timeRange }) => {
       key: (data) =>
         `${data.entries.humidity2.latestValue?.toString() ?? "0"}%`,
     },
-  ];
-
-  const chartConfigs: ChartConfig[] = [
+  ],
+  chartConfigs: [
     {
       title: "Temperatur",
       icon: faThermometerHalf,
@@ -129,9 +116,8 @@ const OutdoorSensorPage: React.FC<OutdoorSensorPageProps> = ({ timeRange }) => {
       icon: faCloud,
       chartComponent: CloudBaseHeightChart,
     },
-  ];
-
-  const overviewCardConfigs: OverviewCardConfig[] = [
+  ],
+  overviewCardConfigs: [
     {
       title: "Temperatur",
       value: (data) =>
@@ -194,26 +180,7 @@ const OutdoorSensorPage: React.FC<OutdoorSensorPageProps> = ({ timeRange }) => {
       icon: faCloud,
       color: "#7f8c8d",
     },
-  ];
-
-  if (!deviceId) {
-    return (
-      <div>
-        Error: REACT_APP_API_DEVICE_ID_OUDOOR_SENSOR_ID is not set in the .env
-        file
-      </div>
-    );
-  }
-  return (
-    <Dashboard
-      deviceId={deviceId}
-      timeRange={timeRange}
-      dataPointConfigs={dataPointConfigs}
-      additionalContextDataConfig={additionalContextDataConfig}
-      chartConfigs={chartConfigs}
-      overviewCardConfigs={overviewCardConfigs}
-    />
-  );
+  ],
 };
 
-export default OutdoorSensorPage;
+export default outdoorDashboardConfig;

@@ -5,7 +5,7 @@ import Footer from "./components/layout/Footer";
 import OverviewPage from "./components/pages/OverviewPage";
 import { ViewportProvider } from "./ViewportContext";
 import "./App.css";
-import OutdoorSensorPage from "./components/pages/OutdoorSensorPage";
+import DashboardPage from "./components/pages/DashboardPage";
 import Header from "./components/layout/Header";
 
 function App() {
@@ -59,8 +59,8 @@ function App() {
               <Routes>
                 <Route path="/" element={<OverviewPage />} />
                 <Route
-                  path="/outdoor"
-                  element={<OutdoorSensorPage timeRange={currentTimePeriod} />}
+                  path="/dashboard/:dashboardId"
+                  element={<DashboardPage timeRange={currentTimePeriod} />}
                 />
                 {/* Add more routes for other dashboards here */}
               </Routes>
