@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Chart } from "react-chartjs-2";
 import { ChartData, ChartOptions, Chart as ChartJS } from "chart.js";
 import "chartjs-adapter-date-fns";
@@ -12,8 +12,6 @@ import { useViewport } from "../../ViewportContext";
 import { getCommonChartOptions } from "./chart-config";
 import { createAutoHideTooltipPlugin } from "./plugins/AutoHideTooltipPlugin";
 import { createSunriseSunsetPlugin } from "./plugins/SunriseSunsetPlugin";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSun } from "@fortawesome/free-solid-svg-icons";
 
 interface TelemetryChartsProps {
   data: ProcessedData;
@@ -27,7 +25,6 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
   const viewport = useViewport();
   const chartStyles = useChartStyles();
   const chartRef = useRef<ChartJS | null>(null);
-  const [showSunriseSunset, setShowSunriseSunset] = useState(false);
 
   if (!data || !data.entries) {
     return <div>No data available</div>;
@@ -109,7 +106,6 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
       sunriseSunset: {
         latitude: Number(process.env.REACT_APP_LATITUDE),
         longitude: Number(process.env.REACT_APP_LONGITUDE),
-        show: showSunriseSunset,
         darkMode: viewport.isDarkMode,
         isMobile: !viewport.isDesktop,
       },
@@ -130,19 +126,6 @@ const TemperatureChart: React.FC<TelemetryChartsProps> = ({
             }
           }}
         />
-      </div>
-      <div className="chart-controls">
-        <button
-          className={`toggle-sunrise-sunset ${!showSunriseSunset ? 'strikethrough' : ''}`}
-          onClick={() => setShowSunriseSunset(!showSunriseSunset)}
-          title={showSunriseSunset ? "Sonnendaten ausblenden" : "Sonnendaten einblenden"}
-        >
-          <FontAwesomeIcon 
-            icon={faSun} 
-            color={showSunriseSunset ? "var(--primary-color)" : "var(--chart-text-color)"}
-          />
-          <span>Sonnendaten</span>
-        </button>
       </div>
     </div>
   );
