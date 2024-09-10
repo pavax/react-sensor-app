@@ -7,5 +7,4 @@ export interface DashboardConfig {
     additionalContextDataConfig: AdditionalContextConfig[];
     chartConfigs: ChartConfig[];
     overviewCardConfigs: OverviewCardConfig[];
-  }
-  
+}

@@ -1,0 +1,159 @@
+{
+  "deviceId": "47617760-ff3a-11ee-9df9-61f0fe185737",
+  "dataPointConfigs": {
+    "temperature": {
+      "aggregationType": "AVERAGE",
+      "fractionDigits": 0
+    },
+    "humidity": {
+      "aggregationType": "AVERAGE",
+      "fractionDigits": 0
+    },
+    "dewPoint": {
+      "aggregationType": "AVERAGE",
+      "fractionDigits": 0
+    },
+    "windVoltageMax": {
+      "aggregationType": "MAX",
+      "fractionDigits": 0,
+      "valueTransformFn": "MULTIPLY(DIVIDE(value, 1000), 14)"
+    },
+    "windDirection": { "aggregationType": "MODE" },
+    "rainEventAccDifference": {
+      "aggregationType": "SUM",
+      "fractionDigits": 0
+    },
+    "counter": {
+      "aggregationType": "LATEST",
+      "fractionDigits": 0
+    },
+    "temperature2": {
+      "aggregationType": "LATEST",
+      "fractionDigits": 0
+    },
+    "humidity2": {
+      "aggregationType": "LATEST",
+      "fractionDigits": 0
+    },
+    "lux": { "aggregationType": "MAX", "fractionDigits": 0 },
+    "uvIndex": { "aggregationType": "MAX", "fractionDigits": 0 },
+    "pressure": {
+      "aggregationType": "AVERAGE",
+      "fractionDigits": 0
+    },
+    "cloudBaseHeight": {
+      "aggregationType": "AVERAGE",
+      "fractionDigits": 0
+    },
+    "batteryVoltage": {
+      "aggregationType": "AVERAGE",
+      "fractionDigits": 0
+    }
+  },
+  "additionalContextDataConfig": [
+    {
+      "label": "Device-Uptime Count",
+      "key": "LATEST(counter)"
+    },
+    {
+      "label": "Batterie",
+      "key": "LATEST(batteryVoltage)",
+      "unit": "mv"
+    },
+    {
+      "label": "Gehäuse Temp.",
+      "key": "LATEST(temperature2)",
+      "unit": "°C"
+    },
+    {
+      "label": "Gehäuse Hum.",
+      "key": "LATEST(humidity2)",
+      "unit": "%"
+    }
+  ],
+  "chartConfigs": [
+    {
+      "title": "Temperatur",
+      "icon": "faThermometerHalf",
+      "chartComponent": "TemperatureChart"
+    },
+    {
+      "title": "Wind",
+      "icon": "faWind",
+      "chartComponent": "WindChart"
+    },
+    {
+      "title": "Regen",
+      "icon": "faCloudRain",
+      "chartComponent": "RainEventChart"
+    },
+    {
+      "title": "Licht",
+      "icon": "faSun",
+      "chartComponent": "LightChart"
+    },
+    {
+      "title": "Cloud Base Height",
+      "icon": "faCloud",
+      "chartComponent": "CloudBaseHeightChart"
+    }
+  ],
+  "overviewCardConfigs": [
+    {
+      "title": "Temperatur",
+      "value": "LATEST(temperature)",
+      "unit": "°C",
+      "icon": "faTemperatureLow",
+      "color": "#8e44ad"
+    },
+    {
+      "title": "Feuchtigkeit",
+      "value": "LATEST(humidity)",
+      "unit": "%",
+      "icon": "faWater",
+      "color": "#1abc9c"
+    },
+    {
+      "title": "Wind",
+      "value": "LATEST(windVoltageMax)",
+      "unit": "m/s",
+      "icon": "faWind",
+      "color": "#3498db"
+    },
+    {
+      "title": "Regen",
+      "value": "SUM(rainEventAccDifference)",
+      "unit": "mm",
+      "icon": "faCloudRain",
+      "color": "#2ecc71"
+    },
+    {
+      "title": "Luftdruck",
+      "value": "LATEST(pressure)",
+      "unit": "hpa",
+      "icon": "faTachometerAlt",
+      "color": "#e74c3c"
+    },
+    {
+      "title": "Schnee",
+      "value": "CONSTANT(--)",
+      "unit": "",
+      "icon": "faSnowflake",
+      "color": "#34495e"
+    },
+    {
+      "title": "UV-Index",
+      "value": "LATEST(uvIndex)",
+      "unit": "",
+      "icon": "faSun",
+      "color": "#f39c12"
+    },
+    {
+      "title": "Cloudbase Height",
+      "value": "LATEST(cloudBaseHeight)",
+      "unit": "m",
+      "icon": "faCloud",
+      "color": "#7f8c8d"
+    }
+  ]
+}

@@ -2,26 +2,29 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import { TimeRange } from "../../api/thingsboard-api";
-import outdoorDashboardConfig from "../../configs/outdoorSensorConfig";
-import { DashboardConfig } from "../../configs/types";
+import outdoorSensorConfigJson from "../../configs/outdoor-dashboard.json";
+import { DashboardConfig } from "../../dashboards/config-types";
+import { transformJsonConfig } from "../../dashboards/config-transformer";
 
 
 interface DashboardPageData {
   timeRange: TimeRange;
 }
 
-const configMap: { [key: string]: DashboardConfig } = {
-  outdoor: outdoorDashboardConfig,
+const configMap: { [key: string]: any } = {
+  outdoor: outdoorSensorConfigJson,
 };
 
 const DashboardPage: React.FC<DashboardPageData> = ({ timeRange }) => {
   const { dashboardId } = useParams<{ dashboardId: string }>();
   
-  const dashboardConfig = configMap[dashboardId || ""];
+  const jsonConfig = configMap[dashboardId || ""];
 
-  if (!dashboardConfig) {
+  if (!jsonConfig) {
     return <div>Error: Invalid dashboard ID</div>;
   }
+
+  const dashboardConfig: DashboardConfig = transformJsonConfig(jsonConfig);
 
   return (
     <Dashboard
