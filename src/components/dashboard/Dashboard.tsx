@@ -27,7 +27,7 @@ export interface ChartSettings {
   chartComponent: React.ComponentType<{
     processedData: ProcessedData;
     timeRange: TimeRange;
-    chartConfig?: ChartConfig;
+    chartConfig: ChartConfig;
   }>;
 }
 

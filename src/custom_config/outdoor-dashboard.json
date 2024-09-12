@@ -152,7 +152,7 @@
             "transparency": "60"
           },
           {
-            "label": "Trend-Temperature",
+            "label": "Temperature (Trend)",
             "yAxis": "y0",
             "dataKey": "temperature",
             "unit": "°C",
@@ -252,6 +252,16 @@
             "dataKey": "uvIndex",
             "unit": "",
             "color": "lineColor1"
+          },
+          {
+            "label": "Lux (Trend)",
+            "yAxis": "y0",
+            "dataKey": "lux",
+            "unit": "lux",
+            "color": "lineColor3",
+            "style": "dashed",
+            "isTrendLineData": "true",
+            "transparency": "60"
           }
         ],
         "scales": {

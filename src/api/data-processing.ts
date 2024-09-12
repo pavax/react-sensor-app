@@ -1,4 +1,4 @@
-import { calculateMedian, calculateMin, calculateMax, calculateMode, calculateAverage, calculateSum, calculateLatest } from "../common/math";
+import { calculateMedian, calculateMin, calculateMax, calculateMode, calculateAverage, calculateSum, calculateLatest } from "../common/math-utils";
 import {
   TelemetryItem,
   TelemetryTimeSeries,

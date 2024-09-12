@@ -6,7 +6,7 @@ import {
   calculateMedian,
   calculateMin,
   calculateMode,
-} from "../common/math";
+} from "../common/math-utils";
 
 const parser = new Parser();
 
