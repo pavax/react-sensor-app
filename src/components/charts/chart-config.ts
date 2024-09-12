@@ -1,4 +1,10 @@
-import { BarController, ChartOptions, LineController, TimeSeriesScale, TooltipItem } from "chart.js";
+import {
+  BarController,
+  ChartOptions,
+  LineController,
+  TimeSeriesScale,
+  TooltipItem,
+} from "chart.js";
 import { TimeRange } from "../../api/thingsboard-api";
 import {
   determineMaxTickLimit,
@@ -18,9 +24,11 @@ import {
   PointElement,
   TimeScale,
   Title,
-  Tooltip,
+  Tooltip
 } from "chart.js";
 import { useViewport } from "../../ViewportContext";
+
+import 'chartjs-adapter-date-fns';
 
 ChartJS.register(
   CategoryScale,
@@ -74,6 +82,11 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
                 timeZone: "Europe/Zurich",
               }
             ),
+          label: function (tooltipItem: TooltipItem<any>) {
+            return `${
+              tooltipItem.dataset.label
+            }: ${tooltipItem.parsed.y.toFixed(0)}${tooltipItem.dataset.unit}`;
+          },
         },
       },
     },

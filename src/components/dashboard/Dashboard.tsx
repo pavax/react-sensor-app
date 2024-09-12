@@ -2,10 +2,7 @@ import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format } from "date-fns-tz";
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  processData,
-  ProcessedData,
-} from "../../api/data-processing";
+import { processData, ProcessedData } from "../../api/data-processing";
 import {
   fetchTelemetry,
   subscribeToTelemetry as subscribeToDeviceTelemetry,
@@ -27,7 +24,11 @@ export interface ChartSettings {
   title: string;
   icon: IconDefinition;
   chartConfig: ChartConfig;
-  chartComponent: React.ComponentType<{ data: ProcessedData; timeRange: TimeRange, chartConfig?: ChartConfig }>;
+  chartComponent: React.ComponentType<{
+    processedData: ProcessedData;
+    timeRange: TimeRange;
+    chartConfig?: ChartConfig;
+  }>;
 }
 
 export interface AdditionalContextConfig {
@@ -204,7 +205,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           </h3>
           <div className="chart-container">
             <config.chartComponent
-              data={processedTelemetryData}
+              processedData={processedTelemetryData}
               timeRange={timeRange}
               chartConfig={config.chartConfig}
             />

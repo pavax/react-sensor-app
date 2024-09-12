@@ -11,7 +11,7 @@ import { createSunriseSunsetPlugin } from "./plugins/SunriseSunsetPlugin";
 import { createWindDirectionPlugin } from "./plugins/WindDirectionPlugin";
 
 export interface LineChartProps {
-  data: ProcessedData;
+  processedData: ProcessedData;
   timeRange: TimeRange;
   chartConfig: ChartConfig;
 }
@@ -36,6 +36,7 @@ export interface DataSetConfig {
   label: string;
   yAxis: "y0" | "y1";
   type: "line" | "bar";
+  unit?: "string";
   dataKey: string;
   isTrendLineData: boolean;
   color: "lineColor1" | "lineColor2" | "lineColor3";
@@ -82,7 +83,7 @@ const parseBoolean = (
 };
 
 const GenericLineChart: React.FC<LineChartProps> = ({
-  data,
+  processedData: data,
   timeRange,
   chartConfig,
 }: LineChartProps) => {
@@ -93,27 +94,34 @@ const GenericLineChart: React.FC<LineChartProps> = ({
   type ChartType = typeof chartConfig.chartType;
 
   const chartData: ChartData<ChartType> = useMemo(() => {
+    function extractData(
+      dataSetConfig: DataSetConfig,
+      data: ProcessedData
+    ): number[] {
+      if (dataSetConfig.isTrendLineData) {
+        return calculateTrendLine(
+          data.entries[dataSetConfig.dataKey].values ?? []
+        );
+      }
+      return data.entries[dataSetConfig.dataKey].values;
+    }
+
     return {
       labels: data.timestamps,
       datasets: chartConfig.dataSets.map((dataSetConfig) => {
-        // const transparency = dataSetConfig.transparency || "";
         return {
           type: dataSetConfig.type || chartConfig.chartType,
+          unit: dataSetConfig.unit || "",
           yAxisID: dataSetConfig.yAxis,
           label: dataSetConfig.label,
-          data: !dataSetConfig.isTrendLineData
-            ? [...data.entries[dataSetConfig.dataKey].values]
-            : calculateTrendLine(
-                data.entries[dataSetConfig.dataKey].values ?? []
-              ),
+          data: extractData(dataSetConfig, data),
           borderColor: `${chartStyles[dataSetConfig.color]}${
             dataSetConfig.transparency || ""
           }`,
           backgroundColor: `${chartStyles[dataSetConfig.color]}${
             dataSetConfig.transparency || ""
           }`,
-          hidden: dataSetConfig.hidden,
-          fill: false,
+          hidden: parseBoolean(dataSetConfig.hidden, false),
           borderDash: dataSetConfig.style === "dashed" ? [5, 5] : undefined,
           pointStyle:
             dataSetConfig.style === "point-cyrcle"
@@ -124,15 +132,16 @@ const GenericLineChart: React.FC<LineChartProps> = ({
           pointRadius: viewport.isMobile ? 2 : 3,
           stepped: dataSetConfig.stepped ? "middle" : undefined,
           showLine: parseBoolean(dataSetConfig.showLine, true),
+        
         };
       }),
     };
   }, [
+    data,
+    chartConfig.dataSets,
+    chartConfig.chartType,
     chartStyles,
-    data.timestamps,
-    chartConfig,
-    data.entries,
-    viewport.isMobile,
+    viewport,
   ]);
 
   const options = useMemo<ChartOptions<ChartType>>(() => {

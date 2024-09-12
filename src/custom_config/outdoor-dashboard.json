@@ -138,6 +138,7 @@
             "label": "Temperature",
             "yAxis": "y0",
             "dataKey": "temperature",
+            "unit": "°C",
             "color": "lineColor1"
           },
           {
@@ -145,6 +146,7 @@
             "yAxis": "y0",
             "dataKey": "dewPoint",
             "color": "lineColor2",
+            "unit": "°C",
             "style": "point-cyrcle",
             "showLine": "false",
             "transparency": "60"
@@ -153,6 +155,7 @@
             "label": "Trend-Temperature",
             "yAxis": "y0",
             "dataKey": "temperature",
+            "unit": "°C",
             "color": "lineColor3",
             "style": "dashed",
             "isTrendLineData": "true",
@@ -162,6 +165,7 @@
             "label": "Humidtiy",
             "yAxis": "y1",
             "dataKey": "humidity",
+            "unit": "%",
             "color": "lineColor4",
             "style": "point-triangle",
             "hidden": "true",
@@ -196,6 +200,7 @@
             "label": "Wind Speed",
             "yAxis": "y0",
             "dataKey": "windVoltageMax",
+            "unit": "m/s",
             "color": "lineColor1",
             "stepped": "true"
           }
@@ -218,6 +223,7 @@
             "label": "Regenmenge",
             "yAxis": "y0",
             "dataKey": "rainEventAccDifference",
+            "unit": "mm",
             "color": "lineColor1",
             "type": "bar"
           }
@@ -235,6 +241,7 @@
             "label": "Cloud Base Height",
             "yAxis": "y0",
             "dataKey": "cloudBaseHeight",
+            "unit": "m",
             "color": "lineColor1"
           }
         ]
@@ -251,6 +258,7 @@
             "label": "Lux",
             "yAxis": "y0",
             "dataKey": "lux",
+            "unit": "lux",
             "color": "lineColor3"
           },
           {
@@ -258,6 +266,7 @@
             "yAxis": "y1",
             "type": "bar",
             "dataKey": "uvIndex",
+            "unit": "",
             "color": "lineColor1"
           }
         ],
