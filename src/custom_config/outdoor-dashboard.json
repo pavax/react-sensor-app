@@ -230,23 +230,7 @@
         ]
       }
     },
-    {
-      "title": "Cloud Base Height",
-      "icon": "faCloud",
-      "chartComponent": "LineChart",
-      "config": {
-        "chartType": "line",
-        "dataSets": [
-          {
-            "label": "Cloud Base Height",
-            "yAxis": "y0",
-            "dataKey": "cloudBaseHeight",
-            "unit": "m",
-            "color": "lineColor1"
-          }
-        ]
-      }
-    },
+
     {
       "title": "Licht",
       "icon": "faSun",
@@ -284,6 +268,23 @@
         "plugins": {
           "sunriseSunsets": "true"
         }
+      }
+    },
+    {
+      "title": "Cloud Base Height",
+      "icon": "faCloud",
+      "chartComponent": "LineChart",
+      "config": {
+        "chartType": "line",
+        "dataSets": [
+          {
+            "label": "Cloud Base Height",
+            "yAxis": "y0",
+            "dataKey": "cloudBaseHeight",
+            "unit": "m",
+            "color": "lineColor1"
+          }
+        ]
       }
     }
   ]
