@@ -1,6 +1,7 @@
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format } from "date-fns-tz";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   processData,
   ProcessedData,
@@ -12,20 +13,21 @@ import {
   TelemetryTimeSeries,
   TimeRange,
 } from "../../api/thingsboard-api";
+import { DashboardConfig } from "../../dashboards/config-types";
+import { ChartConfig } from "../charts/LineChart";
 import ContextInfoBar from "./ContextInfoBar";
 import OverviewCards, { OverviewCardData } from "./OverviewCards";
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { DashboardConfig } from "../../dashboards/config-types";
 
 interface DashboardProps {
   timeRange: TimeRange;
   dashboardConfig: DashboardConfig;
 }
 
-export interface ChartConfig {
+export interface ChartSettings {
   title: string;
   icon: IconDefinition;
-  chartComponent: React.ComponentType<{ data: ProcessedData; timeRange: TimeRange }>;
+  chartConfig: ChartConfig;
+  chartComponent: React.ComponentType<{ data: ProcessedData; timeRange: TimeRange, chartConfig?: ChartConfig }>;
 }
 
 export interface AdditionalContextConfig {
@@ -204,6 +206,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             <config.chartComponent
               data={processedTelemetryData}
               timeRange={timeRange}
+              chartConfig={config.chartConfig}
             />
           </div>
         </div>

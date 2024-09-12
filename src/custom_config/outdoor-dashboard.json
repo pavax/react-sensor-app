@@ -130,27 +130,152 @@
     {
       "title": "Temperatur",
       "icon": "faThermometerHalf",
-      "chartComponent": "TemperatureChart"
+      "chartComponent": "LineChart",
+      "config": {
+        "chartType": "line",
+        "dataSets": [
+          {
+            "label": "Temperature",
+            "yAxis": "y0",
+            "dataKey": "temperature",
+            "color": "lineColor1"
+          },
+          {
+            "label": "Dew Point",
+            "yAxis": "y0",
+            "dataKey": "dewPoint",
+            "color": "lineColor2",
+            "style": "point-cyrcle",
+            "showLine": "false",
+            "transparency": "60"
+          },
+          {
+            "label": "Trend-Temperature",
+            "yAxis": "y0",
+            "dataKey": "temperature",
+            "color": "lineColor3",
+            "style": "dashed",
+            "isTrendLineData": "true",
+            "transparency": "60"
+          },
+          {
+            "label": "Humidtiy",
+            "yAxis": "y1",
+            "dataKey": "humidity",
+            "color": "lineColor4",
+            "style": "point-triangle",
+            "hidden": "true",
+            "transparency": "60"
+          }
+        ],
+        "scales": {
+          "y1": {
+            "position": "right",
+            "min": "0",
+            "max": "100",
+            "maxTicks": 4,
+            "display": {
+              "mobile": "false",
+              "desktop": "true"
+            }
+          }
+        },
+        "plugins": {
+          "sunriseSunsets": "true"
+        }
+      }
     },
     {
       "title": "Wind",
       "icon": "faWind",
-      "chartComponent": "WindChart"
+      "chartComponent": "LineChart",
+      "config": {
+        "chartType": "line",
+        "dataSets": [
+          {
+            "label": "Wind Speed",
+            "yAxis": "y0",
+            "dataKey": "windVoltageMax",
+            "color": "lineColor1",
+            "stepped": "true"
+          }
+        ],
+        "plugins": {
+          "windDirections": {
+            "directionKey": "windDirection"
+          }
+        }
+      }
     },
     {
       "title": "Regen",
       "icon": "faCloudRain",
-      "chartComponent": "RainEventChart"
-    },
-    {
-      "title": "Licht",
-      "icon": "faSun",
-      "chartComponent": "LightChart"
+      "chartComponent": "LineChart",
+      "config": {
+        "chartType": "line",
+        "dataSets": [
+          {
+            "label": "Regenmenge",
+            "yAxis": "y0",
+            "dataKey": "rainEventAccDifference",
+            "color": "lineColor1",
+            "type": "bar"
+          }
+        ]
+      }
     },
     {
       "title": "Cloud Base Height",
       "icon": "faCloud",
-      "chartComponent": "CloudBaseHeightChart"
+      "chartComponent": "LineChart",
+      "config": {
+        "chartType": "line",
+        "dataSets": [
+          {
+            "label": "Cloud Base Height",
+            "yAxis": "y0",
+            "dataKey": "cloudBaseHeight",
+            "color": "lineColor1"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Licht",
+      "icon": "faSun",
+      "chartComponent": "LineChart",
+      "config": {
+        "chartType": "line",
+        "dataSets": [
+          {
+            "label": "Lux",
+            "yAxis": "y0",
+            "dataKey": "lux",
+            "color": "lineColor3"
+          },
+          {
+            "label": "UV Index",
+            "yAxis": "y1",
+            "type": "bar",
+            "dataKey": "uvIndex",
+            "color": "lineColor1"
+          }
+        ],
+        "scales": {
+          "y1": {
+            "position": "right",
+            "min": "0",
+            "max": "12",
+            "display": {
+              "mobile": "false",
+              "desktop": "true"
+            }
+          }
+        },
+        "plugins": {
+          "sunriseSunsets": "true"
+        }
+      }
     }
   ]
 }
