@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+
 import { TimeRange } from "../../api/thingsboard-api";
 import outdoorSensorConfigJson from "../../custom_config/outdoor-dashboard.json";
 import indoorSensorConfigJson from "../../custom_config/indoor-dashboard.json";

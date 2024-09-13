@@ -8,10 +8,12 @@ import {
 import { Parser } from "expr-eval";
 import React, { useMemo, useRef } from "react";
 import { Chart } from "react-chartjs-2";
+
 import { useViewport } from "../../ViewportContext";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
 import { calculateTrendLine } from "../../common/math-utils";
+
 import { getCommonChartOptions } from "./chart-config";
 import { useChartStyles } from "./chart-utils";
 import { createAutoHideTooltipPlugin } from "./plugins/AutoHideTooltipPlugin";
@@ -200,15 +202,11 @@ const GenericLineChart: React.FC<LineChartProps> = ({
     return {
       ...commonOptions,
       scales: {
-        x: {
-          ...prepareScale(chartConfig?.scales?.x, commonOptions.scales?.x),
-        },
-        y0: {
-          ...prepareScale(chartConfig?.scales?.y0, commonOptions.scales?.y0),
-        },
-        y1: chartConfig?.scales?.y1 && {
-          ...prepareScale(chartConfig.scales.y1, commonOptions.scales.y1),
-        },
+        x: prepareScale(chartConfig?.scales?.x, commonOptions.scales?.x),
+        y0: prepareScale(chartConfig?.scales?.y0, commonOptions.scales?.y0),
+        ...(chartConfig?.scales?.y1 && {
+          y1: prepareScale(chartConfig.scales.y1, commonOptions.scales.y1),
+        }),
       },
       plugins: {
         ...commonOptions.plugins,

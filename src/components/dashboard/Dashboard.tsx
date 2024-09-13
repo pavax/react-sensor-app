@@ -2,6 +2,7 @@ import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format } from "date-fns-tz";
 import React, { useEffect, useMemo, useState } from "react";
+
 import { processData, ProcessedData } from "../../api/data-processing";
 import {
   fetchTelemetry,
@@ -12,6 +13,7 @@ import {
 } from "../../api/thingsboard-api";
 import { DashboardConfig } from "../../dashboards/config-types";
 import { ChartConfig } from "../charts/LineChart";
+
 import ContextInfoBar from "./ContextInfoBar";
 import OverviewCards, { OverviewCardData } from "./OverviewCards";
 
@@ -192,9 +194,8 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   return (
     <div className="telemetry-grid">
-   
       <ContextInfoBar
-         title={name}
+        title={name}
         latestTimestamp={contextLatestTime}
         additionalData={contextAdditionalData}
       />

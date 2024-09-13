@@ -6,15 +6,7 @@ import {
   TimeSeriesScale,
   TooltipItem,
 } from "chart.js";
-import { TimeRange } from "../../api/thingsboard-api";
-import {
-  determineMaxTickLimit,
-  getTimeUnit,
-  useChartStyles,
-} from "./chart-utils";
-
 import { format } from "date-fns-tz";
-
 import {
   BarElement,
   CategoryScale,
@@ -27,9 +19,16 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
+
+import { TimeRange } from "../../api/thingsboard-api";
 import { useViewport } from "../../ViewportContext";
 
-import 'chartjs-adapter-date-fns';
+import {
+  determineMaxTickLimit,
+  getTimeUnit,
+  useChartStyles,
+} from "./chart-utils";
+import "chartjs-adapter-date-fns";
 
 ChartJS.register(
   CategoryScale,

@@ -1,4 +1,5 @@
 import { Parser } from "expr-eval";
+
 import { ProcessedData } from "../api/data-processing";
 import {
   calculateAverage,

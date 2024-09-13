@@ -8,6 +8,7 @@ import {
   faInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+
 import { TimeRange } from "../../api/thingsboard-api";
 import { useViewport } from "../../ViewportContext";
 

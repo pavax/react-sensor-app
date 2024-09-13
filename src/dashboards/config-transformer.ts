@@ -1,6 +1,8 @@
 import * as icons from "@fortawesome/free-solid-svg-icons";
+
 import { AggregationType } from "../api/data-processing";
 import * as charts from "../components/charts";
+
 import { DashboardConfig } from "./config-types";
 import { evaluateDSL, transformRawValue } from "./dsl-evaluator";
 

@@ -1,5 +1,6 @@
-import { TimeRange } from "../../api/thingsboard-api";
 import { useState, useEffect } from "react";
+
+import { TimeRange } from "../../api/thingsboard-api";
 import { useViewport } from "../../ViewportContext";
 
 export function getTimeUnit(timeRange: TimeRange): "hour" | "day" | "week" {

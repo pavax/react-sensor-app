@@ -5,8 +5,8 @@ import { faWater, faHouse, faTree } from '@fortawesome/free-solid-svg-icons';
 
 const OverviewPage: React.FC = () => {
   const dashboards = [
-    { name: 'Aussen-Sensor', path: '/dashboard/outdoor', icon: faTree },
-    { name: 'Innen-Sensor', path: '/dashboard/indoor', icon: faHouse },
+    { name: 'Wetter-Sensor', path: '/dashboard/outdoor', icon: faTree },
+    { name: 'Stube-Sensor', path: '/dashboard/indoor', icon: faHouse },
     { name: 'Wasser-Sensor', path: '/dashboard/water', icon: faWater }
   ];
   return (
