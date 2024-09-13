@@ -29,7 +29,7 @@ const ContextInfoBar: React.FC<ContextInfoBarProps> = ({
       className={`context-information ${expanded ? "expanded" : ""}`}
       onClick={toggleExpand}
     >
-      <h2>{title}</h2>
+      {title && <h2>{title}</h2>}
       <span>Daten von: </span>
       <strong>{latestTimestamp}</strong>
       {additionalData && additionalData.size > 0 && (
