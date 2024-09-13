@@ -1,4 +1,4 @@
-import { Plugin, Chart, ChartType } from "chart.js";
+import { Chart, ChartType, Plugin } from "chart.js";
 import { format } from "date-fns";
 import SunCalc from "suncalc";
 
@@ -50,45 +50,29 @@ export function createSunriseSunsetPlugin(): Plugin {
 
       ctx.save();
 
-      const legendHeight = isMobile ? 10 : 20;
-      const padding = isMobile ? 2 : 5;
-      const fontSize = isMobile ? 9 : 14;
-      const legendWidth = fontSize + padding;
-      const alpha = 0.3;
+      const legendHeight = isMobile ? 15 : 20;
+      const fontSize = isMobile ? 12 : 16;
+      const legendWidth = fontSize;
+      const transparency = 0.3;
 
       const drawToggleButton = () => {
-        // Set transparency if not visible
-        ctx.globalAlpha = isVisible ? alpha * 2 : alpha;
+        ctx.globalAlpha = isVisible ? 0.8 : transparency;
 
-        const legendX = isMobile ? 0: xAxis.left;
-        const legendY = isMobile ? 15 : 30;
+        const legendX = (xAxis.left - legendWidth * 1.8) / 2;
+        const legendY = isMobile ? 8 : 15;
 
         ctx.fillStyle = "#FFFFFF";
         ctx.font = `${fontSize}px Arial`;
         ctx.fillText("☀️", legendX, legendY + fontSize * 0.5);
 
-        const text = "Sonne";
-        const textY = legendY + fontSize / 2;
-        ctx.fillText(text, legendX + fontSize + padding, textY);
-
-        // Update the click area to use legendWidth and legendHeight
-        const textWidth = ctx.measureText(text).width;
-        const clickAreaWidth = legendWidth + textWidth;
+        const clickAreaWidth = legendWidth;
         const clickAreaHeight = legendHeight;
 
-        if (!isVisible) {
-          ctx.beginPath();
-          ctx.moveTo(legendX + fontSize + 5, textY);
-          ctx.lineTo(legendX + clickAreaWidth, textY);
-          ctx.strokeStyle = "#FFFFFF";
-          ctx.lineWidth = 2;
-          ctx.stroke();
-        }
-        ctx.globalAlpha = 1; // Reset alpha to default
+        ctx.globalAlpha = 1;
         return { legendX, legendY, clickAreaWidth, clickAreaHeight };
       };
       let toggleButtonDimensions = drawToggleButton();
-      
+
       const handleToggleClick = (event: MouseEvent) => {
         const rect = chart.canvas.getBoundingClientRect();
         const clickX = event.clientX - rect.left;
@@ -184,7 +168,7 @@ export function createSunriseSunsetPlugin(): Plugin {
 
         // Draw ground
         ctx.beginPath();
-        ctx.strokeStyle = "#4682B4"; 
+        ctx.strokeStyle = "#4682B4";
         ctx.lineWidth = 2;
         ctx.moveTo(x - groundWidth / 2, yBase + arrowSize + tickSize + gap);
         ctx.lineTo(x + groundWidth / 2, yBase + arrowSize + tickSize + gap);
@@ -204,7 +188,7 @@ export function createSunriseSunsetPlugin(): Plugin {
 
       ctx.textAlign = "center";
       ctx.textBaseline = "bottom";
-      ctx.globalAlpha = alpha;
+      ctx.globalAlpha = transparency;
 
       uniqueDates.forEach((dateString) => {
         const sunTimes = SunCalc.getTimes(
