@@ -284,23 +284,6 @@
       }
     },
     {
-      "title": "Cloud Base Height",
-      "icon": "faCloud",
-      "chartComponent": "LineChart",
-      "config": {
-        "chartType": "line",
-        "dataSets": [
-          {
-            "label": "Cloud Base Height",
-            "yAxis": "y0",
-            "dataKey": "cloudBaseHeight",
-            "unit": "m",
-            "color": "lineColor1"
-          }
-        ]
-      }
-    },
-    {
       "title": "Battery",
       "icon": "faBattery",
       "chartComponent": "LineChart",
@@ -325,9 +308,32 @@
             "transparency": "20"
           }
         ],
+        "scales": {
+          "y0": {
+            "min": "3300",
+            "max": "4200"
+          }
+        },
         "plugins": {
           "sunriseSunsets": "true"
         }
+      }
+    },
+    {
+      "title": "Cloud Base Height",
+      "icon": "faCloud",
+      "chartComponent": "LineChart",
+      "config": {
+        "chartType": "line",
+        "dataSets": [
+          {
+            "label": "Cloud Base Height",
+            "yAxis": "y0",
+            "dataKey": "cloudBaseHeight",
+            "unit": "m",
+            "color": "lineColor1"
+          }
+        ]
       }
     }
   ]

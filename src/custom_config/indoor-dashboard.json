@@ -161,6 +161,10 @@
           }
         ],
         "scales": {
+          "y0": {
+            "min": "300",
+            "max": "3000"
+          },
           "y1": {
             "position": "right",
             "display": {
@@ -210,6 +214,10 @@
           }
         ],
         "scales": {
+          "y0": {
+            "min": "3300",
+            "max": "4300"
+          },
           "y1": {
             "position": "right",
             "min": "0",
