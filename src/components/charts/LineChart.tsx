@@ -98,7 +98,7 @@ const parseBoolean = (
 
 const parser = new Parser();
 
-const GenericLineChart: React.FC<LineChartProps> = ({
+const LineChart: React.FC<LineChartProps> = ({
   processedData: data,
   timeRange,
   chartConfig,
@@ -261,4 +261,4 @@ const GenericLineChart: React.FC<LineChartProps> = ({
   );
 };
 
-export default GenericLineChart;
+export default LineChart;

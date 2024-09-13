@@ -172,28 +172,54 @@
       }
     },
     {
-      "title": "Strom",
-      "icon": "faBolt",
+      "title": "Battery & Strom",
+      "icon": "faBattery",
       "chartComponent": "LineChart",
       "config": {
         "chartType": "line",
         "dataSets": [
           {
-            "label": "Netzstrom",
+            "label": "Batterie",
             "yAxis": "y0",
+            "dataKey": "battery",
+            "unit": "mv",
+            "color": "lineColor1"
+          },
+          {
+            "label": "Netzstrom",
+            "type": "line",
+            "yAxis": "y1",
             "dataKey": "mainsConnected",
             "unit": "",
-            "color": "lineColor1",
+            "color": "lineColor5",
             "stepped": "true",
+            "transparency": "90",
             "fill": {
-              "transparency": "50"
+              "transparency": "10"
             }
+          },
+          {
+            "label": "Batterie (Trend)",
+            "yAxis": "y0",
+            "dataKey": "battery",
+            "unit": "°C",
+            "color": "lineColor3",
+            "style": "dashed",
+            "isTrendLineData": "true",
+            "transparency": "20"
           }
         ],
         "scales": {
-          "y0": {
-            "maxTicks": "2",
-            "ticksFormatter": "x == 1 ? \"ON\": \"OFF\""
+          "y1": {
+            "position": "right",
+            "min": "0",
+            "max": "1",
+            "maxTicks": 2,
+            "ticksFormatter": "x == 1 ? \"AN\": \"AUS\"",
+            "display": {
+              "mobile": "false",
+              "desktop": "true"
+            }
           }
         }
       }

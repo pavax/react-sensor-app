@@ -7,8 +7,8 @@
     "typescriptreact"
   ],
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "explicit"
+    "source.fixAll.eslint": "always",
+    "source.organizeImports": "always"
   },
   "eslint.alwaysShowRuleFailuresAsWarnings": true,
   "editor.formatOnSave": true,

@@ -36,12 +36,12 @@ export function transformJsonConfig(jsonConfig: any): DashboardConfig {
       })
     ),
     chartConfigs: jsonConfig.chartConfigs.map((config: any) => {
-      return ({
+      return {
         icon: (icons as any)[config.icon],
         title: config.title,
         chartComponent: (charts as any)[config.chartComponent],
         chartConfig: config.config,
-      });
+      };
     }),
     overviewCardConfigs: jsonConfig.overviewCardConfigs.map((config: any) => ({
       ...config,

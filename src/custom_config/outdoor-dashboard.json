@@ -297,6 +297,43 @@
           }
         ]
       }
+    },
+    {
+      "title": "Battery",
+      "icon": "faBattery",
+      "chartComponent": "LineChart",
+      "config": {
+        "chartType": "line",
+        "dataSets": [
+          {
+            "label": "Batterie",
+            "yAxis": "y0",
+            "dataKey": "batteryVoltage",
+            "unit": "mv",
+            "color": "lineColor1"
+          },
+          {
+            "label": "Batterie (Trend)",
+            "yAxis": "y0",
+            "dataKey": "batteryVoltage",
+            "unit": "°C",
+            "color": "lineColor3",
+            "style": "dashed",
+            "isTrendLineData": "true",
+            "transparency": "20"
+          },
+          {
+            "label": "Cloud Base Height",
+            "yAxis": "y0",
+            "dataKey": "cloudBaseHeight",
+            "unit": "m",
+            "color": "lineColor1"
+          }
+        ],
+        "plugins": {
+          "sunriseSunsets": "true"
+        }
+      }
     }
   ]
 }
