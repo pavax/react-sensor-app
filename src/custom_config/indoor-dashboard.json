@@ -138,7 +138,7 @@
     },
     {
       "title": "Luft",
-      "icon": "faAir",
+      "icon": "faSmog",
       "chartComponent": "LineChart",
       "config": {
         "chartType": "line",
