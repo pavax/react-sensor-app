@@ -159,7 +159,7 @@
             "color": "lineColor3",
             "style": "dashed",
             "isTrendLineData": "true",
-            "transparency": "60"
+            "transparency": "20"
           },
           {
             "label": "Humidtiy",
@@ -261,7 +261,7 @@
             "color": "lineColor3",
             "style": "dashed",
             "isTrendLineData": "true",
-            "transparency": "60"
+            "transparency": "20"
           }
         ],
         "scales": {

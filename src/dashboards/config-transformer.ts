@@ -1,8 +1,8 @@
+import * as icons from "@fortawesome/free-solid-svg-icons";
+import { AggregationType } from "../api/data-processing";
+import * as charts from "../components/charts";
 import { DashboardConfig } from "./config-types";
 import { evaluateDSL, transformRawValue } from "./dsl-evaluator";
-import * as icons from "@fortawesome/free-solid-svg-icons";
-import * as charts from "../components/charts";
-import { AggregationType } from "../api/data-processing";
 
 export function transformJsonConfig(jsonConfig: any): DashboardConfig {
   return {

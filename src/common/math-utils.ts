@@ -47,3 +47,16 @@ export function calculateMedian(values: number[]): number {
   export function calculateLatest(values: number[]): number {
     return values.length ? values[values.length - 1] : 0;
   }
+
+  export function calculateTrendLine(values: number[]): number[] {
+    const n = values.length;
+    const sumX = values.reduce((acc, _, i) => acc + i, 0);
+    const sumY = values.reduce((acc, y) => acc + y, 0);
+    const sumXY = values.reduce((acc, y, i) => acc + i * y, 0);
+    const sumX2 = values.reduce((acc, _, i) => acc + i * i, 0);
+  
+    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+  
+    return values.map((_, i) => slope * i + intercept);
+  }

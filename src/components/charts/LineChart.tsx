@@ -5,10 +5,11 @@ import { useViewport } from "../../ViewportContext";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
 import { getCommonChartOptions } from "./chart-config";
-import { calculateTrendLine, useChartStyles } from "./chart-utils";
+import { useChartStyles } from "./chart-utils";
 import { createAutoHideTooltipPlugin } from "./plugins/AutoHideTooltipPlugin";
 import { createSunriseSunsetPlugin } from "./plugins/SunriseSunsetPlugin";
 import { createWindDirectionPlugin } from "./plugins/WindDirectionPlugin";
+import { calculateTrendLine } from "../../common/math-utils";
 
 export interface LineChartProps {
   processedData: ProcessedData;
@@ -132,7 +133,6 @@ const GenericLineChart: React.FC<LineChartProps> = ({
           pointRadius: viewport.isMobile ? 2 : 3,
           stepped: dataSetConfig.stepped ? "middle" : undefined,
           showLine: parseBoolean(dataSetConfig.showLine, true),
-        
         };
       }),
     };

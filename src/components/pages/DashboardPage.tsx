@@ -1,10 +1,9 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import Dashboard from "../dashboard/Dashboard";
 import { TimeRange } from "../../api/thingsboard-api";
-import outdoorSensorConfigJson from "../../custom_config/outdoor-dashboard.json"
-import { DashboardConfig } from "../../dashboards/config-types";
+import outdoorSensorConfigJson from "../../custom_config/outdoor-dashboard.json";
 import { transformJsonConfig } from "../../dashboards/config-transformer";
+import Dashboard from "../dashboard/Dashboard";
 
 interface DashboardProps {
   timeRange: TimeRange;
@@ -23,7 +22,7 @@ const DashboardPage: React.FC<DashboardProps> = ({ timeRange }) => {
     return <div>Error: Invalid dashboard ID</div>;
   }
 
-  const dashboardConfig: DashboardConfig = transformJsonConfig(jsonConfig);
+  const dashboardConfig = transformJsonConfig(jsonConfig);
 
   return (
     <Dashboard
