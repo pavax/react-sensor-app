@@ -306,6 +306,10 @@ input:checked + .slider:before {
   color: var(--primary-color);
 }
 
+.context-information div {
+  padding: 3px 0;
+}
+
 .context-information .latch-icon-container {
   position: absolute;
   bottom: 5px;
@@ -326,7 +330,7 @@ input:checked + .slider:before {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease;
-  margin-bottom: 1px; 
+  margin-bottom: 1px;
 }
 
 .context-information.expanded .additional-info {
@@ -397,11 +401,11 @@ input:checked + .slider:before {
 
   .context-information {
     font-size: 0.8rem;
-    padding: 8px 15px 30px; 
+    padding: 8px 15px 30px;
   }
 
   .context-information .latch-icon-container {
-    bottom: 8px; 
+    bottom: 8px;
   }
 }
 
@@ -411,7 +415,7 @@ input:checked + .slider:before {
   }
 
   .context-information {
-    padding: 8px 10px 30px; 
+    padding: 8px 10px 30px;
   }
 }
 
@@ -519,7 +523,6 @@ input:checked + .slider:before {
     font-size: 1.5rem;
   }
 }
-
 
 .chart-wrapper {
   width: 100%;

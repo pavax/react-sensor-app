@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { TimeRange } from "../../api/thingsboard-api";
 import { useViewport } from "../../ViewportContext";

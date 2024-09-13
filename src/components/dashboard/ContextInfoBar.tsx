@@ -1,15 +1,27 @@
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState } from "react";
+
+import { TimeRange } from "../../api/thingsboard-api";
 
 interface ContextInfoBarProps {
   title?: string;
+  timeRange: TimeRange;
   latestTimestamp: string;
   additionalData?: Map<String, String>;
 }
 
+const timeRangeLabels: { [key in TimeRange]: string } = {
+  [TimeRange.ONE_DAY]: "Ein Tag",
+  [TimeRange.THREE_DAYS]: "Drei Tage",
+  [TimeRange.ONE_WEEK]: "Eine Woche",
+  [TimeRange.TWO_WEEKS]: "Zwei Wochen",
+  [TimeRange.ONE_MONTH]: "Ein Monat",
+};
+
 const ContextInfoBar: React.FC<ContextInfoBarProps> = ({
   title,
+  timeRange,
   latestTimestamp,
   additionalData,
 }) => {
@@ -29,8 +41,17 @@ const ContextInfoBar: React.FC<ContextInfoBarProps> = ({
       onClick={toggleExpand}
     >
       {title && <h2>{title}</h2>}
-      <span>Daten von: </span>
-      <strong>{latestTimestamp}</strong>
+      {timeRange && (
+        <div>
+          <span>Zeitraum: </span>
+          <strong>{timeRangeLabels[timeRange]}</strong>
+        </div>
+      )}
+      <div>
+        <span>Letztes Update: </span>
+        <strong>{latestTimestamp}</strong>
+      </div>
+
       {additionalData && additionalData.size > 0 && (
         <>
           <div className="additional-info">

@@ -1,34 +1,32 @@
 import {
   BarController,
-  ChartOptions,
-  Filler,
-  LineController,
-  TimeSeriesScale,
-  TooltipItem,
-} from "chart.js";
-import { format } from "date-fns-tz";
-import {
   BarElement,
   CategoryScale,
   Chart as ChartJS,
+  ChartOptions,
+  Filler,
   Legend,
   LinearScale,
+  LineController,
   LineElement,
   PointElement,
   TimeScale,
+  TimeSeriesScale,
   Title,
   Tooltip,
+  TooltipItem,
 } from "chart.js";
+import { format } from "date-fns-tz";
 
 import { TimeRange } from "../../api/thingsboard-api";
 import { useViewport } from "../../ViewportContext";
 
+import "chartjs-adapter-date-fns";
 import {
   determineMaxTickLimit,
   getTimeUnit,
   useChartStyles,
 } from "./chart-utils";
-import "chartjs-adapter-date-fns";
 
 ChartJS.register(
   CategoryScale,
@@ -145,6 +143,9 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
           color: chartStyles.textColor,
           font: {
             size: 10,
+          },
+          callback: (value: any) => {
+            return new Intl.NumberFormat().format(value);
           },
         },
         grid: {

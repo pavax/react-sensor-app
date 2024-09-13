@@ -196,6 +196,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     <div className="telemetry-grid">
       <ContextInfoBar
         title={name}
+        timeRange={timeRange}
         latestTimestamp={contextLatestTime}
         additionalData={contextAdditionalData}
       />

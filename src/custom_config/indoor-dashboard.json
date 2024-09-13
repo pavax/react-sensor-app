@@ -202,7 +202,7 @@
             "label": "Batterie (Trend)",
             "yAxis": "y0",
             "dataKey": "battery",
-            "unit": "°C",
+            "unit": "mV",
             "color": "lineColor3",
             "style": "dashed",
             "isTrendLineData": "true",

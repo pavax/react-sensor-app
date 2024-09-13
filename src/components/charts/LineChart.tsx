@@ -186,14 +186,13 @@ const LineChart: React.FC<LineChartProps> = ({
         },
         ticks: {
           ...template.ticks,
-          callback:
-            scaleConfig.ticksFormatter === undefined
-              ? (value: any) => `${Number(value).toFixed(0)}`
-              : (value: any) => {
-                  const formattedTicks = scaleConfig.ticksFormatter;
-                  const expr = parser.parse(formattedTicks);
-                  return expr.evaluate({ x: value });
-                },
+          ...(scaleConfig.ticksFormatter && {
+            callback: (value: any) => {
+              const formattedTicks = scaleConfig.ticksFormatter;
+              const expr = parser.parse(formattedTicks);
+              return expr.evaluate({ x: value });
+            },
+          }),
           count: parseNumber(scaleConfig.maxTicks, undefined),
         },
       };

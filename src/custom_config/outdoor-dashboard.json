@@ -321,13 +321,6 @@
             "style": "dashed",
             "isTrendLineData": "true",
             "transparency": "20"
-          },
-          {
-            "label": "Cloud Base Height",
-            "yAxis": "y0",
-            "dataKey": "cloudBaseHeight",
-            "unit": "m",
-            "color": "lineColor1"
           }
         ],
         "plugins": {
