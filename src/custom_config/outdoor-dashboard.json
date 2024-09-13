@@ -80,7 +80,7 @@
       "title": "Feuchtigkeit",
       "value": "LATEST(humidity)",
       "unit": "%",
-      "icon": "faWater",
+      "icon": "faTint",
       "color": "#1abc9c"
     },
     {

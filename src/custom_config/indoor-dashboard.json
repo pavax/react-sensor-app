@@ -1,0 +1,195 @@
+{
+  "deviceId": "ad7d90b0-6205-11ee-b205-89ce6a954df5",
+  "dataPointConfigs": {
+    "counter": {
+      "aggregationType": "LATEST",
+      "fractionDigits": 0
+    },
+    "battery": {
+      "aggregationType": "AVERAGE",
+      "fractionDigits": 0
+    },
+    "temperature_avg": {
+      "aggregationType": "AVERAGE",
+      "fractionDigits": 0
+    },
+    "humidity_avg": {
+      "aggregationType": "AVERAGE",
+      "fractionDigits": 0
+    },
+    "pressure": {
+      "aggregationType": "MEDIAN",
+      "fractionDigits": 0
+    },
+    "co2": {
+      "aggregationType": "MEDIAN",
+      "fractionDigits": 0
+    },
+    "gas": {
+      "aggregationType": "MEDIAN",
+      "fractionDigits": 0
+    },
+    "aqi": {
+      "aggregationType": "MEDIAN",
+      "fractionDigits": 0
+    },
+    "mainsConnected": {
+      "aggregationType": "MAX",
+      "fractionDigits": 0
+    }
+  },
+  "additionalContextDataConfig": [
+    {
+      "label": "Device-Uptime Count",
+      "text": "LATEST(counter)"
+    },
+    {
+      "label": "Batterie",
+      "text": "LATEST(battery) mv"
+    }
+  ],
+  "overviewCardConfigs": [
+    {
+      "title": "Temperatur",
+      "value": "LATEST(temperature_avg)",
+      "unit": "°C",
+      "icon": "faTemperatureLow",
+      "color": "#8e44ad"
+    },
+    {
+      "title": "Feuchtigkeit",
+      "value": "LATEST(humidity_avg)",
+      "unit": "%",
+      "icon": "faTint",
+      "color": "#1abc9c"
+    },
+    {
+      "title": "Co2",
+      "value": "LATEST(co2)",
+      "unit": "ppm",
+      "icon": "faSmog",
+      "color": "#2ecc71"
+    },
+    {
+      "title": "AQI",
+      "value": "LATEST(aqi)",
+      "unit": "%",
+      "icon": "faTrafficLight",
+      "color": "#f39c12"
+    },
+    {
+      "title": "Luftdruck",
+      "value": "LATEST(pressure)",
+      "unit": "hpa",
+      "icon": "faTachometerAlt",
+      "color": "#e74c3c"
+    }
+  ],
+  "chartConfigs": [
+    {
+      "title": "Temperatur",
+      "icon": "faThermometerHalf",
+      "chartComponent": "LineChart",
+      "config": {
+        "chartType": "line",
+        "dataSets": [
+          {
+            "label": "Temperature",
+            "yAxis": "y0",
+            "dataKey": "temperature_avg",
+            "unit": "°C",
+            "color": "lineColor1"
+          },
+          {
+            "label": "Temperature (Trend)",
+            "yAxis": "y0",
+            "dataKey": "temperature_avg",
+            "unit": "°C",
+            "color": "lineColor3",
+            "style": "dashed",
+            "isTrendLineData": "true",
+            "transparency": "20"
+          },
+          {
+            "label": "Humidtiy",
+            "yAxis": "y1",
+            "dataKey": "humidity_avg",
+            "unit": "%",
+            "color": "lineColor4",
+            "style": "point-triangle",
+            "hidden": "true",
+            "transparency": "60"
+          }
+        ],
+        "scales": {
+          "y1": {
+            "position": "right",
+            "min": "0",
+            "max": "100",
+            "maxTicks": 4,
+            "display": {
+              "mobile": "false",
+              "desktop": "true"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Luft",
+      "icon": "faAir",
+      "chartComponent": "LineChart",
+      "config": {
+        "chartType": "line",
+        "dataSets": [
+          {
+            "label": "Co2",
+            "yAxis": "y0",
+            "dataKey": "co2",
+            "unit": "ppm",
+            "color": "lineColor1"
+          },
+          {
+            "label": "Gas",
+            "yAxis": "y1",
+            "dataKey": "gas",
+            "unit": "",
+            "color": "lineColor3",
+            "style": "dashed",
+            "transparency": "20"
+          }
+        ],
+        "scales": {
+          "y1": {
+            "position": "right",
+            "display": {
+              "mobile": "false",
+              "desktop": "true"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Strom",
+      "icon": "faBolt",
+      "chartComponent": "LineChart",
+      "config": {
+        "chartType": "line",
+        "dataSets": [
+          {
+            "label": "Netzstrom",
+            "yAxis": "y0",
+            "dataKey": "mainsConnected",
+            "unit": "",
+            "color": "lineColor1",
+            "stepped": "true",
+            "fill": {
+              "transparency": "10"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

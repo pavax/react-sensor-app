@@ -1,4 +1,10 @@
-import { ChartData, Chart as ChartJS, ChartOptions, Plugin } from "chart.js";
+import {
+  ChartData,
+  ChartDataset,
+  Chart as ChartJS,
+  ChartOptions,
+  Plugin,
+} from "chart.js";
 import React, { useMemo, useRef } from "react";
 import { Chart } from "react-chartjs-2";
 import { useViewport } from "../../ViewportContext";
@@ -46,6 +52,9 @@ export interface DataSetConfig {
   hidden: boolean;
   stepped: boolean;
   showLine: boolean | string;
+  fill?: {
+    transparency?: number;
+  };
 }
 
 export interface ScaleConfig {
@@ -94,7 +103,7 @@ const GenericLineChart: React.FC<LineChartProps> = ({
   const commonOptions = getCommonChartOptions(timeRange);
   type ChartType = typeof chartConfig.chartType;
 
-  const chartData: ChartData<ChartType> = useMemo(() => {
+  const chartData = useMemo<ChartData<ChartType>>(() => {
     function extractData(
       dataSetConfig: DataSetConfig,
       data: ProcessedData
@@ -106,20 +115,16 @@ const GenericLineChart: React.FC<LineChartProps> = ({
       }
       return data.entries[dataSetConfig.dataKey].values;
     }
-
     return {
       labels: data.timestamps,
-      datasets: chartConfig.dataSets.map((dataSetConfig) => {
-        return {
+      datasets: chartConfig.dataSets.map<ChartDataset<ChartType>>(
+        (dataSetConfig) => ({
           type: dataSetConfig.type || chartConfig.chartType,
           unit: dataSetConfig.unit || "",
           yAxisID: dataSetConfig.yAxis,
           label: dataSetConfig.label,
           data: extractData(dataSetConfig, data),
           borderColor: `${chartStyles[dataSetConfig.color]}${
-            dataSetConfig.transparency || ""
-          }`,
-          backgroundColor: `${chartStyles[dataSetConfig.color]}${
             dataSetConfig.transparency || ""
           }`,
           hidden: parseBoolean(dataSetConfig.hidden, false),
@@ -133,8 +138,12 @@ const GenericLineChart: React.FC<LineChartProps> = ({
           pointRadius: viewport.isMobile ? 2 : 3,
           stepped: dataSetConfig.stepped ? "middle" : undefined,
           showLine: parseBoolean(dataSetConfig.showLine, true),
-        };
-      }),
+          fill: dataSetConfig.fill ? true : false,
+          backgroundColor: `${chartStyles[dataSetConfig.color]}${
+            dataSetConfig.fill?.transparency || ""
+          }`,
+        })
+      ),
     };
   }, [
     data,

@@ -1,6 +1,7 @@
 import {
   BarController,
   ChartOptions,
+  Filler,
   LineController,
   TimeSeriesScale,
   TooltipItem,
@@ -24,7 +25,7 @@ import {
   PointElement,
   TimeScale,
   Title,
-  Tooltip
+  Tooltip,
 } from "chart.js";
 import { useViewport } from "../../ViewportContext";
 
@@ -42,7 +43,8 @@ ChartJS.register(
   Tooltip,
   Legend,
   LineController,
-  BarController
+  BarController,
+  Filler
 );
 
 export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
