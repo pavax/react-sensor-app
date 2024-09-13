@@ -49,7 +49,7 @@ export interface DataSetConfig {
   unit?: "string";
   dataKey: string;
   isTrendLineData: boolean;
-  color: "lineColor1" | "lineColor2" | "lineColor3";
+  color: keyof typeof useChartStyles;
   transparency?: number;
   style?: "line" | "point-cyrcle" | "point-triangle" | "dashed";
   hidden: boolean;
@@ -121,6 +121,30 @@ const LineChart: React.FC<LineChartProps> = ({
       }
       return data.entries[dataSetConfig.dataKey].values;
     }
+
+    function extractColor(
+      colorName: keyof typeof chartStyles,
+      transparency?: number
+    ) {
+      const color = chartStyles[colorName];
+      if (!color && color === "") {
+        return;
+      }
+      const hexToRgba = (hex: string, alpha: number = 1) => {
+        if (hex.length === 4) {
+          hex = `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}`;
+        }
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, ${alpha / 100})`;
+      };
+
+      return transparency !== undefined
+        ? hexToRgba(color, transparency)
+        : color;
+    }
+
     return {
       labels: data.timestamps,
       datasets: chartConfig.dataSets.map<ChartDataset<ChartType>>(
@@ -130,9 +154,10 @@ const LineChart: React.FC<LineChartProps> = ({
           yAxisID: dataSetConfig.yAxis,
           label: dataSetConfig.label,
           data: extractData(dataSetConfig, data),
-          borderColor: `${chartStyles[dataSetConfig.color]}${
-            dataSetConfig.transparency || ""
-          }`,
+          borderColor: extractColor(
+            dataSetConfig.color,
+            dataSetConfig.transparency
+          ),
           hidden: parseBoolean(dataSetConfig.hidden, false),
           borderDash: dataSetConfig.style === "dashed" ? [5, 5] : undefined,
           pointStyle:
@@ -145,9 +170,10 @@ const LineChart: React.FC<LineChartProps> = ({
           stepped: dataSetConfig.stepped ? "middle" : undefined,
           showLine: parseBoolean(dataSetConfig.showLine, true),
           fill: dataSetConfig.fill ? true : false,
-          backgroundColor: `${chartStyles[dataSetConfig.color]}${
-            dataSetConfig.fill?.transparency || ""
-          }`,
+          backgroundColor: extractColor(
+            dataSetConfig.color,
+            dataSetConfig.fill?.transparency
+          ),
         })
       ),
     };

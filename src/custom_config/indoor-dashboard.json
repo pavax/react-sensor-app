@@ -119,7 +119,7 @@
             "color": "lineColor4",
             "style": "point-triangle",
             "hidden": "true",
-            "transparency": "60"
+            "transparency": "20"
           }
         ],
         "scales": {
@@ -193,7 +193,7 @@
             "unit": "",
             "color": "lineColor5",
             "stepped": "true",
-            "transparency": "90",
+            "transparency": "20",
             "fill": {
               "transparency": "10"
             }

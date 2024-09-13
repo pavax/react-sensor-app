@@ -150,7 +150,7 @@
             "unit": "°C",
             "style": "point-cyrcle",
             "showLine": "false",
-            "transparency": "60"
+            "transparency": "20"
           },
           {
             "label": "Temperature (Trend)",
@@ -170,7 +170,7 @@
             "color": "lineColor4",
             "style": "point-triangle",
             "hidden": "true",
-            "transparency": "60"
+            "transparency": "20"
           }
         ],
         "scales": {
