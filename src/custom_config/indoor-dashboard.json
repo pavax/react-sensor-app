@@ -188,7 +188,13 @@
               "transparency": "10"
             }
           }
-        ]
+        ],
+        "scales": {
+          "y0": {
+            "maxTicks": "2",
+            "ticksFormatter": "x == 1 ? \"ON\": \"OFF\""
+          }
+        }
       }
     }
   ]

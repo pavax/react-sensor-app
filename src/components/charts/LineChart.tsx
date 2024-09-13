@@ -5,17 +5,18 @@ import {
   ChartOptions,
   Plugin,
 } from "chart.js";
+import { Parser } from "expr-eval";
 import React, { useMemo, useRef } from "react";
 import { Chart } from "react-chartjs-2";
 import { useViewport } from "../../ViewportContext";
 import { ProcessedData } from "../../api/data-processing";
 import { TimeRange } from "../../api/thingsboard-api";
+import { calculateTrendLine } from "../../common/math-utils";
 import { getCommonChartOptions } from "./chart-config";
 import { useChartStyles } from "./chart-utils";
 import { createAutoHideTooltipPlugin } from "./plugins/AutoHideTooltipPlugin";
 import { createSunriseSunsetPlugin } from "./plugins/SunriseSunsetPlugin";
 import { createWindDirectionPlugin } from "./plugins/WindDirectionPlugin";
-import { calculateTrendLine } from "../../common/math-utils";
 
 export interface LineChartProps {
   processedData: ProcessedData;
@@ -69,6 +70,7 @@ export interface ScaleConfig {
   maxTicks?: number | string;
   tickCounts?: number;
   drawOnChartArea: string | boolean;
+  ticksFormatter: string;
 }
 
 const parseNumber = (
@@ -91,6 +93,8 @@ const parseBoolean = (
 
   return aBoolean === true || aBoolean === "true";
 };
+
+const parser = new Parser();
 
 const GenericLineChart: React.FC<LineChartProps> = ({
   processedData: data,
@@ -180,7 +184,14 @@ const GenericLineChart: React.FC<LineChartProps> = ({
         },
         ticks: {
           ...template.ticks,
-          callback: (value: any) => `${Number(value).toFixed(0)}`,
+          callback:
+            scaleConfig.ticksFormatter === undefined
+              ? (value: any) => `${Number(value).toFixed(0)}`
+              : (value: any) => {
+                  const formattedTicks = scaleConfig.ticksFormatter;
+                  const expr = parser.parse(formattedTicks);
+                  return expr.evaluate({ x: value });
+                },
           count: parseNumber(scaleConfig.maxTicks, undefined),
         },
       };
