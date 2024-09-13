@@ -7,6 +7,7 @@ import { evaluateDSL, transformRawValue } from "./dsl-evaluator";
 export function transformJsonConfig(jsonConfig: any): DashboardConfig {
   return {
     deviceId: jsonConfig.deviceId,
+    name: jsonConfig.name,
     dataPointConfigs: Object.entries(jsonConfig.dataPointConfigs).reduce(
       (acc, [key, value]: [string, any]) => {
         acc[key] = {

@@ -3,6 +3,7 @@ import { AdditionalContextConfig, ChartSettings, OverviewCardConfig } from "../c
 
 export interface DashboardConfig {
     deviceId: string;
+    name: string;
     dataPointConfigs: DataPointConfigs;
     additionalContextDataConfig: AdditionalContextConfig[];
     chartConfigs: ChartSettings[];

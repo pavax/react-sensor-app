@@ -1,5 +1,6 @@
 {
   "deviceId": "47617760-ff3a-11ee-9df9-61f0fe185737",
+  "name": "Wetter Sensor",
   "dataPointConfigs": {
     "temperature": {
       "aggregationType": "AVERAGE",

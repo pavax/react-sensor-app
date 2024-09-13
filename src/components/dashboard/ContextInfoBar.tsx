@@ -4,11 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 interface ContextInfoBarProps {
+  title?: string;
   latestTimestamp: string;
   additionalData?: Map<String, String>;
 }
 
 const ContextInfoBar: React.FC<ContextInfoBarProps> = ({
+  title,
   latestTimestamp,
   additionalData,
 }) => {
@@ -27,6 +29,7 @@ const ContextInfoBar: React.FC<ContextInfoBarProps> = ({
       className={`context-information ${expanded ? "expanded" : ""}`}
       onClick={toggleExpand}
     >
+      <h2>{title}</h2>
       <span>Daten von: </span>
       <strong>{latestTimestamp}</strong>
       {additionalData && additionalData.size > 0 && (

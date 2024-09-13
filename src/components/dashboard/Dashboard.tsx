@@ -50,6 +50,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 }) => {
   const {
     deviceId,
+    name,
     dataPointConfigs,
     additionalContextDataConfig,
     chartConfigs,
@@ -191,7 +192,9 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   return (
     <div className="telemetry-grid">
+   
       <ContextInfoBar
+         title={name}
         latestTimestamp={contextLatestTime}
         additionalData={contextAdditionalData}
       />

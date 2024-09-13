@@ -1,5 +1,6 @@
 {
   "deviceId": "ad7d90b0-6205-11ee-b205-89ce6a954df5",
+  "name": "Stube Sensor",
   "dataPointConfigs": {
     "counter": {
       "aggregationType": "LATEST",
