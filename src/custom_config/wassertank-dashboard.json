@@ -1,0 +1,96 @@
+{
+  "deviceId": "16ced5c0-6200-11ee-b205-89ce6a954df5",
+  "name": "Wasser Tank Sensor",
+  "dataPointConfigs": {
+    "counter": {
+      "aggregationType": "LATEST",
+      "fractionDigits": 0
+    },
+    "voltage": {
+      "aggregationType": "AVERAGE",
+      "fractionDigits": 0
+    },
+    "tankVolume": {
+      "aggregationType": "AVERAGE",
+      "fractionDigits": 0
+    }
+  },
+  "additionalContextDataConfig": [
+    {
+      "label": "Device-Uptime Count",
+      "text": "LATEST(counter)"
+    },
+    {
+      "label": "Batterie",
+      "text": "LATEST(voltage) mv"
+    }
+  ],
+  "overviewCardConfigs": [
+    {
+      "title": "Wasser Tank",
+      "value": "LATEST(tankVolume) l",
+      "icon": "faTemperatureLow",
+      "color": "#8e44ad"
+    }
+  ],
+  "chartConfigs": [
+    {
+      "title": "Tank Volumen",
+      "icon": "faWater",
+      "chartComponent": "LineChart",
+      "config": {
+        "chartType": "line",
+        "dataSets": [
+          {
+            "label": "Volumen",
+            "yAxis": "y0",
+            "dataKey": "tankVolume",
+            "unit": "l",
+            "color": "lineColor1",
+            "fill": {
+              "transparency": "20"
+            }
+          }
+        ],
+        "scales": {
+          "y0": {
+            "min": "0"
+          }
+        }
+      }
+    },
+    {
+      "title": "Battery",
+      "icon": "faBattery",
+      "chartComponent": "LineChart",
+      "config": {
+        "chartType": "line",
+        "dataSets": [
+          {
+            "label": "Batterie",
+            "yAxis": "y0",
+            "dataKey": "voltage",
+            "unit": "mv",
+            "color": "lineColor1"
+          },
+          {
+            "label": "Batterie (Trend)",
+            "yAxis": "y0",
+            "dataKey": "voltage",
+            "unit": "mV",
+            "color": "lineColor3",
+            "style": "dashed",
+            "isTrendLineData": "true",
+            "transparency": "20"
+          }
+        ],
+        "scales": {
+          "y0": {
+            "min": "3200",
+            "max": "3500"
+          }
+        }
+      }
+    }
+  ]
+}
