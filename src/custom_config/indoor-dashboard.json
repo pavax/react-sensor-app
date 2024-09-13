@@ -11,7 +11,7 @@
     },
     "temperature_avg": {
       "aggregationType": "AVERAGE",
-      "fractionDigits": 0
+      "fractionDigits": 1
     },
     "humidity_avg": {
       "aggregationType": "AVERAGE",
@@ -185,7 +185,7 @@
             "color": "lineColor1",
             "stepped": "true",
             "fill": {
-              "transparency": "10"
+              "transparency": "50"
             }
           }
         ],
