@@ -150,7 +150,7 @@
             "unit": "°C",
             "style": "point-cyrcle",
             "showLine": "false",
-            "transparency": "20"
+            "transparency": "40"
           },
           {
             "label": "Temperature (Trend)",
@@ -168,7 +168,6 @@
             "dataKey": "humidity",
             "unit": "%",
             "color": "lineColor4",
-            "style": "point-triangle",
             "hidden": "true",
             "transparency": "20"
           }
@@ -203,7 +202,10 @@
             "dataKey": "windVoltageMax",
             "unit": "m/s",
             "color": "lineColor1",
-            "stepped": "true"
+            "stepped": "true",
+            "fill": {
+              "transparency": "20"
+            }
           }
         ],
         "plugins": {

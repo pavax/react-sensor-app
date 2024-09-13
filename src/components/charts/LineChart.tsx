@@ -158,6 +158,10 @@ const LineChart: React.FC<LineChartProps> = ({
             dataSetConfig.color,
             dataSetConfig.transparency
           ),
+          backgroundColor: extractColor(
+            dataSetConfig.color,
+            dataSetConfig.fill?.transparency || dataSetConfig.transparency
+          ),
           hidden: parseBoolean(dataSetConfig.hidden, false),
           borderDash: dataSetConfig.style === "dashed" ? [5, 5] : undefined,
           pointStyle:
@@ -170,10 +174,6 @@ const LineChart: React.FC<LineChartProps> = ({
           stepped: dataSetConfig.stepped ? "middle" : undefined,
           showLine: parseBoolean(dataSetConfig.showLine, true),
           fill: dataSetConfig.fill ? true : false,
-          backgroundColor: extractColor(
-            dataSetConfig.color,
-            dataSetConfig.fill?.transparency
-          ),
         })
       ),
     };
