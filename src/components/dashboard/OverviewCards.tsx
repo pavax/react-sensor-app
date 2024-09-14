@@ -1,10 +1,9 @@
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import Slider, { Settings } from "react-slick";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 import { useViewport } from "../../ViewportContext";
-
 
 interface OverviewCardsProps {
   cards: OverviewCardData[];
@@ -13,7 +12,6 @@ interface OverviewCardsProps {
 export interface OverviewCardData {
   title: string;
   value: string | number;
-  unit: string;
   icon: IconDefinition;
   color: string;
 }
@@ -111,7 +109,6 @@ const OverviewCards: React.FC<OverviewCardsProps> = ({ cards }) => {
                 }}
               >
                 {card.value}
-                {card.unit}
               </p>
             </div>
           </div>

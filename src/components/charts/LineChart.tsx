@@ -106,11 +106,11 @@ const LineChart: React.FC<LineChartProps> = ({
   timeRange,
   chartConfig,
 }: LineChartProps) => {
+  type ChartType = typeof chartConfig.chartType;
   const viewport = useViewport();
   const chartRef = useRef<ChartJS | null>(null);
   const chartStyles = useChartStyles();
   const commonOptions = getCommonChartOptions(timeRange);
-  type ChartType = typeof chartConfig.chartType;
 
   const chartData = useMemo<ChartData<ChartType>>(() => {
     function extractData(
@@ -235,7 +235,7 @@ const LineChart: React.FC<LineChartProps> = ({
         x: prepareScale(chartConfig?.scales?.x, commonOptions.scales?.x),
         y0: prepareScale(chartConfig?.scales?.y0, commonOptions.scales?.y0),
         ...(chartConfig?.scales?.y1 && {
-          y1: prepareScale(chartConfig.scales.y1, commonOptions.scales.y1),
+          y1: prepareScale(chartConfig.scales.y1, commonOptions.scales?.y1),
         }),
       },
       plugins: {

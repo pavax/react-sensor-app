@@ -10,9 +10,9 @@ export function getTimeUnit(timeRange: TimeRange): "hour" | "day" | "week" {
     case TimeRange.THREE_DAYS:
       return "day";
     case TimeRange.ONE_WEEK:
-      return "day";
+      return "week";
     case TimeRange.TWO_WEEKS:
-      return "day";
+      return "week";
     case TimeRange.ONE_MONTH:
       return "week";
     default:
@@ -25,7 +25,7 @@ export function determineMaxTickLimit(timeRange: TimeRange) {
     case TimeRange.ONE_DAY:
       return 24;
     case TimeRange.THREE_DAYS:
-      return 3;
+      return 12;
     case TimeRange.ONE_WEEK:
       return 7;
     case TimeRange.TWO_WEEKS:

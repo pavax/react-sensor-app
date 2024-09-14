@@ -117,7 +117,7 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
             second: "HH:mm:ss",
             minute: "HH:mm",
             hour: "HH:mm",
-            day: "dd.MM",
+            day: "dd.MM HH:mm",
             week: "dd.MM",
             month: "MM.yyyy",
             quarter: "MM.yyyy",

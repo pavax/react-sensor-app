@@ -44,8 +44,9 @@ export function transformJsonConfig(jsonConfig: any): DashboardConfig {
       };
     }),
     overviewCardConfigs: jsonConfig.overviewCardConfigs.map((config: any) => ({
-      ...config,
       icon: (icons as any)[config.icon],
+      title: config.title,
+      color: config.color,
       value: (data: any) => {
         const value = evaluateDSL(config.value, data);
         return value.toString() ?? "--";

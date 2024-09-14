@@ -52,36 +52,31 @@
   "overviewCardConfigs": [
     {
       "title": "Temperatur",
-      "value": "LATEST(temperature_avg)",
-      "unit": "°C",
+      "value": "LATEST(temperature_avg) °C",
       "icon": "faTemperatureLow",
       "color": "#8e44ad"
     },
     {
       "title": "Feuchtigkeit",
-      "value": "LATEST(humidity_avg)",
-      "unit": "%",
+      "value": "LATEST(humidity_avg) %",
       "icon": "faTint",
       "color": "#1abc9c"
     },
     {
       "title": "Co2",
-      "value": "LATEST(co2)",
-      "unit": "ppm",
+      "value": "LATEST(co2) ppm",
       "icon": "faSmog",
       "color": "#2ecc71"
     },
     {
       "title": "AQI",
-      "value": "LATEST(aqi)",
-      "unit": "%",
+      "value": "LATEST(aqi) %",
       "icon": "faTrafficLight",
       "color": "#f39c12"
     },
     {
       "title": "Luftdruck",
-      "value": "LATEST(pressure)",
-      "unit": "hpa",
+      "value": "LATEST(pressure) hpa",
       "icon": "faTachometerAlt",
       "color": "#e74c3c"
     }

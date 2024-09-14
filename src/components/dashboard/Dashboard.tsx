@@ -41,7 +41,6 @@ export interface AdditionalContextConfig {
 export interface OverviewCardConfig {
   title: string;
   value: (data: ProcessedData) => string;
-  unit: string;
   icon: IconDefinition;
   color: string;
 }
