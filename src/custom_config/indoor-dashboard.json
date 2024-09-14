@@ -12,7 +12,7 @@
     },
     "temperature_avg": {
       "aggregationType": "AVERAGE",
-      "fractionDigits": 1
+      "fractionDigits": 0
     },
     "humidity_avg": {
       "aggregationType": "AVERAGE",
@@ -23,7 +23,7 @@
       "fractionDigits": 0
     },
     "co2": {
-      "aggregationType": "MEDIAN",
+      "aggregationType": "AVERAGE",
       "fractionDigits": 0
     },
     "gas": {
@@ -117,7 +117,6 @@
             "dataKey": "humidity_avg",
             "unit": "%",
             "color": "lineColor4",
-            "style": "point-triangle",
             "hidden": "true",
             "transparency": "20"
           }

@@ -140,7 +140,8 @@
             "yAxis": "y0",
             "dataKey": "temperature",
             "unit": "°C",
-            "color": "lineColor1"
+            "color": "lineColor1",
+            "style": "line"
           },
           {
             "label": "Dew Point",
@@ -148,7 +149,8 @@
             "dataKey": "dewPoint",
             "color": "lineColor2",
             "unit": "°C",
-            "style": "point-cyrcle",
+            "pointStyle": "circle",
+            "showPoints": "true",
             "showLine": "false",
             "transparency": "40"
           },

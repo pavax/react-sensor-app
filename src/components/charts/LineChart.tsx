@@ -4,6 +4,7 @@ import {
   Chart as ChartJS,
   ChartOptions,
   Plugin,
+  ScaleOptionsByType,
 } from "chart.js";
 import { Parser } from "expr-eval";
 import React, { useMemo, useRef } from "react";
@@ -51,7 +52,9 @@ export interface DataSetConfig {
   isTrendLineData: boolean;
   color: keyof typeof useChartStyles;
   transparency?: number;
-  style?: "line" | "point-cyrcle" | "point-triangle" | "dashed";
+  style?: "line" | "dashed";
+  pointStyle?: "circle" | "triangle";
+  showPoints?: boolean | string;
   hidden: boolean;
   stepped: boolean;
   showLine: boolean | string;
@@ -86,7 +89,7 @@ const parseNumber = (
 };
 
 const parseBoolean = (
-  aBoolean: boolean | string,
+  aBoolean: boolean | string | undefined,
   fallback: boolean
 ): boolean => {
   if (aBoolean === undefined) {
@@ -164,13 +167,12 @@ const LineChart: React.FC<LineChartProps> = ({
           ),
           hidden: parseBoolean(dataSetConfig.hidden, false),
           borderDash: dataSetConfig.style === "dashed" ? [5, 5] : undefined,
-          pointStyle:
-            dataSetConfig.style === "point-cyrcle"
-              ? "circle"
-              : dataSetConfig.style === "point-triangle"
-              ? "triangle"
-              : false,
-          pointRadius: viewport.isMobile ? 2 : 3,
+          pointStyle: dataSetConfig.pointStyle || "circle",
+          pointRadius: parseBoolean(dataSetConfig.showPoints, false)
+            ? viewport.isMobile
+              ? 2
+              : 3
+            : 0,
           stepped: dataSetConfig.stepped ? "middle" : undefined,
           showLine: parseBoolean(dataSetConfig.showLine, true),
           fill: dataSetConfig.fill ? true : false,
@@ -186,7 +188,10 @@ const LineChart: React.FC<LineChartProps> = ({
   ]);
 
   const options = useMemo<ChartOptions<ChartType>>(() => {
-    function prepareScale(scaleConfig: ScaleConfig | undefined, template: any) {
+    function prepareScale(
+      scaleConfig: ScaleConfig | undefined,
+      template: any
+    ): ScaleOptionsByType {
       if (!scaleConfig) {
         return { ...template };
       }
@@ -219,7 +224,7 @@ const LineChart: React.FC<LineChartProps> = ({
               return expr.evaluate({ x: value });
             },
           }),
-          count: parseNumber(scaleConfig.maxTicks, undefined),
+          maxTicksLimit: parseNumber(scaleConfig.maxTicks, undefined),
         },
       };
     }

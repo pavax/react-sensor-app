@@ -54,6 +54,7 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
   return {
     responsive: true,
     maintainAspectRatio: false,
+    clip: false,
     layout: {
       padding: {
         top: viewport.isMobile ? 35 : 60,
@@ -97,8 +98,8 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
     },
     elements: {
       point: {
-        radius: 0,
-        hoverRadius: 5,
+        radius: 5,
+        hoverRadius: viewport.isMobile ? 5 : 6,
         hitRadius: viewport.isMobile ? 15 : 5,
         borderWidth: 0,
       },
