@@ -58,7 +58,6 @@ export function getCommonChartOptions(timeRange: TimeRange): ChartOptions<any> {
     layout: {
       padding: {
         top: viewport.isMobile ? 35 : 60,
-        right: 5,
       },
     },
     plugins: {

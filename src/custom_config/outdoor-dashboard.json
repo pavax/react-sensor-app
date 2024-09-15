@@ -273,6 +273,9 @@
           }
         ],
         "scales": {
+          "y0": {
+            "ticksFormatter": "(x / 1000) || 'k'"
+          },
           "y1": {
             "position": "right",
             "min": "0",
