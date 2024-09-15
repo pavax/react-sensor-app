@@ -50,6 +50,10 @@ export interface DataSetConfig {
   unit?: "string";
   dataKey: string;
   isTrendLineData: boolean;
+  filter?: {
+    min?: number;
+    max?: number;
+  };
   color: keyof typeof useChartStyles;
   transparency?: number;
   style?: "line" | "dashed";
@@ -117,12 +121,20 @@ const LineChart: React.FC<LineChartProps> = ({
       dataSetConfig: DataSetConfig,
       data: ProcessedData
     ): number[] {
+      let values = data.entries[dataSetConfig.dataKey].values || [];
       if (dataSetConfig.isTrendLineData) {
-        return calculateTrendLine(
-          data.entries[dataSetConfig.dataKey].values ?? []
-        );
+        values = calculateTrendLine(values);
       }
-      return data.entries[dataSetConfig.dataKey].values;
+      if (dataSetConfig.filter) {
+        const { min, max } = dataSetConfig.filter;
+        return values.filter((value) => {
+          return (
+            (min === undefined || value >= min) &&
+            (max === undefined || value <= max)
+          );
+        });
+      }
+      return values;
     }
 
     function extractColor(

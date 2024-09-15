@@ -266,6 +266,9 @@
             "color": "lineColor3",
             "style": "dashed",
             "isTrendLineData": "true",
+            "filter": {
+              "min": "0"
+            },
             "transparency": "20"
           }
         ],
