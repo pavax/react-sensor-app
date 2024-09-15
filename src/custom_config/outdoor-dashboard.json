@@ -72,36 +72,31 @@
   "overviewCardConfigs": [
     {
       "title": "Temperatur",
-      "value": "LATEST(temperature)",
-      "unit": "°C",
+      "value": "LATEST(temperature) °C",
       "icon": "faTemperatureLow",
       "color": "#8e44ad"
     },
     {
       "title": "Feuchtigkeit",
-      "value": "LATEST(humidity)",
-      "unit": "%",
+      "value": "LATEST(humidity) %",
       "icon": "faTint",
       "color": "#1abc9c"
     },
     {
       "title": "Wind",
-      "value": "LATEST(windVoltageMax)",
-      "unit": "m/s",
+      "value": "LATEST(windVoltageMax) m/s",
       "icon": "faWind",
       "color": "#3498db"
     },
     {
       "title": "Regen",
-      "value": "SUM(rainEventAccDifference)",
-      "unit": "mm",
+      "value": "SUM(rainEventAccDifference) mm",
       "icon": "faCloudRain",
       "color": "#2ecc71"
     },
     {
       "title": "Luftdruck",
-      "value": "LATEST(pressure)",
-      "unit": "hpa",
+      "value": "LATEST(pressure) hpa",
       "icon": "faTachometerAlt",
       "color": "#e74c3c"
     },
@@ -121,8 +116,7 @@
     },
     {
       "title": "Cloudbase Height",
-      "value": "LATEST(cloudBaseHeight)",
-      "unit": "m",
+      "value": "LATEST(cloudBaseHeight) m",
       "icon": "faCloud",
       "color": "#7f8c8d"
     }
