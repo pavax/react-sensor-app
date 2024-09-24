@@ -36,7 +36,10 @@ export interface ChartConfig {
     y1?: ScaleConfig;
   };
   plugins?: {
-    sunriseSunsets: boolean;
+    sunriseSunsets: {
+      latitude?: number;
+      longitude?: number;
+    };
     windDirections: {
       directionKey: string;
     };
@@ -252,21 +255,27 @@ const LineChart: React.FC<LineChartProps> = ({
       },
       plugins: {
         ...commonOptions.plugins,
-        sunriseSunset: {
-          latitude: Number(process.env.REACT_APP_LATITUDE),
-          longitude: Number(process.env.REACT_APP_LONGITUDE),
-          darkMode: viewport.isDarkMode,
-          isMobile: !viewport.isDesktop,
-        },
-        windDirection: chartConfig.plugins?.windDirections
-          ? {
-              windDirectionData:
-                data.entries[chartConfig.plugins?.windDirections.directionKey]
-                  .values,
-              darkMode: viewport.isDarkMode,
-              isMobile: !viewport.isDesktop,
-            }
-          : undefined,
+        ...(chartConfig.plugins?.sunriseSunsets && {
+          sunriseSunset: {
+            latitude:
+              chartConfig.plugins?.sunriseSunsets.latitude ||
+              Number(process.env.REACT_APP_LATITUDE),
+            longitude:
+              chartConfig.plugins?.sunriseSunsets.longitude ||
+              Number(process.env.REACT_APP_LONGITUDE),
+            darkMode: viewport.isDarkMode,
+            isMobile: !viewport.isDesktop,
+          },
+        }),
+        ...(chartConfig.plugins?.windDirections && {
+          windDirection: {
+            windDirectionData:
+              data.entries[chartConfig.plugins?.windDirections.directionKey]
+                .values,
+            darkMode: viewport.isDarkMode,
+            isMobile: !viewport.isDesktop,
+          },
+        }),
       },
     };
   }, [commonOptions, chartStyles, chartConfig, viewport, data.entries]);
